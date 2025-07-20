@@ -54,7 +54,6 @@ function validateSignupForm($form_data)
 }
 
 
-//  function for show error 
 
 function showError($field)
 {
