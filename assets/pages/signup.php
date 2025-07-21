@@ -24,21 +24,21 @@
                 <div class="d-flex gap-3 my-3">
                     <div class="form-check">
                         <input class="form-check-input"  type="radio" name="gender" id="exampleRadios1"
-                            value="1" <?=isset($_SESSION['formdata'])?'':'checked'?> <?=showFormData('gender')==1? 'checked': ''?>>
+                            value="0" <?=isset($_SESSION['formdata'])?'':'checked'?> <?=showFormData('gender')==1? 'checked': ''?>>
                         <label class="form-check-label" for="exampleRadios1">
                             Male
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="gender" id="exampleRadios3"
-                            value="2" <?=showFormData('gender')==2? 'checked': ''?>>
+                            value="1" <?=showFormData('gender')==1? 'checked': ''?>>
                         <label class="form-check-label" for="exampleRadios3">
                             Female
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="gender" id="exampleRadios2"
-                            value="0" <?=showFormData('gender')==0? 'checked': ''?>>
+                            value="2" <?=showFormData('gender')==2? 'checked': ''?>>
                         <label class="form-check-label" for="exampleRadios2">
                             Other
                         </label>
