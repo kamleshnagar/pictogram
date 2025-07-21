@@ -11,15 +11,12 @@ function d($data)
     print_r($data);
     echo '</pre><br>';
     exit;
-    
 }
 function p($data)
 {
     echo '<pre>';
     print_r($data);
     echo '</pre><br>';
-    
-
 }
 
 // function to show pages
@@ -212,7 +209,15 @@ function createUser($data)
 }
 
 
-// for logout the user 
+// function for update new password
+
+function resetPassword($email, $password)
+{
+    global $db;
+    $password = md5($password);
+    $query = "UPDATE users SET password = '$password' WHERE email = '$email'";
+    return mysqli_query($db, $query);
+}
 
 
 ?>

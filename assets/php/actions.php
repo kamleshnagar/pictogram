@@ -54,7 +54,7 @@ if (isset($_GET['login'])) {
 if (isset($_GET['resend_code'])) {
     $code = rand(111111, 999999);
     $_SESSION['code'] = $code;
-    sendCode($_SESSION['userdata']['email'], 'Verify youremail', $code);
+    sendCode($_SESSION['userdata']['email'], 'Verify your email', $code);
     header('location:../../?resended');
 }
 
@@ -79,10 +79,76 @@ if (isset($_GET['verify_email'])) {
     }
 }
 
-if (isset($_GET['logout'])){
+
+if (isset($_GET['forgetpassword'])) {
+    if (!$_POST['email']) {
+        $response['msg'] = "Please enter a your email.";
+        $response['field'] = 'email';
+        $_SESSION['error'] = $response;
+        header('location:../../?forgetpassword');
+        exit;
+    } elseif (!isUserRegistered('email', $_POST['email'])) {
+        $response['msg'] = "Email is not registered. Enter a valid email.";
+        $response['field'] = 'email';
+        $_SESSION['error'] = $response;
+        header('location:../../?forgetpassword');
+        exit;
+    } else {
+        $_SESSION['forget_email'] = $_POST['email'];
+        $code = rand(111111, 999999);
+        $_SESSION['forget_code'] = $code;
+        sendCode($_POST['email'], 'Forgot your password ', $code);
+        header('location:../../?forgetpassword');
+        exit;
+    }
+}
+
+
+//function for verify code
+
+
+if (isset($_GET['verifycode'])) {
+    $code = $_POST['code'];
+    $user_code = $_SESSION['forget_code'];
+    if ($code == $user_code) {
+        $_SESSION['temp_auth'] = true;
+        header('location:../../?forgetpassword');
+    } else {
+        $response['msg'] = 'Incorrect verification code!';
+        if (!$_POST['code']) {
+            $response['msg'] = 'Enter 6 digit verification code';
+        }
+        $response['field'] = 'code';
+        $_SESSION['error'] = $response;
+        header('location:../../?forgetpassword');
+    }
+}
+
+
+
+if (isset($_GET['changepassword'])) {
+    if (isset($_POST['password']) && !empty($_POST['password'] && $_SESSION['temp_auth'])) {
+        $password = $_POST['password'];
+        $email = ($_SESSION['forget_email']);
+        resetPassword($email, $password);
+        header('location:../../?newfp');
+    } else {
+        $response['msg'] = 'Please Enter New Password';
+        $response['msg'] = 'Please Enter New Password';
+        $response['field'] = 'password';
+        $_SESSION['error'] = $response;
+
+        header('location:../../?forgetpassword');
+    }
+}
+
+
+
+
+
+if (isset($_GET['logout'])) {
     session_destroy();
     header('location:../../');
-    
 }
 
 ?>

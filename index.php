@@ -1,5 +1,12 @@
 <?php
 require_once 'assets/php/functions.php';
+
+
+if (isset($_GET['newfp'])) {
+    unset($_SESSION['forget_email']);
+    unset($_SESSION['forget_code']);
+    unset($_SESSION['temp_auth']);
+}
 if (isset($_SESSION['AUTH'])) {
 
     $user = getUser($_SESSION['userdata']['id']);
@@ -30,9 +37,9 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0) {
 }
 
 
-echo "check------------------->";
-echo p($_SESSION);
-
-showPage("footer");
+p($_SESSION);
+p($_POST);
 unset($_SESSION['error']);
 unset($_SESSION['formdata']);
+
+showPage("footer");
