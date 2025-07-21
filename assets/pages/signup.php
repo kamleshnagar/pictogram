@@ -24,7 +24,7 @@
                 <div class="d-flex gap-3 my-3">
                     <div class="form-check">
                         <input class="form-check-input"  type="radio" name="gender" id="exampleRadios1"
-                            value="0" <?=isset($_SESSION['formdata'])?'':'checked'?> <?=showFormData('gender')==1? 'checked': ''?>>
+                            value="0" <?=isset($_SESSION['formdata'])==0?'':'checked'?> <?=showFormData('gender')==0? 'checked': ''?>>
                         <label class="form-check-label" for="exampleRadios1">
                             Male
                         </label>
@@ -53,7 +53,7 @@
                     <input type="text" name="username" class="form-control rounded-0" value="<?=showFormData('username')?>" placeholder="username">
                     <label for="floatingInput">username</label>
                 </div>
-                 <?=showError('usrname')?>
+                 <?=showError('username')?>
                 <div class="form-floating mt-1">
                     <input type="password" name="password" class="form-control rounded-0" id="floatingPassword" placeholder="Password">
                     <label for="floatingPassword">password</label>
@@ -62,7 +62,7 @@
 
                 <div class="mt-3 d-flex justify-content-between align-items-center">
                     <button class="btn btn-primary" type="submit">Sign Up</button>
-                    <a href="#" class="text-decoration-none">Already have an account ?</a>
+                    <a href="?login" class="text-decoration-none">Already have an account ?</a>
 
 
                 </div>
