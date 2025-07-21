@@ -5,11 +5,21 @@ require_once 'config.php';
 
 $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME) or die("Can't Connect to Data Base!");
 
+function d($data)
+{
+    echo '<pre>';
+    print_r($data);
+    echo '</pre><br>';
+    exit;
+    
+}
 function p($data)
 {
     echo '<pre>';
     print_r($data);
     echo '</pre><br>';
+    
+
 }
 
 // function to show pages
@@ -200,6 +210,9 @@ function createUser($data)
             VALUES('$first_name','$last_name',$gender,'$email','$username','$password')";
     return mysqli_query($db, $sql);
 }
+
+
+// for logout the user 
 
 
 ?>

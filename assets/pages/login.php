@@ -41,7 +41,7 @@
 
 
                 </div>
-                <a href="#" class="text-decoration-none">Forgot password ?</a>
+                <a href="?forgetpassword" class="text-decoration-none">Forgot password ?</a>
             </form>
         </div>
     </div>

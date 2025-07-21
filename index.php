@@ -1,9 +1,8 @@
 <?php
 require_once 'assets/php/functions.php';
-if(isset($_SESSION['AUTH'])){
-    
+if (isset($_SESSION['AUTH'])) {
+
     $user = getUser($_SESSION['userdata']['id']);
-    
 }
 
 
@@ -12,6 +11,7 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0) {
     showPage("verify_email");
 } elseif (isset($_SESSION['AUTH']) && $user['ac_status'] == 1) {
     showPage("header", ["page_title" => "Home"]);
+    showPage("navbar");
     showPage("wall");
 } elseif (isset($_SESSION['AUTH']) && $user['ac_status'] == 2) {
     showPage("header", ["page_title" => "Blocked"]);
@@ -22,6 +22,9 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0) {
 } elseif (isset($_GET['login'])) {
     showPage("header", ["page_title" => "Pictogram-Login"]);
     showPage("login");
+} elseif (isset($_GET['forgetpassword'])) {
+    showPage("header", ["page_title" => "Pictogram-Forgot Password"]);
+    showPage("forgot_password");
 } else {
     header('location:?login');
 }

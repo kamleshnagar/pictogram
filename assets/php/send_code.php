@@ -13,7 +13,10 @@ $mail = new PHPMailer(true);
 function sendCode($email,$subject,$code){
 global $mail;
 
-    
+
+
+
+
 
 
 
@@ -28,17 +31,19 @@ try {
     $mail->Password   = 'lqdq iule ynsg qbvd';        // App password, NOT your real password
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port       = 465;
-
+    
     //Recipients
     $mail->setFrom('kaalmusicproduction@gmail.com', 'Pictogram');
     $mail->addAddress($email);
-
+    
     //Content
     $mail->isHTML(true);
     $mail->Subject = $subject;
     $mail->Body    = 'This is a test email with <b>'.$code.'</b>';
+    
 
     $mail->send();
+    echo 'messager sent';
 
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

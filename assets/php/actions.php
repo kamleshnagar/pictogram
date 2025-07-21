@@ -79,4 +79,10 @@ if (isset($_GET['verify_email'])) {
     }
 }
 
+if (isset($_GET['logout'])){
+    session_destroy();
+    header('location:../../');
+    
+}
+
 ?>

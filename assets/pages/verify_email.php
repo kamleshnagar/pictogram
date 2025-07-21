@@ -33,7 +33,7 @@ global $user;
 
                 </div>
                 <br>
-                <a href="?login" class="text-decoration-none mt-5"><i class="bi bi-arrow-left-circle-fill"></i>
+                <a href="/assets/php/actions.php?logout" class="text-decoration-none mt-5"><i class="bi bi-arrow-left-circle-fill"></i>
                     Logout</a>
             </form>
         </div>
