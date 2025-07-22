@@ -1,0 +1,5 @@
+aleTESTING
+GIT STATUS
+sadfsdfsd
+asddasdas
+sdasdasdads
