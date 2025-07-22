@@ -1,4 +1,8 @@
 
+<?php global $user;?>
+<?php $name = $user['first_name'].' '.$user['last_name']; ?>
+<?php $username ='@' . $user['username']; ?>
+<?php $profile_pic = $user['profile_pic']; ?>
 
 
    
@@ -8,8 +12,7 @@
                 <div class="card-title d-flex justify-content-between  align-items-center">
 
                     <div class="d-flex align-items-center p-2">
-                        <img src="assets/images/profile/profile.jpg" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;Kaal
-                        Music
+                        <img src="assets/images/profile/<?=$profile_pic?>" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;<?=$name?>
                     </div>
                     <div class="p-2">
                         <i class="bi bi-three-dots-vertical"></i>
@@ -38,8 +41,7 @@
                 <div class="card-title d-flex justify-content-between  align-items-center">
 
                     <div class="d-flex align-items-center p-2">
-                        <img src="assets/images/profile/profile.jpg" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;Kaal
-                        Music
+                        <img src="assets/images/profile/<?=$profile_pic?>" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;<?=$name?>
                     </div>
                     <div class="p-2">
                         <i class="bi bi-three-dots-vertical"></i>
@@ -68,7 +70,7 @@
                 <div class="card-title d-flex justify-content-between  align-items-center">
 
                     <div class="d-flex align-items-center p-2">
-                        <img src="assets/images/profile/profile.jpg" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;Kaal
+                        <img src="assets/images/profile/<?=$profile_pic?>" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;Kaal
                         Music
                     </div>
                     <div class="p-2">
@@ -98,8 +100,7 @@
                 <div class="card-title d-flex justify-content-between  align-items-center">
 
                     <div class="d-flex align-items-center p-2">
-                        <img src="assets/images/profile/profile.jpg" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;Kaal
-                        Music
+                        <img src="assets/images/profile/<?=$profile_pic?>" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;<?=$name?>
                     </div>
                     <div class="p-2">
                         <i class="bi bi-three-dots-vertical"></i>
@@ -128,7 +129,7 @@
                 <div class="card-title d-flex justify-content-between  align-items-center">
 
                     <div class="d-flex align-items-center p-2">
-                        <img src="assets/images/profile/profile.jpg" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;Kaal
+                        <img src="assets/images/profile/<?=$profile_pic?>" alt="" height="30" class="rounded-circle border">&nbsp;&nbsp;Kaal
                         Music
                     </div>
                     <div class="p-2">
@@ -159,12 +160,12 @@
 
         <div class="col-4 mt-4 p-3">
             <div class="d-flex align-items-center p-2">
-                <div><img src="assets/images/profile/profile.jpg" alt="" height="60" class="rounded-circle border">
+                <div><img src="assets/images/profile/<?=$profile_pic?>" alt="" height="60" class="rounded-circle border">
                 </div>
                 <div>&nbsp;&nbsp;&nbsp;</div>
                 <div class="d-flex flex-column justify-content-center align-items-center">
-                    <h6 style="margin: 0px;">Kaal Music</h6>
-                    <p style="margin:0px;" class="text-muted">@kaalmusic</p>
+                    <h6 style="margin: 0px;"><?=$name?></h6>
+                    <p style="margin:0px;" class="text-muted"><?=$username?></p>
                 </div>
             </div>
             <div>

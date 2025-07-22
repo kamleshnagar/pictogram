@@ -1,7 +1,16 @@
- <nav class="navbar navbar-expand-lg navbar-light bg-white border">
+
+<?php global $user;?>
+<?php $name = $user['first_name'].' '.$user['last_name']; ?>
+<?php $username ='@' . $user['username']; ?>
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white border">
         <div class="container col-9 d-flex justify-content-between">
             <div class="d-flex justify-content-between col-8">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="?home">
                     <img src="assets/images/pictogram.png" alt="" height="28">
 
                 </a>
@@ -32,10 +41,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="assets/images/profile/profile.jpg" alt="" height="30" class="rounded-circle border">
+                        <img src="assets/images/profile/<?=$user['profile_pic']?>" alt="" height="30" class="rounded-circle border">
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">My Profile</a></li>
+                        <li><a class="dropdown-item" href="?edit_profile">Edit Profile</a></li>
                         <li><a class="dropdown-item" href="#">Account Settings</a></li>
                         <li>
                             <hr class="dropdown-divider">

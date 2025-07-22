@@ -35,12 +35,13 @@ if (isset($_GET['login'])) {
     if ($response['status']) {
         $_SESSION['AUTH'] = true;
         $_SESSION['userdata'] = $response['user'];
+
         if ($response['user']['ac_status'] == 0) {
             $code = rand(111111, 999999);
             $_SESSION['code'] = $code;
             sendCode($response['user']['email'], 'Verify youremail', $code);
         }
-        header('location:../../?home');
+        header('location:../../');
     } else {
         $_SESSION['error'] = $response;
         $_SESSION['formdata'] = $_POST;
@@ -151,4 +152,24 @@ if (isset($_GET['logout'])) {
     header('location:../../');
 }
 
-?>
+
+
+
+//for update profile
+if (isset($_GET['updateprofile'])) {
+
+    $response = validateUpdateForm($_POST, $_FILES['profile_pic']);
+    // d($_SESSION);
+
+    if ($response['status']) {
+        if (updateProfile($_POST, $_FILES['profile_pic'])) {
+            echo 'profile updated';
+            header('location:../../?edit_profile&success');
+        } else {
+            echo  'somethig is wrong';
+        }
+    } else {
+        $_SESSION['error'] = $response;
+        header('location:../../?edit_profile');
+    }
+}
