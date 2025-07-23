@@ -10,6 +10,7 @@ if (isset($_GET['newfp'])) {
 if (isset($_SESSION['AUTH'])) {
 
     $user = getUser($_SESSION['userdata']['id']);
+    $post = getPost();
 }
 
 
@@ -54,8 +55,6 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
         showPage("header", ["page_title" => "Blocked"]);
         showPage("blocked");
     } else {
-        session_destroy();
-        session_start();
         showPage("header", ["page_title" => "Pictogram-Login"]);
         showPage("login");
     }

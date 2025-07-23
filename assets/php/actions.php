@@ -173,3 +173,19 @@ if (isset($_GET['updateprofile'])) {
         header('location:../../?edit_profile');
     }
 }
+
+
+// Post post_img  to data base 
+if (isset($_GET['addpost'])) {
+
+    $response = validatePostForm($_FILES['post_img']);
+    if ($response['status']) {
+        createPost($_POST, $_FILES['post_img']);
+        echo 'post uploaded';
+        header('location:../../?new_post_added');
+    } else {
+        $_SESSION['error'] = $response;
+        header('location:../../?post_failed');
+
+    }
+}

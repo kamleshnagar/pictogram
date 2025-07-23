@@ -3,21 +3,24 @@
 
 require_once 'config.php';
 
-$db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME) or die("Can't Connect to Data Base!");
 
-function d($data)
+
+function deb($data)
 {
     echo '<pre>';
     print_r($data);
     echo '</pre><br>';
     exit;
 }
-function p($data)
+function pr(...$dataList)
 {
-    echo '<pre>';
-    print_r($data);
-    echo '</pre><br>';
+    foreach ($dataList as $data) {
+        echo '<pre>';
+        print_r($data);
+        echo '</pre><br>';
+    }
 }
+
 
 // function to show pages
 
@@ -132,6 +135,14 @@ function getUser($user_id)
     $run = mysqli_query($db, $query);
     return mysqli_fetch_assoc($run);
 }
+function getPost()
+{
+    global $db;
+
+    $query = "SELECT posts.id,posts.post_img,posts.post_text,posts.created_at,users.first_name,users.last_name,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run, true);
+}
 
 //function for verify Email
 function verifyEmail($email)
@@ -150,14 +161,27 @@ function showError($field)
         $error = $_SESSION['error'];
 
         if ($field == $error['field']) {
+        ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Failed!</strong> <?= $error['msg']; ?>.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+<?php
+        }
+    }else if (isset($_SESSION['error']) && $_GET['post_failed']) {
+        $error = $_SESSION['error'];
+
+        if ($field == $error['field']) {
 ?>
             <div class="alert alert-danger" role="alert">
                 <?= $error['msg']; ?>
             </div>
 
-<?php
+        <?php
         }
     }
+   
 }
 
 
@@ -313,16 +337,69 @@ function updateProfile($data, $image_data)
     }
     $profile_pic = "";
     if ($image_data['name']) {
-        $image_name = time() .'-' . basename($image_data['name']);
+        $image_name = time() . '-' . basename($image_data['name']);
         $image_dir = "../images/profile/$image_name";
         move_uploaded_file($image_data['tmp_name'], $image_dir);
         $profile_pic = ", profile_pic='$image_name'";
     }
-        
-        
+
+
 
 
 
     $query = "UPDATE users SET first_name='$first_name', last_name='$last_name', username='$username',  password='$password' $profile_pic WHERE id=" . $_SESSION['userdata']['id'] . ";";
     return mysqli_query($db, $query);
+}
+
+
+//for validtating add post form 
+
+function validatePostForm($media_data)
+
+{
+
+    $response['status'] = true;
+
+    if (!$media_data['name']) {
+        $response['msg'] = "Please select a video or image to upload. <small class='text-primary'>(file size should be less then 10mb)</small>";
+        $response['status'] = false;
+        $response['field'] = 'post_img';
+    }
+    if ($media_data['name']) {
+        $media = basename($media_data['name']);
+        $type = strtolower(pathinfo($media, PATHINFO_EXTENSION));
+        $size = $media_data['size'] / 1000;
+
+        if (!in_array($type, ['jpg', 'jpeg', 'png', 'mp4', 'mov', 'avi', 'wmv', 'mkv', 'webm', 'flv', 'mp4'])) {
+            $response['msg'] = "Only image and video files are allowed.";
+            $response['status'] = false;
+            $response['field'] = 'post_img';
+        }
+        if ($size > 10240) {
+            $response['msg'] = "Upload media file less then 10 mb.";
+            $response['status'] = false;
+            $response['field'] = 'post_img';
+        }
+    }
+
+    return $response;
+}
+
+
+//for creating new post
+function createPost($text, $image)
+{
+    global $db;
+
+    $user_id = $_SESSION['userdata']['id'];
+    $post_text = mysqli_escape_string($db, $text['post_text']);
+    $image_name = time() . '-' . basename($image['name']);
+    //uploading file to server
+    $image_dir = "../images/post/$image_name";
+    move_uploaded_file($image['tmp_name'], $image_dir);
+
+    // sending post data to database
+    $sql = "INSERT INTO posts (user_id, post_text, post_img)
+            VALUES('$user_id','$post_text','$image_name')";
+    return mysqli_query($db, $sql);
 }
