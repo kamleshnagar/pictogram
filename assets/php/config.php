@@ -34,3 +34,4 @@ $table_users = "CREATE TABLE IF NOT EXISTS users (
     PRIMARY KEY (id)
 );";
 mysqli_query($db,$table_users);
+

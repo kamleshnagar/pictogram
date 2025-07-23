@@ -1,6 +1,0 @@
-aleTESTING
-GIT STATUS
-sadfsdfsd
-asddasdas
-sdasdasdadssdasdasda
-asdasdasdasdad

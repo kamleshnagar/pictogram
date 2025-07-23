@@ -135,11 +135,32 @@ function getUser($user_id)
     $run = mysqli_query($db, $query);
     return mysqli_fetch_assoc($run);
 }
+
+//getting user data by username
+function getUserByUsername($username)
+{
+    global $db;
+
+    $query = "SELECT * FROM users WHERE username= '$username'; ";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($run);
+}
+// Getting feed post
 function getPost()
 {
     global $db;
 
-    $query = "SELECT posts.id,posts.post_img,posts.post_text,posts.created_at,users.first_name,users.last_name,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id;";
+    $query = "SELECT posts.id,posts.post_img,posts.post_text,posts.created_at,users.first_name,users.last_name,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id ORDER BY id DESC;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run, true);
+}
+
+// getting Posts by user_id
+function getPostByUserId($id)
+{
+    global $db;
+
+    $query = "SELECT * FROM posts WHERE user_id = $id ORDER BY id DESC;";
     $run = mysqli_query($db, $query);
     return mysqli_fetch_all($run, true);
 }

@@ -34,6 +34,22 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
     showPage("header", ["page_title" => "Edit Profile"]);
     showPage("navbar");
     showPage("edit_profile");
+} elseif (isset($_SESSION['AUTH']) && isset($_GET['u']) && $user['ac_status'] == 1) {
+    $profile = getUserByUsername($_GET['u']);
+    $profile_post = getPostByUserId($profile['id']);
+    
+
+    if (!$profile) {
+
+        showPage("header", ["page_title" => "User Not Found"]);
+        showPage("navbar");
+        showPage("usernotfound");
+    } else {
+
+        showPage("header", ["page_title" => $profile['first_name'] . ' ' . $profile['last_name']]);
+        showPage("navbar");
+        showPage("profile");
+    }
 } elseif (isset($_GET['signup']) && !isset($_SESSION['AUTH'])) {
     showPage("header", ["page_title" => "Pictogram-Signup"]);
     showPage("signup");
