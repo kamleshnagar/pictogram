@@ -17,7 +17,7 @@ $table_posts = "CREATE TABLE IF NOT EXISTS posts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );";
-mysqli_query($db,$table_posts);
+mysqli_query($db, $table_posts);
 
 $table_users = "CREATE TABLE IF NOT EXISTS users (
     id INT(11) NOT NULL AUTO_INCREMENT,
@@ -33,5 +33,14 @@ $table_users = "CREATE TABLE IF NOT EXISTS users (
     ac_status INT(11) NOT NULL,
     PRIMARY KEY (id)
 );";
-mysqli_query($db,$table_users);
+mysqli_query($db, $table_users);
 
+
+
+$table_follower_list = "CREATE TABLE IF NOT EXISTS `pictogram`.`follow_list`
+(`id` INT NOT NULL AUTO_INCREMENT ,
+ `follower_id` INT NOT NULL , 
+ `user_id` INT NOT NULL , 
+ PRIMARY KEY (`id`)
+ );";
+mysqli_query($db, $table_follower_list);

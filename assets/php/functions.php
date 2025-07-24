@@ -206,9 +206,9 @@ function showError($field)
 
         // if ($field == $success['field']) {
         ?>
-            <div class="alert alert-success" role="alert">
-                <?= $success['msg']; ?>
-            </div>
+        <div class="alert alert-success" role="alert">
+            <?= $success['msg']; ?>
+        </div>
 
 <?php
         // }
@@ -434,3 +434,70 @@ function createPost($text, $image)
             VALUES('$user_id','$post_text','$image_name')";
     return mysqli_query($db, $sql);
 }
+
+
+//for getting user for follow suggestions
+function getFollowSuggestions()
+{
+    global $db;
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "SELECT * FROM users WHERE id!= $current_user  LIMIT 7;";
+    $run =  mysqli_query($db, $query);
+    return mysqli_fetch_all($run, true);
+}
+
+//for filtering th follow suggestion
+function filterFollowSuggestion()
+{
+    $list = getFollowSuggestions();
+    $filter_list = array();
+    foreach ($list as $user) {
+        if (!checkFollowStatus($user['id'])) {
+            $filter_list[] = $user;
+        }
+    }
+    return $filter_list;
+}
+//for filtering Wall Post follow suggestion
+function filterPost()
+{
+    $list = getFollowSuggestions();
+    $filter_list = array();
+    foreach ($list as $user) {
+        if (!checkFollowStatus($user['id'])) {
+            $filter_list[] = $user;
+        }
+    }
+    return $filter_list;
+}
+// for checking the user is followed by current user or not 
+function checkFollowStatus($user_id)
+{
+    global $db;
+    $current_user = $_SESSION['userdata']['id'];
+    $query = "SELECT count(*) as row FROM follow_list WHERE follower_id = $current_user && user_id=$user_id ;";
+    $run =  mysqli_query($db, $query);
+    return mysqli_fetch_assoc($run)['row'];;
+}
+
+
+
+function followUser($user_id)
+{
+    global $db;
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "INSERT INTO follow_list (follower_id, user_id) VALUES ('$current_user', '$user_id');";
+    return mysqli_query($db, $query);
+}
+function unfollowUser($user_id)
+{
+    global $db;
+    $user_id = 6;
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "DELETE FROM follow_list WHERE follower_id = '$current_user' AND user_id= '$user_id';";
+
+    $result = mysqli_query($db, $query);
+
+    return $result;
+}  
+

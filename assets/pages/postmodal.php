@@ -8,6 +8,7 @@
         <form method="POST" action="assets/php/actions.php?addpost" enctype="multipart/form-data">
             <div class="my-3">
                 <input class="form-control" name="post_img" type="file" id="select_post_img">
+                 <div id="post_img_error" class="text-danger mt-2 small"></div>
             </div>
 
             <div class="mb-3">
@@ -15,7 +16,7 @@
                 <textarea name="post_text" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
             </div>
     </div>
-    <button type="submit" class="btn btn-primary">Post</button>
+    <button type="submit" on=submit class="btn btn-primary">Post</button>
     </form>
 </div>
 

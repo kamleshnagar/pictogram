@@ -11,6 +11,7 @@ if (isset($_SESSION['AUTH'])) {
 
     $user = getUser($_SESSION['userdata']['id']);
     $post = getPost();
+    $follow_suggestions = filterFollowSuggestion();
 }
 
 
@@ -37,7 +38,7 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
 } elseif (isset($_SESSION['AUTH']) && isset($_GET['u']) && $user['ac_status'] == 1) {
     $profile = getUserByUsername($_GET['u']);
     $profile_post = getPostByUserId($profile['id']);
-    
+
 
     if (!$profile) {
 
@@ -77,7 +78,7 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
 }
 
 
-
+pr($_SESSION);
 
 unset($_SESSION['error']);
 unset($_SESSION['success']);
@@ -85,7 +86,4 @@ unset($_SESSION['formdata']);
 
 showPage("footer");
 
-// echo 'pagecount' . p($pagecount);
-// p($user);
-// // p($_POST);
-// p($_SESSION);
+//  . p($pagecount);    

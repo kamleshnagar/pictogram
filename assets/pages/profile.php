@@ -45,15 +45,13 @@ global $profile_post;
     </div>
     <h3 class="border-bottom">Posts</h3>
     <div class="gallery d-flex flex-wrap justify-content-center gap-2 mb-4">
-        <img src="assets/images/post/post.jpg" width="300px" class="rounded" />
-        <img src="assets/images/post/post2.jpg" width="300px" class="rounded" />
-        <img src="assets/images/post/post3.png" width="300px" class="rounded" />
-        <img src="assets/images/post/post4.jpg" width="300px" class="rounded" />
-        <img src="assets/images/post/post5.jpg" width="300px" class="rounded" />
-        <img src="assets/images/post/post.jpg" width="300px" class="rounded" />
-        <img src="assets/images/post/post.jpg" width="300px" class="rounded" />
-        <img src="assets/images/post/post2.jpg" width="300px" class="rounded" />
-        <img src="assets/images/post/post3.png" width="300px" class="rounded" />
+        <?php
+            foreach($profile_post as $post){
+        ?>
+        <img src="assets/images/post/<?=$post['post_img']?>" width="300px" class="rounded" />
+
+        <?php } ?>
+        
 
     </div>
 
