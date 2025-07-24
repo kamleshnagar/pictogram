@@ -181,11 +181,11 @@ if (isset($_GET['addpost'])) {
     $response = validatePostForm($_FILES['post_img']);
     if ($response['status']) {
         createPost($_POST, $_FILES['post_img']);
-        echo 'post uploaded';
+        $response['msg'] = "Post has been uploaded successfully";
+        $_SESSION['success'] =  $response;
         header('location:../../?new_post_added');
     } else {
         $_SESSION['error'] = $response;
         header('location:../../?post_failed');
-
     }
 }

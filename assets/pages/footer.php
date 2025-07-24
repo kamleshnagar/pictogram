@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<script src="<?=baseurl().'/assets/bootstrap/js/bootstrap.bundle.min.js'?>"></script>
+<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/custom.js?v=<?= time() ?>"></script>
 </body>
 

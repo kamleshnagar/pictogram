@@ -182,27 +182,37 @@ function showError($field)
         $error = $_SESSION['error'];
 
         if ($field == $error['field']) {
-        ?>
+?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Failed!</strong> <?= $error['msg']; ?>.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
-<?php
+        <?php
         }
-    }else if (isset($_SESSION['error']) && $_GET['post_failed']) {
+    } else if (isset($_SESSION['error']) && $_GET['post_failed']) {
         $error = $_SESSION['error'];
 
         if ($field == $error['field']) {
-?>
+        ?>
             <div class="alert alert-danger" role="alert">
                 <?= $error['msg']; ?>
             </div>
 
         <?php
         }
+    } else if (isset($_SESSION['success'])) {
+        $success = $_SESSION['success'];
+
+        // if ($field == $success['field']) {
+        ?>
+            <div class="alert alert-success" role="alert">
+                <?= $success['msg']; ?>
+            </div>
+
+<?php
+        // }
     }
-   
 }
 
 
