@@ -150,7 +150,7 @@ function getPost()
 {
     global $db;
 
-    $query = "SELECT posts.id,posts.post_img,posts.post_text,posts.created_at,users.first_name,users.last_name,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id ORDER BY id DESC;";
+    $query = "SELECT posts.id,posts.user_id,posts.post_img,posts.post_text,posts.created_at,users.first_name,users.last_name,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id ORDER BY id DESC;";
     $run = mysqli_query($db, $query);
     return mysqli_fetch_all($run, true);
 }
@@ -462,14 +462,15 @@ function filterFollowSuggestion()
     }
     return $filter_list;
 }
-//for filtering Wall Post follow suggestion
+//for getting post dinamically
 function filterPost()
 {
-    $list = getFollowSuggestions();
+    $list = getPost();
+    
     $filter_list = array();
-    foreach ($list as $user) {
-        if (!checkFollowStatus($user['id'])) {
-            $filter_list[] = $user;
+    foreach ($list as $post) {
+        if (checkFollowStatus($post['user_id']) || $post['user_id'] == $_SESSION['userdata']['id']) {
+            $filter_list[] = $post;
         }
     }
     return $filter_list;
@@ -496,9 +497,9 @@ function followUser($user_id)
 function unfollowUser($user_id)
 {
     global $db;
-    $user_id = 6;
+    $user_id = $user_id;
     $current_user =  $_SESSION['userdata']['id'];
-    $query = "DELETE FROM follow_list WHERE follower_id = '$current_user' AND user_id= '$user_id';";
+    $query = "DELETE FROM follow_list WHERE follower_id = $current_user AND user_id= $user_id;";
 
     $result = mysqli_query($db, $query);
 

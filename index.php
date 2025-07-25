@@ -10,7 +10,7 @@ if (isset($_GET['newfp'])) {
 if (isset($_SESSION['AUTH'])) {
 
     $user = getUser($_SESSION['userdata']['id']);
-    $post = getPost();
+    $post =  filterPost();
     $follow_suggestions = filterFollowSuggestion();
 }
 

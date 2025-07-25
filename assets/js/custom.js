@@ -23,6 +23,7 @@ $(document).on("click", ".followbtn", function () {
     let user_id_v = $(this).data('userId');
     let button = this;
     console.log("follow button is clicked");
+    $(button).attr('disabled:', true);
     $.ajax({
         url: 'assets/php/ajax.php?follow',
         method: 'POST',
@@ -32,6 +33,7 @@ $(document).on("click", ".followbtn", function () {
             if (response.status) {
                 $(button).text('Unfollow');
                 $(button).attr('userId:', user_id_v);
+                $(button).attr('disabled:', false);
                 $(button).removeClass('followbtn btn-primary').addClass('unfollowbtn btn-danger');
                 $(document).on("click", ".unfollowbtn", unfollow);
             }
@@ -47,6 +49,7 @@ function unfollow() {
 
     let user_id_v = $(this).data('userId');
     let button = this;
+    $(button).attr('disabled:', true);
     $.ajax({
         url: 'assets/php/ajax.php?unfollow',
         method: 'POST',
@@ -57,6 +60,7 @@ function unfollow() {
             if (response.status) {
                 $(button).text("Follow");
                 $(button).attr('userId:', user_id_v);
+                $(button).attr('disabled:', false);
                 $(button).removeClass('unfollowbtn btn-danger').addClass('followbtn btn-primary');
             }
         }

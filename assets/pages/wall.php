@@ -86,6 +86,14 @@ global $follow_suggestions;
                 </div>
             <?php
             }
+
+            if (count($follow_suggestions) <1) {
+            ?>
+                <div class="text-center bg-white p-3 rounded">
+                    <p class="text-muted">No Follow Suggestions</p>
+                </div>
+            <?php
+            }
             ?>
 
 

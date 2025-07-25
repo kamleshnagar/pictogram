@@ -27,7 +27,7 @@
             <ul class="navbar-nav  mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#"><i class="bi bi-house-door-fill"></i></a>
+                    <a class="nav-link text-dark" href="?home"><i class="bi bi-house-door-fill"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark" data-bs-toggle="modal" data-bs-target="#addpost" href="#"><i class="bi bi-plus-square-fill"></i></a>
@@ -45,6 +45,7 @@
                         <img src="assets/images/profile/<?=$user['profile_pic']?>" alt="" height="30" class="rounded-circle border">
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="?u=<?=$user['username']?>">Profile</a></li>
                         <li><a class="dropdown-item" href="?edit_profile">Edit Profile</a></li>
                         <li><a class="dropdown-item" href="#">Account Settings</a></li>
                         <li>
