@@ -16,7 +16,7 @@
                 <textarea name="post_text" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
             </div>
     </div>
-    <button type="submit" on=submit class="btn btn-primary">Post</button>
+    <button type="submit" class="btn btn-primary post-btn">Post</button>
     </form>
 </div>
 

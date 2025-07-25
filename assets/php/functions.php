@@ -456,7 +456,7 @@ function filterFollowSuggestion()
     $list = getFollowSuggestions();
     $filter_list = array();
     foreach ($list as $user) {
-        if (!checkFollowStatus($user['id'])) {
+        if (!checkFollowStatus($user['id']) && count($filter_list) < 5) {
             $filter_list[] = $user;
         }
     }
@@ -466,12 +466,20 @@ function filterFollowSuggestion()
 function filterPost()
 {
     $list = getPost();
-    
+    if (!isset($_SESSION['AUTH'])) {
+        return $list;
+    }
+    if($list == null) {
+       return [];
+    }
     $filter_list = array();
     foreach ($list as $post) {
         if (checkFollowStatus($post['user_id']) || $post['user_id'] == $_SESSION['userdata']['id']) {
             $filter_list[] = $post;
         }
+    }
+    if (count($filter_list) < 1) {
+        $filter_list = $list;
     }
     return $filter_list;
 }

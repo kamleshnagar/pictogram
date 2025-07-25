@@ -177,16 +177,16 @@ if (isset($_GET['updateprofile'])) {
 
 
 // Post post_img  to data base 
-if (isset($_GET['addpost'])) {
+// if (isset($_GET['addpost'])) {
 
-    $response = validatePostForm($_FILES['post_img']);
-    if ($response['status']) {
-        createPost($_POST, $_FILES['post_img']);
-        $response['msg'] = "Post has been uploaded successfully";
-        $_SESSION['success'] =  $response;
-        header('location:../../?new_post_added');
-    } else {
-        $_SESSION['error'] = $response;
-        header('location:../../?post_failed');
-    }
-}
+//     $response = validatePostForm($_FILES['post_img']);
+//     if ($response['status']) {
+//         createPost($_POST, $_FILES['post_img']);
+//         $response['msg'] = "Post has been uploaded successfully";
+//         $_SESSION['success'] =  $response;
+//         header('location:../../?new_post_added');
+//     } else {
+//         $_SESSION['error'] = $response;
+//         header('location:../../?post_failed');
+//     }
+// }
