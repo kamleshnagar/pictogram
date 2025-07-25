@@ -104,10 +104,6 @@ $(document).on("click", ".post-btn", function (e) {
            
             if (response.status) {
                 
-                $('#exampleFormControlTextarea1').val('');
-                $('#select_post_img').val('');
-                $('#post_img').hide().attr('src', '');
-               
                  window.location.href = response.redirect;
 
             } else {
