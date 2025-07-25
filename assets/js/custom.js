@@ -78,7 +78,7 @@ $(document).on("click", ".post-btn", function (e) {
     let postImgError = $('#post_img_error');
 
 
-    if (!postText && !postImg) {
+    if (!postImg) {
         postImgError.html("<p class='text-danger'>Please enter a post text or select an image.</p>");
         return;
     } else {
