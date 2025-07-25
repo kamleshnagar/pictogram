@@ -86,8 +86,7 @@ $(document).on("click", ".post-btn", function (e) {
     }
 
     let formData = new FormData();
-    // Append post text and image to formData
-       
+    
     formData.append('post_text', postText);
     formData.append('post_img', postImg);
     if (postImg) {
@@ -104,10 +103,7 @@ $(document).on("click", ".post-btn", function (e) {
         success: function (response) {
            
             if (response.status) {
-                // Hide modal (if using Bootstrap modal)
-                // $('#postModal').modal('hide');
-
-                // Optionally clear the form
+                
                 $('#exampleFormControlTextarea1').val('');
                 $('#select_post_img').val('');
                 $('#post_img').hide().attr('src', '');
