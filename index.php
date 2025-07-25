@@ -54,7 +54,7 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
 } elseif (isset($_GET['signup']) && !isset($_SESSION['AUTH'])) {
     showPage("header", ["page_title" => "Pictogram-Signup"]);
     showPage("signup");
-} elseif (isset($_GET['login']) && isset($_SESSION['AUTH'])) {
+} elseif (isset($_GET['login']) && !isset($_SESSION['AUTH'])) {
     showPage("header", ["page_title" => "Pictogram-Login"]);
     showPage("login");
 } elseif (isset($_GET['forgetpassword'])) {
@@ -86,4 +86,4 @@ unset($_SESSION['formdata']);
 
 showPage("footer");
 
-//  . p($pagecount);    
+

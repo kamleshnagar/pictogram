@@ -10,6 +10,7 @@ if (isset($_GET['signup'])) {
     $response = validateSignupForm($_POST);
     if ($response['status']) {
         if (createUser($_POST)) {
+           
             header('location:../../?login&newuser');
             exit;
         } else {

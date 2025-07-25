@@ -27,17 +27,18 @@ $table_users = "CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     password TEXT NOT NULL,
-    profile_pic TEXT NOT NULL DEFAULT 'default_profile.jpg',
+    profile_pic VARCHAR(255) NOT NULL DEFAULT 'default_profile.jpg',
     create_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     ac_status INT(11) NOT NULL,
     PRIMARY KEY (id)
 );";
+
 mysqli_query($db, $table_users);
 
 
 
-$table_follower_list = "CREATE TABLE IF NOT EXISTS `pictogram`.`follow_list`
+$table_follower_list = "CREATE TABLE IF NOT EXISTS follow_list
 (`id` INT NOT NULL AUTO_INCREMENT ,
  `follower_id` INT NOT NULL , 
  `user_id` INT NOT NULL , 

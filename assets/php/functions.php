@@ -235,11 +235,9 @@ function isUserRegistered($field_name, $field_value)
     global $db;
 
     // Use prepared statements to prevent SQL injection
-    $stmt = $db->prepare("SELECT COUNT(*) as row FROM users WHERE $field_name = ?");
-    $stmt->bind_param("s", $field_value);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $return_data = $result->fetch_assoc();
+    $query = "SELECT COUNT(*) as `row` FROM users WHERE $field_name = '$field_value' ;";
+    $result = mysqli_query($db, $query);
+    $return_data = mysqli_fetch_assoc($result);
 
     return $return_data['row'];
 }
@@ -258,9 +256,12 @@ function createUser($data)
     $password = mysqli_escape_string($db, $data['password']);
     $password = md5($password);
 
+
     $sql = "INSERT INTO users (first_name, last_name, gender, email, username, password)
             VALUES('$first_name','$last_name',$gender,'$email','$username','$password')";
-    return mysqli_query($db, $sql);
+    $result = mysqli_query($db, $sql);
+
+    return $result;
 }
 
 
@@ -338,7 +339,7 @@ function isUserRegisteredbyOther($username)
     global $db;
     $user_id = $_SESSION['userdata']['id'];
 
-    $query = "SELECT COUNT(*) as row FROM users WHERE username = '$username' && id!=$user_id;";
+    $query = "SELECT COUNT(*) as `row` FROM `users` WHERE username = '$username' && id!='$user_id';";
     $result = mysqli_query($db, $query);
     $return_data = mysqli_fetch_assoc($result);
 
@@ -369,7 +370,7 @@ function updateProfile($data, $image_data)
     $profile_pic = "";
     if ($image_data['name']) {
         $image_name = time() . '-' . basename($image_data['name']);
-        $image_dir = "../images/profile/$image_name";
+        $image_dir = realpath(__DIR__ . "/../images/profile/") . "/" . $image_name;
         move_uploaded_file($image_data['tmp_name'], $image_dir);
         $profile_pic = ", profile_pic='$image_name'";
     }
@@ -426,7 +427,10 @@ function createPost($text, $image)
     $post_text = mysqli_escape_string($db, $text['post_text']);
     $image_name = time() . '-' . basename($image['name']);
     //uploading file to server
-    $image_dir = "../images/post/$image_name";
+
+
+    $image_dir = realpath(__DIR__ . "/../images/post/") . "/" . $image_name;
+
     move_uploaded_file($image['tmp_name'], $image_dir);
 
     // sending post data to database
@@ -475,7 +479,7 @@ function checkFollowStatus($user_id)
 {
     global $db;
     $current_user = $_SESSION['userdata']['id'];
-    $query = "SELECT count(*) as row FROM follow_list WHERE follower_id = $current_user && user_id=$user_id ;";
+    $query = "SELECT count(*) as `row` FROM follow_list WHERE follower_id = $current_user && user_id=$user_id ;";
     $run =  mysqli_query($db, $query);
     return mysqli_fetch_assoc($run)['row'];;
 }
@@ -499,5 +503,4 @@ function unfollowUser($user_id)
     $result = mysqli_query($db, $query);
 
     return $result;
-}  
-
+}
