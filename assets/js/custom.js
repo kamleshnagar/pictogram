@@ -35,7 +35,7 @@ $(document).on("click", ".followbtn", function () {
                 $(button).text('Unfollow');
                 $(button).attr('disabled:', false);
                 $(button).removeClass('followbtn btn-primary').addClass('unfollowbtn btn-danger');
-                $(document).on("click", ".unfollowbtn", unfollow);
+                $(button).on("click", ".unfollowbtn", unfollow);
                 console.log("Successfully followed");
             }
         }
@@ -44,10 +44,10 @@ $(document).on("click", ".followbtn", function () {
 
 
 
-
 // Unfollow button handler
-function unfollow() {
+$(document).on("click", ".unfollowbtn", unfollow);
 
+function unfollow() {
     let user_id = $(this).data('userId');
     let button = this;
     $(button).attr('disabled:', true);
@@ -55,7 +55,7 @@ function unfollow() {
         url: 'assets/php/ajax.php?unfollow',
         method: 'POST',
         dataType: 'json',
-        data: { user_id: user_id},
+        data: { user_id: user_id },
         success: function (response) {
             if (response.status) {
                 $(button).text("Follow");
@@ -82,14 +82,14 @@ $(document).on("click", ".post-btn", function (e) {
     }
 
     let formData = new FormData();
-    
+
     formData.append('post_text', postText);
     formData.append('post_img', postImg);
     if (postImg) {
         formData.append('post_img', postImg);
     }
     console.log(formData);
- $.ajax({
+    $.ajax({
         url: 'assets/php/ajax.php?addpost',
         type: 'POST',
         data: formData,
@@ -97,10 +97,10 @@ $(document).on("click", ".post-btn", function (e) {
         contentType: false,
         dataType: 'json',
         success: function (response) {
-           
+
             if (response.status) {
-                
-                 window.location.href = response.redirect;
+
+                window.location.href = response.redirect;
 
             } else {
                 postImgError.html("<p class='text-danger'>" + response.message + "</p>");

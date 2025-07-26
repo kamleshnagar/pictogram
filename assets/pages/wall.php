@@ -26,8 +26,8 @@ global $follow_suggestions;
                     <div class="card-title d-flex justify-content-between  align-items-center">
 
                         <div class="d-flex align-items-center p-2">
-                            <img src="assets/images/profile/<?= $posts['profile_pic'] ?>" alt="" height="30" class="rounded-circle border"><?= $posts['first_name'] . ' ' . $posts['last_name'] ?>
-                        </div>
+                           <a href="?u=<?=$posts['username']?>" class="text-decoration-none text-dark"> <img src="assets/images/profile/<?= $posts['profile_pic'] ?>" alt="" height="30" class="rounded-circle border "><span class="px-2"><?= $posts['first_name'] . ' ' . $posts['last_name'] ?>
+                        </span></div></a>
                         <div class="p-2">
                             <i class="bi bi-three-dots-vertical"></i>
                         </div>

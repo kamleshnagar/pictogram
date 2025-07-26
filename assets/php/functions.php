@@ -513,3 +513,20 @@ function unfollowUser($user_id)
 
     return $result;
 }
+
+
+// for counting the followers
+function getFollowers($user_id)
+{
+    global $db;
+    $query = "SELECT * FROM follow_list WHERE user_id = $user_id;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run,true);
+}   
+function getFollowing($user_id)
+{
+    global $db;
+    $query = "SELECT * FROM follow_list WHERE follower_id = $user_id;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run,true);
+}   
