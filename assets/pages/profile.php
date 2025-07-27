@@ -3,6 +3,8 @@ global $profile;
 global $user;
 global $profile_post;
 
+//  pr($profile['following']);
+
 ?>
 <div class="container col-9 rounded-0 d-flex flex-column justify-content-center align-items-center">
     <div class="col-12 rounded p-4 mt-4 d-flex gap-5">
@@ -36,9 +38,11 @@ global $profile_post;
                 <div class="d-flex flex-column  ">
                     <div class="d- flex gap-2 align-items-center justify-content-center my-3">
 
-                        <a class="btn btn-sm btn-primary"><i class="bi bi-file-post-fill"></i> <?= count($profile_post) ?> Posts</a>
-                        <a class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#follower_list"><i class="bi bi-people-fill"></i> <?= count($profile['followers']) ?> Followers</a>
-                        <a class="btn btn-sm btn-primary"><i class="bi bi-person-fill"></i><?= count($profile['following']) ?> Following</a>
+                        <a class="btn btn-sm btn-primary posts"><i class="bi bi-file-post-fill"></i> <?= count($profile_post) ?> Posts</a>
+                        <a class="btn btn-sm btn-primary followers" data-bs-toggle="modal" data-bs-target="#follower_list"><i class="bi bi-people-fill"></i> <?= count($profile['followers']) ?> Followers</a>
+                        <a class="btn btn-sm btn-primary following" data-bs-toggle="modal" data-bs-target="#following_list">
+                            <i class="bi bi-person-fill"></i> <?= count($profile['following']) ?> Following
+                        </a>
 
                     </div>
 
@@ -81,9 +85,9 @@ global $profile_post;
                 }
             } else {
                 ?>
-               
-                    <p class="text-muted w-100 fs-3 my-5">No Posts Found</p>
-               
+
+                <p class="text-muted w-100 fs-3 my-5">No Posts Found</p>
+
             <?php
             }
 
@@ -182,10 +186,5 @@ global $profile_post;
 
 
 <!-- this is the followerlist -->
- <div class="modal fade" id="follower_list" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <?php include('followers_modal.php'); ?>
-        </div>
-    </div>
-</div>
+
+<?php include('followers&following_modal.php'); ?>

@@ -1,6 +1,7 @@
 <?php
 require_once 'config.php';
 require_once 'functions.php';
+global $profile_post;
 
 
 if (isset($_GET['follow'])) {
@@ -20,11 +21,13 @@ if (isset($_GET['follow'])) {
     echo json_encode($response);
 }
 
-if (isset($_GET['unfollow']) || isset($_GET['u'])) {
+if (isset($_GET['unfollow'])) {
     $user_id = $_POST['user_id'];
 
     if (unfollowUser($user_id)) {
         $response['status'] = true;
+        
+      
     } else {
         $response['status'] = false;
     }

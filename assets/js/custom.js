@@ -6,7 +6,6 @@ input.addEventListener("change", preview);
 function preview() {
     let fileobject = this.files[0];
     let filereader = new FileReader();
-
     filereader.readAsDataURL(fileobject);
     filereader.onload = function () {
         let img_src = filereader.result;
@@ -36,7 +35,6 @@ $(document).on("click", ".followbtn", function () {
                 $(button).attr('disabled:', false);
                 $(button).removeClass('followbtn btn-primary').addClass('unfollowbtn btn-danger');
                 $(button).on("click", ".unfollowbtn", unfollow);
-                console.log("Successfully followed");
             }
         }
     });
@@ -61,7 +59,7 @@ function unfollow() {
                 $(button).text("Follow");
                 $(button).attr('disabled:', false);
                 $(button).removeClass('unfollowbtn btn-danger').addClass('followbtn btn-primary');
-                console.log("Successfully unfollowed");
+                console.log(response);
             }
         }
     });
@@ -111,3 +109,7 @@ $(document).on("click", ".post-btn", function (e) {
         }
     });
 });
+
+
+
+
