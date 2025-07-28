@@ -469,8 +469,8 @@ function filterPost()
     if (!isset($_SESSION['AUTH'])) {
         return $list;
     }
-    if($list == null) {
-       return [];
+    if ($list == null) {
+        return [];
     }
     $filter_list = array();
     foreach ($list as $post) {
@@ -499,13 +499,13 @@ function followUser($user_id)
 {
     global $db;
     $current_user =  $_SESSION['userdata']['id'];
-    $query = "INSERT INTO follow_list (follower_id, user_id) VALUES ('$current_user', '$user_id');";
+    $query = "INSERT INTO follow_list (follower_id, user_id) VALUES ($current_user, $user_id);";
     return mysqli_query($db, $query);
 }
 function unfollowUser($user_id)
 {
     global $db;
-    $user_id = $user_id;
+
     $current_user =  $_SESSION['userdata']['id'];
     $query = "DELETE FROM follow_list WHERE follower_id = $current_user AND user_id= $user_id;";
 
@@ -521,12 +521,47 @@ function getFollowers($user_id)
     global $db;
     $query = "SELECT * FROM follow_list WHERE user_id = $user_id;";
     $run = mysqli_query($db, $query);
-    return mysqli_fetch_all($run,true);
-}   
+    return mysqli_fetch_all($run, true);
+}
 function getFollowing($user_id)
 {
     global $db;
     $query = "SELECT * FROM follow_list WHERE follower_id = $user_id;";
     $run = mysqli_query($db, $query);
-    return mysqli_fetch_all($run,true);
-}   
+    return mysqli_fetch_all($run, true);
+}
+
+
+
+//check like status
+function checkLikeStatus($post_id)
+{
+    global $db;
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "SELECT count(*) as `row` FROM likes WHERE user_id = $current_user && post_id=$post_id ;";
+    $run =  mysqli_query($db, $query);
+    return mysqli_fetch_assoc($run)['row'];;
+}
+
+
+// like post
+function like($post_id)
+{
+    global $db;
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "INSERT INTO `likes` (post_id, user_id) VALUES ($post_id,$current_user);";
+    return mysqli_query($db, $query);
+}
+
+// unlike post
+function unlike($post_id)
+{
+    global $db;
+
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "DELETE FROM likes WHERE user_id = $current_user AND post_id= $post_id;";
+
+    $result = mysqli_query($db, $query);
+
+    return $result;
+}

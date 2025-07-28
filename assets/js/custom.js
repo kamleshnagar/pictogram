@@ -16,55 +16,6 @@ function preview() {
 }
 
 
-
-
-
-// Follow button handler
-$(document).on("click", ".followbtn", function () {
-    let user_id = $(this).data('userId');
-    let button = this;
-    $(button).attr('disabled:', true);
-    $.ajax({
-        url: 'assets/php/ajax.php?follow',
-        method: 'POST',
-        dataType: 'json',
-        data: { user_id: user_id },
-        success: function (response) {
-            if (response.status) {
-                $(button).text('Unfollow');
-                $(button).attr('disabled:', false);
-                $(button).removeClass('followbtn btn-primary').addClass('unfollowbtn btn-danger');
-                $(button).on("click", ".unfollowbtn", unfollow);
-            }
-        }
-    });
-});
-
-
-
-// Unfollow button handler
-$(document).on("click", ".unfollowbtn", unfollow);
-
-function unfollow() {
-    let user_id = $(this).data('userId');
-    let button = this;
-    $(button).attr('disabled:', true);
-    $.ajax({
-        url: 'assets/php/ajax.php?unfollow',
-        method: 'POST',
-        dataType: 'json',
-        data: { user_id: user_id },
-        success: function (response) {
-            if (response.status) {
-                $(button).text("Follow");
-                $(button).attr('disabled:', false);
-                $(button).removeClass('unfollowbtn btn-danger').addClass('followbtn btn-primary');
-                console.log(response);
-            }
-        }
-    });
-};
-
 //post validation
 $(document).on("click", ".post-btn", function (e) {
     e.preventDefault();
@@ -112,4 +63,109 @@ $(document).on("click", ".post-btn", function (e) {
 
 
 
+
+// Follow button handler
+$(document).on("click", ".followbtn", follow);
+    function follow() {
+    let user_id_v = $(this).data('userId');
+    let button = this;
+    $(button).attr('disabled:', true);
+    $.ajax({
+        url: 'assets/php/ajax.php?follow',
+        method: 'POST',
+        dataType: 'json',
+        data: { user_id: user_id_v },
+        success: function (response) {
+            if (response.status) {
+                $(button).text('Unfollow');
+                $(button).attr('disabled:', false);
+                $(button).removeClass('followbtn btn-primary').addClass('unfollowbtn btn-danger');
+                $(button).on("click", ".unfollowbtn", unfollow);
+            } else {
+                $(button).attr('disabled:', false);
+                alert('Something went wrong, please try again later.');
+            }
+        }
+    });
+};
+
+
+
+// Unfollow button handler
+$(document).on("click", ".unfollowbtn", unfollow);
+
+function unfollow() {
+    let user_id_v = $(this).data('userId');
+    let button = this;
+    $(button).attr('disabled:', true);
+    $.ajax({
+        url: 'assets/php/ajax.php?unfollow',
+        method: 'POST',
+        dataType: 'json',
+        data: { user_id: user_id_v },
+        success: function (response) {
+            if (response.status) {
+                $(button).text("Follow");
+                $(button).attr('disabled:', false);
+                $(button).removeClass('unfollowbtn btn-danger').addClass('followbtn btn-primary');
+                console.log(response);
+            } else {
+                $(button).attr('disabled:', false);
+                alert('Something went wrong, please try again later.');
+            }
+        }
+    });
+};
+
+
+// for like the post
+$(document).on("click", ".like_btn", like);
+function like() {
+    let post_id_v = $(this).data('postId');
+    let button = this;
+    $(button).attr('disabled:', true);
+    $.ajax({
+        url: 'assets/php/ajax.php?like',
+        method: 'POST',
+        dataType: 'json',
+        data: { post_id: post_id_v },
+        success: function (response) {
+            console.log(response);
+            if (response.status) {
+                $(button).attr('disabled:', false);
+                $(button).attr('class', 'bi bi-heart-fill text-danger unlike_btn');
+                $(button).on("click", ".unlike_btn", unlike);
+            } else {
+                $(button).attr('disabled:', false);
+                alert('Something went wrong, please try again later.');
+            }
+        }
+    })
+};
+
+
+// for unlike the post
+$(document).on("click", ".unlike_btn", unlike);
+
+function unlike() {
+    let post_id_v = $(this).data('postId');
+    let button = this;
+    $(button).attr('disabled:', true);
+    $.ajax({
+        url: 'assets/php/ajax.php?unlike',
+        method: 'POST',
+        dataType: 'json',
+        data: { post_id: post_id_v },
+        success: function (response) {
+            if (response.status) {
+                $(button).attr('disabled:', false);
+                $(button).attr('class', 'bi bi-heart like_btn');
+                $(".like_btn").click(like());
+            } else {
+                $(button).attr('disabled:', false);
+                alert('Something went wrong, please try again later.');
+            }
+        }
+    })
+};
 

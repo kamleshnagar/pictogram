@@ -26,10 +26,40 @@ if (isset($_GET['unfollow'])) {
 
     if (unfollowUser($user_id)) {
         $response['status'] = true;
-        
-      
     } else {
         $response['status'] = false;
+    }
+    echo json_encode($response);
+}
+
+
+// like post
+
+if (isset($_GET['like'])) {
+    $post_id = $_POST['post_id'];
+
+    if (!checkLikeStatus($post_id)) {
+        if (like($post_id)) {
+            $response['status'] = true;
+        } else {
+            $response['status'] = false;
+        }
+    }
+    echo json_encode($response);
+}
+
+// unlike post
+if (isset($_GET['unlike'])) {
+
+
+    $post_id = $_POST['post_id'];
+    if (checkLikeStatus($post_id)) {
+
+        if (unlike($post_id)) {
+            $response['status'] = true;
+        } else {
+            $response['status'] = false;
+        }
     }
     echo json_encode($response);
 }

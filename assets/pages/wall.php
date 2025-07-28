@@ -1,7 +1,8 @@
 <?php
 global $user;
-global $post;
+global $posts;
 global $follow_suggestions;
+
 ?>
 
 <div class="container my-3">
@@ -11,7 +12,7 @@ global $follow_suggestions;
 
     <div class="col-8">
         <?php
-        if (count($post) < 1) {
+        if (count($posts) < 1) {
         ?>
             <div class="d-flex align-items-center justify-content-center shadow border  container h-100 bg-white p-3 rounded">
                 <p class="text-muted fs-3">No Posts Found</p>
@@ -20,34 +21,34 @@ global $follow_suggestions;
         } else {
         ?>
             <?php
-            foreach ($post as $posts) {
+            foreach ($posts as $post) {
             ?>
                 <div class="card mt-4">
                     <div class="card-title d-flex justify-content-between  align-items-center">
 
                         <div class="d-flex align-items-center p-2">
-                           <a href="?u=<?=$posts['username']?>" class="text-decoration-none text-dark"> <img src="assets/images/profile/<?= $posts['profile_pic'] ?>" alt="" height="30" class="rounded-circle border "><span class="px-2"><?= $posts['first_name'] . ' ' . $posts['last_name'] ?>
+                           <a href="?u=<?=$post['username']?>" class="text-decoration-none text-dark"> <img src="assets/images/profile/<?= $post['profile_pic'] ?>" alt="" height="30" class="rounded-circle border "><span class="px-2"><?= $post['first_name'] . ' ' . $post['last_name'] ?>
                         </span></div></a>
                         <div class="p-2">
                             <i class="bi bi-three-dots-vertical"></i>
                         </div>
                     </div>
-                    <img src="assets/images/post/<?= $posts['post_img'] ?>" class="" alt="...">
-                    <h4 style="font-size: x-larger" class="p-2 border-bottom"><i class="bi bi-heart"></i>&nbsp;&nbsp;<i
+                    <img src="assets/images/post/<?= $post['post_img'] ?>" class="" alt="...">
+                    <h4 style="font-size: x-larger" class="p-2 border-bottom"><i class="bi <?= checkLikeStatus($post['id'])?'bi-heart-fill text-danger unlike_btn':'bi-heart like_btn'?>" data-post-id="<?=$post['id']?>"></i>&nbsp;&nbsp;<i
                             class="bi bi-chat-left"></i>
                     </h4>
 
 
                     <?php
-                    if (!empty($posts['post_text'])) {
+                    if (!empty($post['post_text'])) {
                     ?>
                         <div class="card-body">
-                            <?= $posts['post_text'] ?>
+                            <?= $post['post_text'] ?>
                         </div>
 
                     <?php } ?>
 
-                    <div class="input-group p-2 <?= !empty($post['post_text']) ? 'border-top' : '' ?>">
+                    <div class="input-group p-2 <?= !empty($posts['post_text']) ? 'border-top' : '' ?>">
                         <input type="text" class="form-control rounded-0 border-0" placeholder="say something.."
                             aria-label="Recipient's username" aria-describedby="button-addon2">
                         <button class="btn btn-outline-primary rounded-0 border-0" type="button"
