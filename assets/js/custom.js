@@ -1,19 +1,22 @@
 
-let input = document.querySelector('#select_post_img');
+document.addEventListener("DOMContentLoaded", function () {
+    var input = document.querySelector('#select_post_img');
+    if (input) {
+        input.addEventListener("change", preview);
 
-input.addEventListener("change", preview);
-
-function preview() {
-    let fileobject = this.files[0];
-    let filereader = new FileReader();
-    filereader.readAsDataURL(fileobject);
-    filereader.onload = function () {
-        let img_src = filereader.result;
-        let image = document.querySelector('#post_img');
-        image.setAttribute('src', img_src);
-        image.setAttribute('style', 'display:""');
+        function preview() {
+            let fileobject = this.files[0];
+            let filereader = new FileReader();
+            filereader.readAsDataURL(fileobject);
+            filereader.onload = function () {
+                let img_src = filereader.result;
+                let image = document.querySelector('#post_img');
+                image.setAttribute('src', img_src);
+                image.setAttribute('style', 'display:""');
+            }
+        }
     }
-}
+});
 
 
 //post validation
@@ -66,7 +69,7 @@ $(document).on("click", ".post-btn", function (e) {
 
 // Follow button handler
 $(document).on("click", ".followbtn", follow);
-    function follow() {
+function follow() {
     let user_id_v = $(this).data('userId');
     let button = this;
     $(button).attr('disabled:', true);
@@ -80,7 +83,6 @@ $(document).on("click", ".followbtn", follow);
                 $(button).text('Unfollow');
                 $(button).attr('disabled:', false);
                 $(button).removeClass('followbtn btn-primary').addClass('unfollowbtn btn-danger');
-                $(button).on("click", ".unfollowbtn", unfollow);
             } else {
                 $(button).attr('disabled:', false);
                 alert('Something went wrong, please try again later.');
