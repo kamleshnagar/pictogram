@@ -197,7 +197,7 @@ global $profile_post;
                 </div>
                 <div class="modal-body">
                     <?php
-                    if (isset($profile['following']) && count($profile['following']) > 0) {
+                    if (isset($profile['followers']) && count($profile['followers']) > 0) {
                         foreach ($profile['followers'] as $f) {
                             $fuser = getUser($f['follower_id']);
                             if ($fuser) {

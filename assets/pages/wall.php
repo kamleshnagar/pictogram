@@ -23,7 +23,7 @@ global $follow_suggestions;
         ?>
             <?php
             foreach ($posts as $post) {
-                $likes = getLikes($post['id']);
+
             ?>
                 <div class="card mt-4">
                     <div class="card-title d-flex justify-content-between  align-items-center">
@@ -42,7 +42,12 @@ global $follow_suggestions;
 
                         <i class="bi bi-chat-left"></i>
                     </h4>
-                    <span class="text-muted px-2 " data-bs-toggle="modal" data-bs-target="#likes<?= $post['id'] ?>">
+                    <span class="text-muted px-2 like_count_refresh"
+                        id="likeCount_<?= $post['id'] ?>"
+                        data-bs-toggle="modal"
+                        data-post-id="<?= $post['id'] ?>"
+                        data-bs-target="#likes<?= $post['id'] ?>">
+                        <?php $likes = getLikes($post['id']); ?>
                         <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
                     </span>
 

@@ -41,6 +41,8 @@ if (isset($_GET['like'])) {
     if (!checkLikeStatus($post_id)) {
         if (like($post_id)) {
             $response['status'] = true;
+            $likes = getLikes($post_id);
+            $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
         } else {
             $response['status'] = false;
         }
@@ -50,13 +52,13 @@ if (isset($_GET['like'])) {
 
 // unlike post
 if (isset($_GET['unlike'])) {
-
-
     $post_id = $_POST['post_id'];
     if (checkLikeStatus($post_id)) {
 
         if (unlike($post_id)) {
             $response['status'] = true;
+            $likes = getLikes($post_id);
+            $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
         } else {
             $response['status'] = false;
         }
@@ -83,5 +85,14 @@ if (isset($_GET['addpost'])) {
         $_SESSION['error'] = $response;
     }
     header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
+// for counting likes
+if (isset($_GET['get_like_count'])) {
+    $post_id = $_POST['post_id'];
+    $likes = getLikes($post_id);
+    $response['status'] = true;
+    $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
     echo json_encode($response);
 }
