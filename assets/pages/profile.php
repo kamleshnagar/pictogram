@@ -198,6 +198,14 @@ global $profile_post;
                 <div class="modal-body">
                     <?php
                     if (isset($profile['followers']) && count($profile['followers']) > 0) {
+
+                        // Reorder folloowers: logged-in user on top
+                        usort($profile['followers'], function ($a, $b) use ($user) {
+                            return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                        });
+                        
+
+                        // fetching users who liked the post
                         foreach ($profile['followers'] as $f) {
                             $fuser = getUser($f['follower_id']);
                             if ($fuser) {
@@ -265,6 +273,13 @@ global $profile_post;
                 <div class="modal-body">
                     <?php
                     if (isset($profile['following']) && count($profile['following']) > 0) {
+
+                        // Reorder following: logged-in user on top
+                        usort($profile['following'], function ($a, $b) use ($user) {
+                            return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                        });
+
+                        // fetching users who liked the post
                         foreach ($profile['following'] as $f) {
                             $fuser = getUser($f['user_id']);
                             if ($fuser) {
@@ -314,4 +329,3 @@ global $profile_post;
         </div>
     </div>
 </div>
-

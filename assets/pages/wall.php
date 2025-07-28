@@ -23,6 +23,7 @@ global $follow_suggestions;
         ?>
             <?php
             foreach ($posts as $post) {
+                $likes = getLikes($post['id']);
 
             ?>
                 <div class="card mt-4">
@@ -42,12 +43,13 @@ global $follow_suggestions;
 
                         <i class="bi bi-chat-left"></i>
                     </h4>
-                    <span class="text-muted px-2 like_count_refresh"
+                    <span
+
+                        class="text-muted px-2 like_count_refresh"
                         id="likeCount_<?= $post['id'] ?>"
                         data-bs-toggle="modal"
                         data-post-id="<?= $post['id'] ?>"
                         data-bs-target="#likes<?= $post['id'] ?>">
-                        <?php $likes = getLikes($post['id']); ?>
                         <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
                     </span>
 
@@ -160,6 +162,76 @@ global $follow_suggestions;
                     </form>
                 </div>
                 <button type="submit" class="btn btn-primary post-btn">Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal for likes -->
+
+
+<div class="modal fade" id="likes<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Likes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <?php
+                 
+                    if (isset($likes) && count($likes) > 0) {
+                        // Reorder likes: logged-in user on top
+                        usort($likes, function ($a, $b) use ($user) {
+                            return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                        });
+                        // fetching users who liked the post
+                        foreach ($likes as $like) {
+                            $liker = getUser($like['user_id']);
+                            if ($liker) {
+                    ?>
+                                <div class="d-flex justify-content-between shadow-sm p-2 mb-2 border rounded">
+                                    <div class="d-flex align-items-center p-2">
+                                        <div> <a href="?u=<?= $liker['username'] ?>"><img src="assets/images/profile/<?= $liker['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                                        </div></a>
+
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none text-dark">
+                                                <h6 style="margin: 0px;font-size: small;"><?= $liker['first_name'] . ' ' . $liker['last_name'] ?></h6>
+                                            </a>
+                                            <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none">
+                                                <p style="margin:0px;font-size:small" class="text-muted">@<?= $liker['username'] ?></p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    if ($liker['id'] !== $user['id']) {
+                                        if (checkFollowStatus($liker['id'])) {
+                                    ?>
+                                            <div class='d-flex align-items-center '>
+                                                <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $liker['id'] ?>">Unfollow</button>
+                                            </div>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <div class='d-flex align-items-center '>
+                                                <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $liker['id'] ?>">Follow</button>
+                                            </div>
+                                        <?php
+                                        }
+                                        ?>
+                                    <?php } ?>
+                                </div>
+                    <?php
+                            }
+                        }
+                    } else {
+                        echo "<p class='text-muted'>No likes found</p>";
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </div>
