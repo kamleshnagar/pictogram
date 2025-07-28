@@ -187,4 +187,3 @@ global $profile_post;
 
 <!-- this is the followerlist -->
 
-<?php include('followers&following_modal.php'); ?>

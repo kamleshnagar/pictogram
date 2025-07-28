@@ -565,3 +565,12 @@ function unlike($post_id)
 
     return $result;
 }
+
+
+// function fr likescount
+function getLikes($post_id){
+global $db;
+    $query = "SELECT * FROM likes WHERE post_id = $post_id;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run,true);
+}

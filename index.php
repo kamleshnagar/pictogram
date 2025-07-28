@@ -41,6 +41,7 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
     $profile_post = getPostByUserId($profile['id']);
     $profile['followers'] = getFollowers($profile['id']);
     $profile['following'] = getFollowing($profile['id']);
+   
 
 
     if (!$profile) {

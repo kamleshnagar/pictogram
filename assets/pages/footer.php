@@ -1,10 +1,7 @@
-<div class="modal fade" id="addpost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <?php include('postmodal.php'); ?>
-        </div>
-    </div>
-</div>
+
+<?php
+    include('modals.php');
+?>
 
 <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets\js\jquery-3.7.1.min.js?v=<?= time() ?>"></script>

@@ -8,5 +8,5 @@
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/bootstrap/icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/custom.css" rel="stylesheet">
-    <title><?=$data['page_title']?></title>
+    <title><?= $data['page_title'] ?></title>
 </head>
