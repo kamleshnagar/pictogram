@@ -1,7 +1,14 @@
 <?php
+
+
 require_once 'config.php';
 require_once 'functions.php';
+
+global $user;
+global $profile;
 global $profile_post;
+global $posts;
+global $follow_suggestions;
 
 
 if (isset($_GET['follow'])) {
@@ -96,3 +103,62 @@ if (isset($_GET['get_like_count'])) {
     $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
     echo json_encode($response);
 }
+
+
+// for getting like list
+if (isset($_GET['get_like_list'])) {
+    $post_id = $_POST['post_id'];
+    $likes = getLikes($post_id);
+    $user = getUser($_SESSION['userdata']['id']);
+
+
+//modal body
+    if (isset($likes) && count($likes) > 0) {
+
+      
+        usort($likes, function ($a, $b) use ($user) {
+            return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+        });
+
+        foreach ($likes as $like) {
+            $liker = getUser($like['user_id']);
+            if ($liker) {
+?>
+                <div class="d-flex justify-content-between shadow-sm p-2 mb-2 border rounded">
+                    <div class="d-flex align-items-center p-2">
+                        <div>
+                            <a href="?u=<?= $liker['username'] ?>">
+                                <img src="assets/images/profile/<?= $liker['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                            </a>
+                        </div>
+
+                        <div class="d-flex flex-column justify-content-center ms-2">
+                            <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none text-dark">
+                                <h6 class="m-0" style="font-size: small;"><?= $liker['first_name'] . ' ' . $liker['last_name'] ?></h6>
+                            </a>
+                            <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none">
+                                <p class="m-0 text-muted" style="font-size: small;">@<?= $liker['username'] ?></p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <?php if ($liker['id'] !== $user['id']) : ?>
+                        <div class='d-flex align-items-center'>
+                            <?php if (checkFollowStatus($liker['id'])) : ?>
+                                <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $liker['id'] ?>">Unfollow</button>
+                            <?php else : ?>
+                                <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $liker['id'] ?>">Follow</button>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+<?php
+            }
+        }
+    } else {
+        echo "<p class='text-muted'>No likes found</p>";
+    }
+
+    exit(); 
+}
+?>

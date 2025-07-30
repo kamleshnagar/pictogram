@@ -53,6 +53,24 @@ global $follow_suggestions;
                         <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
                     </span>
 
+<!-- Modal Start -->
+<div class="modal fade" id="likes<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title">Likes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <!-- 👇 AJAX will load content here -->
+            <div class="modal-body" id="likesModalBody<?= $post['id'] ?>">
+                <div class="text-center py-2 text-muted">Loading likes...</div>
+            </div>
+            
+        </div>
+    </div>
+</div>
 
                     <?php
                     if (!empty($post['post_text'])) {

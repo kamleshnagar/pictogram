@@ -188,22 +188,30 @@ setInterval(function () {
             }
         });
     });
-},1000); // every 3 seconds
+}, 1000); // every 1 seconds
 
-// REFRESH LIKE COUNT when LIKE MODAL opens
-// $(document).on('shown.bs.modal', function (e) {
-//     let modalId = $(e.target).attr('id'); // e.g. likes12
-//     let postId = modalId.replace('likes', '');
 
-//     $.ajax({
-//         url: 'assets/php/ajax.php?get_like_count',
-//         method: 'POST',
-//         dataType: 'json',
-//         data: { post_id: postId },
-//         success: function (response) {
-//             if (response.status) {
-//                 $('#likeCount_' + postId).text(response.like_count);
-//             }
-//         }
-//     });
-// });
+
+//Refresghing likes in modal
+$(document).on('click', '.like_count_refresh', function () {
+    let postId = $(this).data('post-id');
+    let modalBody = $('#likesModalBody' + postId);
+
+
+
+    modalBody.html('<div class="text-center py-3">Loading likes...</div>');
+
+    $.ajax({
+        url: 'assets/php/ajax.php?get_like_list', 
+        type: 'POST',
+        data: {
+            post_id: postId
+        },
+        success: function (response) {
+            modalBody.html(response); 
+        },
+        error: function () {
+            modalBody.html('<p class="text-danger">Failed to load likes. Please try again.</p>');
+        }
+    });
+});
