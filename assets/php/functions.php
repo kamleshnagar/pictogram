@@ -552,6 +552,15 @@ function like($post_id)
     $query = "INSERT INTO `likes` (post_id, user_id) VALUES ($post_id,$current_user);";
     return mysqli_query($db, $query);
 }
+// creating comments
+function addComment($post_id,$comment)
+{
+    global $db;
+    $comment = mysqli_real_escape_string($db, $comment);
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "INSERT INTO `comments` (post_id, user_id, comment) VALUES ($post_id,$current_user,'$comment');";
+    return mysqli_query($db, $query);
+}
 
 // unlike post
 function unlike($post_id)
@@ -571,6 +580,14 @@ function unlike($post_id)
 function getLikes($post_id){
 global $db;
     $query = "SELECT * FROM likes WHERE post_id = $post_id;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run,true);
+}
+
+// function for get comments of the post
+function getComments($post_id){
+global $db;
+    $query = "SELECT * FROM comments WHERE post_id = $post_id;";
     $run = mysqli_query($db, $query);
     return mysqli_fetch_all($run,true);
 }

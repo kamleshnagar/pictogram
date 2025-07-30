@@ -84,6 +84,14 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
 
 
 
+if (isset($_SESSION['code'])) {
+    pr($_SESSION['code']);
+} elseif (isset($_SESSION['forget_code'])) {
+    pr($_SESSION['forget_code']);
+} else {
+    pr('No code found');
+}
+
 unset($_SESSION['error']);
 unset($_SESSION['success']);
 unset($_SESSION['formdata']);

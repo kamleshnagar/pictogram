@@ -137,6 +137,7 @@ function like() {
                 $(button).attr('disabled', false);
                 $(button).attr('class', 'bi bi-heart-fill text-danger unlike_btn');
                 $('#likeCount_' + post_id_v).html(response.like_count);
+                // location.reload();
 
             } else {
                 $(button).attr('disabled:', false);
@@ -164,6 +165,7 @@ function unlike() {
                 $(button).attr('disabled:', false);
                 $(button).attr('class', 'bi bi-heart like_btn');
                 $('#likeCount_' + post_id_v).html(response.like_count);
+                // location.reload();
             } else {
                 $(button).attr('disabled', false);
                 alert('Something went wrong, please try again later.');
@@ -173,26 +175,26 @@ function unlike() {
 };
 
 // for refreshing like count
-setInterval(function () {
-    $('.like_count_refresh').each(function () {
-        let postId = $(this).data('postId');
-        $.ajax({
-            url: 'assets/php/ajax.php?get_like_count',
-            method: 'POST',
-            dataType: 'json',
-            data: { post_id: postId },
-            success: function (response) {
-                if (response.status) {
-                    $('#likeCount_' + postId).text(response.like_count);
-                }
-            }
-        });
-    });
-}, 1000); // every 1 seconds
+// setInterval(function () {
+//     $('.like_count_refresh').each(function () {
+//         let postId = $(this).data('postId');
+//         $.ajax({
+//             url: 'assets/php/ajax.php?get_like_count',
+//             method: 'POST',
+//             dataType: 'json',
+//             data: { post_id: postId },
+//             success: function (response) {
+//                 if (response.status) {
+//                     $('#likeCount_' + postId).text(response.like_count);
+//                 }
+//             }
+//         });
+//     });
+// }, 1000); // every 1 seconds
 
 
 
-//Refresghing likes in modal
+// //Refresghing likes in modal
 $(document).on('click', '.like_count_refresh', function () {
     let postId = $(this).data('post-id');
     let modalBody = $('#likesModalBody' + postId);
@@ -202,16 +204,51 @@ $(document).on('click', '.like_count_refresh', function () {
     modalBody.html('<div class="text-center py-3">Loading likes...</div>');
 
     $.ajax({
-        url: 'assets/php/ajax.php?get_like_list', 
+        url: 'assets/php/ajax.php?get_like_list',
         type: 'POST',
         data: {
             post_id: postId
         },
         success: function (response) {
-            modalBody.html(response); 
+            modalBody.html(response);
         },
         error: function () {
             modalBody.html('<p class="text-danger">Failed to load likes. Please try again.</p>');
         }
     });
+});
+
+
+
+
+//for adding comment
+$(document).on("click", ".add-comment", function (e) {
+    e.preventDefault();
+    let button = this;
+
+    let comment_v = $(button).siblings('.comment-input').val();
+    if (comment_v == '') {
+        return 0;
+    }
+    let post_id_v = $(this).data('postId');
+    $(button).attr('disabled', true);
+    $(button).siblings('.comment-input').attr('disabled', true);
+    $.ajax({
+        url: 'assets/php/ajax.php?addcomment',
+        method: 'POST',
+        dataType: 'json',
+        data: { post_id: post_id_v, comment: comment_v },
+        success: function (response) {
+            console.log(response);
+            if (response.status) {
+                $(button).attr('disabled', false);
+                $(button).siblings('.comment-input').attr('disabled', false);
+                $(button).siblings('.comment-input').val('');
+            } else {
+                $(button).attr('disabled', true);
+                $(button).siblings('.comment-input').attr('disabled', false);
+                alert('Something went wrong, please try again later.');
+            }
+        }
+    })
 });

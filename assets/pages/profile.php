@@ -79,7 +79,94 @@ global $profile_post;
             if (count($profile_post) > 0) {
                 foreach ($profile_post as $post) {
             ?>
-                    <img src="assets/images/post/<?= $post['post_img'] ?>" width="300px" class="rounded" />
+                    <img src="assets/images/post/<?= $post['post_img'] ?>" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>" width="300px" class="rounded" />
+
+
+                    <!---------------------------------------------- Modal ---------------------------------------------->
+                    <div class="modal fade" id="postview<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body d-flex p-0">
+
+                                    <div class="col-8">
+                                        <img src="assets/images/post/<?= $post['post_img'] ?>" class="w-100 rounded-start">
+                                    </div>
+
+
+
+                                    <div class="col-4 d-flex flex-column">
+                                        <div class="d-flex align-items-center p-2 border-bottom">
+
+                                            <div>
+                                                <a href="?u=<?= $profile['username'] ?>" class="text-decoration-none text-dark">
+                                                    <img src="assets/images/profile/<?= $profile['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
+                                                </a>
+                                            </div>
+                                            <div>&nbsp;&nbsp;&nbsp;</div>
+                                            <div class="d-flex flex-column justify-content-start align-items-center">
+                                                <a href="?u=<?= $profile['username'] ?>" class="text-decoration-none text-dark">
+
+                                                    <h6 style="margin: 0px;"><?= $profile['first_name'] . ' ' . $profile['last_name'] ?></h6>
+                                                    <p style="margin:0px;" class="text-muted">@<?= $profile['username'] ?></p>
+                                                </a>
+                                            </div>
+                                            </a>
+                                        </div>
+                                        <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height: 100px;">
+
+
+                                            <?php
+                                            $comments = getComments($post['id']);
+                                            if (!isset($comments) || !count($comments) > 0) {
+                                                ?> 
+                                                <p class="p-3">No Comments Found</p>
+                                                
+                                                <?php
+                                            } else {
+
+
+                                                // Reorder comments: logged-in user on top
+                                                usort($comments, function ($a, $b) use ($user) {
+                                                    return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                                                });
+                                                foreach ($comments as $comment) {
+                                                    $cuser = getUser($comment['user_id']);
+                                            ?>
+
+                                                    <div class="d-flex align-items-center p-2">
+                                                        <div><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark"><img src="assets/images/profile/<?= $cuser['profile_pic'] ?>" alt="" height="40" class="rounded-circle border"></a>
+
+                                                        </div>
+                                                        <div>&nbsp;&nbsp;&nbsp;</div>
+                                                        <div class="d-flex flex-column justify-content-start align-items-start">
+
+                                                            <h6 style="margin: 0px;"><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark ">@<?= $cuser['username'] ?></a></h6>
+                                                            <p class="m-0  mx-1 text-muted"><?= $comment['comment'] ?></p>
+                                                        </div>
+                                                    </div>
+
+
+                                            <?php
+                                                }
+                                            }
+                                            ?>
+
+
+                                        </div>
+                                        <div class="input-group p-2 border-top">
+                                            <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
+                                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                                            <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
+                                                id="button-addon2">Post</button>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 <?php
                 }
@@ -102,86 +189,7 @@ global $profile_post;
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
 
-            <div class="modal-body d-flex p-0">
-                <div class="col-8">
-                    <img src="assets/images/post/post2.jpg" class="w-100 rounded-start">
-                </div>
-
-
-
-                <div class="col-4 d-flex flex-column">
-                    <div class="d-flex align-items-center p-2 border-bottom">
-                        <div><img src="assets/images/profile/<?= $profile['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
-                        </div>
-                        <div>&nbsp;&nbsp;&nbsp;</div>
-                        <div class="d-flex flex-column justify-content-start align-items-center">
-                            <h6 style="margin: 0px;">Monu Giri</h6>
-                            <p style="margin:0px;" class="text-muted"><?= $profile['username'] ?></p>
-                        </div>
-                    </div>
-                    <div class="flex-fill align-self-stretch overflow-auto" style="height: 100px;">
-
-                        <div class="d-flex align-items-center p-2">
-                            <div><img src="assets/images/profile/profile2.jpg" alt="" height="40" class="rounded-circle border">
-                            </div>
-                            <div>&nbsp;&nbsp;&nbsp;</div>
-                            <div class="d-flex flex-column justify-content-start align-items-start">
-                                <h6 style="margin: 0px;">@osilva</h6>
-                                <p style="margin:0px;" class="text-muted">its nice pic very good</p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center p-2">
-                            <div><img src="assets/images/profile/profile2.jpg" alt="" height="40" class="rounded-circle border">
-                            </div>
-                            <div>&nbsp;&nbsp;&nbsp;</div>
-                            <div class="d-flex flex-column justify-content-start align-items-start">
-                                <h6 style="margin: 0px;">@osilva</h6>
-                                <p style="margin:0px;" class="text-muted">its nice pic very good</p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center p-2">
-                            <div><img src="assets/images/profile/profile2.jpg" alt="" height="40" class="rounded-circle border">
-                            </div>
-                            <div>&nbsp;&nbsp;&nbsp;</div>
-                            <div class="d-flex flex-column justify-content-start align-items-start">
-                                <h6 style="margin: 0px;">@osilva</h6>
-                                <p style="margin:0px;" class="text-muted">its nice pic very good</p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center p-2">
-                            <div><img src="assets/images/profile/profile2.jpg" alt="" height="40" class="rounded-circle border">
-                            </div>
-                            <div>&nbsp;&nbsp;&nbsp;</div>
-                            <div class="d-flex flex-column justify-content-start align-items-start">
-                                <h6 style="margin: 0px;">@osilva</h6>
-                                <p style="margin:0px;" class="text-muted">its nice pic very good</p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="input-group p-2 border-top">
-                        <input type="text" class="form-control rounded-0 border-0" placeholder="say something.."
-                            aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-primary rounded-0 border-0" type="button"
-                            id="button-addon2">Post</button>
-                    </div>
-                </div>
-
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
 
 
 
@@ -201,9 +209,8 @@ global $profile_post;
 
                         // Reorder folloowers: logged-in user on top
                         usort($profile['followers'], function ($a, $b) use ($user) {
-                            return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                            return ($b['user_id'] == $user['id']) - ($a['user_id'] == $user['id']);
                         });
-                        
 
                         // fetching users who liked the post
                         foreach ($profile['followers'] as $f) {
@@ -276,9 +283,8 @@ global $profile_post;
 
                         // Reorder following: logged-in user on top
                         usort($profile['following'], function ($a, $b) use ($user) {
-                            return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                            return ($b['user_id'] == $user['id']) - ($a['user_id'] == $user['id']);
                         });
-
                         // fetching users who liked the post
                         foreach ($profile['following'] as $f) {
                             $fuser = getUser($f['user_id']);

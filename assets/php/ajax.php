@@ -1,5 +1,6 @@
 <?php
 
+use Dom\Comment;
 
 require_once 'config.php';
 require_once 'functions.php';
@@ -105,17 +106,39 @@ if (isset($_GET['get_like_count'])) {
 }
 
 
+
+// Comment on post
+if (isset($_GET['addcomment'])) {
+    $post_id = $_POST['post_id'];
+    $comment = $_POST['comment'];
+    if (addComment($post_id, $comment)) {
+        $response['status'] = true;
+    } else {
+        $response['status'] = false;
+    }
+    
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+
+
+
+
+
+
+
+
 // for getting like list
 if (isset($_GET['get_like_list'])) {
     $post_id = $_POST['post_id'];
     $likes = getLikes($post_id);
     $user = getUser($_SESSION['userdata']['id']);
 
-
-//modal body
+    //modal likes body
     if (isset($likes) && count($likes) > 0) {
 
-      
+
         usort($likes, function ($a, $b) use ($user) {
             return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
         });
@@ -159,6 +182,6 @@ if (isset($_GET['get_like_list'])) {
         echo "<p class='text-muted'>No likes found</p>";
     }
 
-    exit(); 
+    exit();
 }
 ?>

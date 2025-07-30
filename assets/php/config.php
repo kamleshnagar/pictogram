@@ -45,3 +45,22 @@ $table_follower_list = "CREATE TABLE IF NOT EXISTS follow_list
  PRIMARY KEY (`id`)
  );";
 mysqli_query($db, $table_follower_list);
+
+
+$table_likes = "CREATE TABLE IF NOT EXISTS likes (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    post_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    PRIMARY KEY (id)
+);";
+mysqli_query($db, $table_likes);
+
+$table_comments = "CREATE TABLE IF NOT EXISTS comments (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    post_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+);";
+mysqli_query($db, $table_comments);
