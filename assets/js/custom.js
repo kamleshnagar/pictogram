@@ -251,9 +251,9 @@ $(document).on("click", ".add-comment", function (e) {
                 $(button).siblings('.comment-input').val('');
                 $('#' + cs).append(response.comment);
                 $('.nce').hide();
-                if (page ='wall') {
-                    location.reload();
-                }
+               if(page == 'wall'){
+                location.reload();
+               }              
 
             } else {
                 $(button).attr('disabled', true);

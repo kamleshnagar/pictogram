@@ -57,7 +57,7 @@ global $follow_suggestions;
                         <span
 
                             class="text-muted"
-                        
+
                             data-bs-toggle="modal"
                             data-post-id="<?= $post['id'] ?>"
                             data-bs-target="#postview<?= $post['id'] ?>">
@@ -157,7 +157,7 @@ global $follow_suggestions;
                                         <div class="input-group p-2 border-top">
                                             <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
                                                 aria-label="Recipient's username" aria-describedby="button-addon2">
-                                            <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-page="wall" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
+                                            <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
                                                 id="button-addon2">Post</button>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@ global $follow_suggestions;
                     <div class="input-group p-2 <?= !empty($posts['post_text']) ? 'border-top' : '' ?>">
                         <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
                             aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
+                        <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-page="wall" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
                             id="button-addon2">Post</button>
                     </div>
 
@@ -258,28 +258,28 @@ global $follow_suggestions;
 <!-- modal for posts list -->
 <div class="modal fade" id="addpost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
+
         <div class="modal-content">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Post</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img src="" id="post_img" style="display:none" class="w-100 rounded border">
-                    <form method="POST" action="assets/php/actions.php?addpost" enctype="multipart/form-data">
-                        <div class="my-3">
-                            <input class="form-control" name="post_img" type="file" id="select_post_img">
-                            <div id="post_img_error" class="text-danger mt-2 small"></div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlTextarea1" class="form-label">Say Something</label>
-                            <textarea name="post_text" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <button type="submit" class="btn btn-primary post-btn">Post</button>
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <img src="" id="post_img" style="display:none" class="w-100 rounded border">
+                <form method="POST" action="assets/php/actions.php?addpost" enctype="multipart/form-data">
+                    <div class="my-3">
+                        <input class="form-control" name="post_img" type="file" id="select_post_img">
+                        <div id="post_img_error" class="text-danger mt-2 small"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Say Something</label>
+                        <textarea name="post_text" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+                    </div>
+                </form>
+            </div>
+            <button type="submit" class="btn btn-primary post-btn">Post</button>
         </div>
+
     </div>
 </div>
 
@@ -290,65 +290,65 @@ global $follow_suggestions;
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Likes</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <?php
 
-                    if (isset($likes) && count($likes) > 0) {
-                        // Reorder likes: logged-in user on top
-                        usort($likes, function ($a, $b) use ($user) {
-                            return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
-                        });
-                        // fetching users who liked the post
-                        foreach ($likes as $like) {
-                            $liker = getUser($like['user_id']);
-                            if ($liker) {
-                    ?>
-                                <div class="d-flex justify-content-between shadow-sm p-2 mb-2 border rounded">
-                                    <div class="d-flex align-items-center p-2">
-                                        <div> <a href="?u=<?= $liker['username'] ?>"><img src="assets/images/profile/<?= $liker['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
-                                        </div></a>
-
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none text-dark">
-                                                <h6 style="margin: 0px;font-size: small;"><?= $liker['first_name'] . ' ' . $liker['last_name'] ?></h6>
-                                            </a>
-                                            <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none">
-                                                <p style="margin:0px;font-size:small" class="text-muted">@<?= $liker['username'] ?></p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <?php
-                                    if ($liker['id'] !== $user['id']) {
-                                        if (checkFollowStatus($liker['id'])) {
-                                    ?>
-                                            <div class='d-flex align-items-center '>
-                                                <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $liker['id'] ?>">Unfollow</button>
-                                            </div>
-                                        <?php
-                                        } else {
-                                        ?>
-                                            <div class='d-flex align-items-center '>
-                                                <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $liker['id'] ?>">Follow</button>
-                                            </div>
-                                        <?php
-                                        }
-                                        ?>
-                                    <?php } ?>
-                                </div>
-                    <?php
-                            }
-                        }
-                    } else {
-                        echo "<p class='text-muted'>No likes found</p>";
-                    }
-                    ?>
-                </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Likes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <?php
+
+                if (isset($likes) && count($likes) > 0) {
+                    // Reorder likes: logged-in user on top
+                    usort($likes, function ($a, $b) use ($user) {
+                        return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                    });
+                    // fetching users who liked the post
+                    foreach ($likes as $like) {
+                        $liker = getUser($like['user_id']);
+                        if ($liker) {
+                ?>
+                            <div class="d-flex justify-content-between shadow-sm p-2 mb-2 border rounded">
+                                <div class="d-flex align-items-center p-2">
+                                    <div> <a href="?u=<?= $liker['username'] ?>"><img src="assets/images/profile/<?= $liker['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                                    </div></a>
+
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none text-dark">
+                                            <h6 style="margin: 0px;font-size: small;"><?= $liker['first_name'] . ' ' . $liker['last_name'] ?></h6>
+                                        </a>
+                                        <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none">
+                                            <p style="margin:0px;font-size:small" class="text-muted">@<?= $liker['username'] ?></p>
+                                        </a>
+                                    </div>
+                                </div>
+                                <?php
+                                if ($liker['id'] !== $user['id']) {
+                                    if (checkFollowStatus($liker['id'])) {
+                                ?>
+                                        <div class='d-flex align-items-center '>
+                                            <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $liker['id'] ?>">Unfollow</button>
+                                        </div>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <div class='d-flex align-items-center '>
+                                            <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $liker['id'] ?>">Follow</button>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
+                                <?php } ?>
+                            </div>
+                <?php
+                        }
+                    }
+                } else {
+                    echo "<p class='text-muted'>No likes found</p>";
+                }
+                ?>
+            </div>
+
         </div>
     </div>
 </div>
