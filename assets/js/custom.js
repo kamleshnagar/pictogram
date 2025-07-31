@@ -176,7 +176,7 @@ function unlike() {
 
 // for refreshing like count
 // setInterval(function () {
-//     $('.like_count_refresh').each(function () {
+//     $('.like_count').each(function () {
 //         let postId = $(this).data('postId');
 //         $.ajax({
 //             url: 'assets/php/ajax.php?get_like_count',
@@ -195,7 +195,7 @@ function unlike() {
 
 
 // //Refresghing likes in modal
-$(document).on('click', '.like_count_refresh', function () {
+$(document).on('click', '.like_count', function () {
     let postId = $(this).data('post-id');
     let modalBody = $('#likesModalBody' + postId);
 
@@ -233,6 +233,7 @@ $(document).on("click", ".add-comment", function (e) {
     let post_id_v = $(this).data('postId');
     $(button).attr('disabled', true);
     $(button).siblings('.comment-input').attr('disabled', true);
+    let cs = $(this).data('cs');
     $.ajax({
         url: 'assets/php/ajax.php?addcomment',
         method: 'POST',
@@ -244,6 +245,9 @@ $(document).on("click", ".add-comment", function (e) {
                 $(button).attr('disabled', false);
                 $(button).siblings('.comment-input').attr('disabled', false);
                 $(button).siblings('.comment-input').val('');
+                $('#' + cs).append(response.comment);
+                $('.nce').hide();
+
             } else {
                 $(button).attr('disabled', true);
                 $(button).siblings('.comment-input').attr('disabled', false);

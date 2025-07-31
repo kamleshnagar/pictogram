@@ -16,7 +16,7 @@ global $follow_suggestions;
         if (count($posts) < 1) {
         ?>
             <div class="d-flex align-items-center justify-content-center shadow-sm border  container h-100 bg-white p-3 rounded">
-                <p class="text-muted fs-3">No Posts Found</p>
+                <p class="text-muted fs-3 ">No Posts Found</p>
             </div>
         <?php
         } else {
@@ -24,6 +24,7 @@ global $follow_suggestions;
             <?php
             foreach ($posts as $post) {
                 $likes = getLikes($post['id']);
+                $comments = getComments($post['id']);
 
             ?>
                 <div class="card mt-4">
@@ -41,36 +42,132 @@ global $follow_suggestions;
                     <h4 style="font-size: x-larger" class="p-2 border-bottom">
                         <i class="bi <?= checkLikeStatus($post['id']) ? 'bi-heart-fill text-danger unlike_btn' : 'bi-heart like_btn' ?>" data-post-id="<?= $post['id'] ?>"></i>
 
-                        <i class="bi bi-chat-left"></i>
+                        <i class="bi bi-chat-left" data-bs-toggle="modal"  data-bs-target="#postview<?= $post['id'] ?>"></i>
                     </h4>
-                    <span
+                    <div>
+                        <span
 
-                        class="text-muted px-2 like_count_refresh"
-                        id="likeCount_<?= $post['id'] ?>"
-                        data-bs-toggle="modal"
-                        data-post-id="<?= $post['id'] ?>"
-                        data-bs-target="#likes<?= $post['id'] ?>">
-                        <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
-                    </span>
+                            class="text-muted px-2 like_count"
+                            id="likeCount_<?= $post['id'] ?>"
+                            data-bs-toggle="modal"
+                            data-post-id="<?= $post['id'] ?>"
+                            data-bs-target="#likes<?= $post['id'] ?>">
+                            <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
+                        </span>
+                        <span
 
-<!-- Modal Start -->
-<div class="modal fade" id="likes<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-        
-            <div class="modal-header">
-                <h5 class="modal-title">Likes</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <!-- 👇 AJAX will load content here -->
-            <div class="modal-body" id="likesModalBody<?= $post['id'] ?>">
-                <div class="text-center py-2 text-muted">Loading likes...</div>
-            </div>
-            
-        </div>
-    </div>
-</div>
+                            class="text-muted"
+                            data-bs-toggle="modal"
+                            data-post-id="<?= $post['id'] ?>"
+                            data-bs-target="#postview<?= $post['id'] ?>">
+                            <?= (count($comments) > 1) ? count($comments) . ' Comments' : count($comments) . ' Comment' ?>
+                        </span>
+                    </div>
+                    <!-- Modal for like  -->
+                    <div class="modal fade" id="likes<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Likes</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <!-- 👇 AJAX will load content here -->
+                                <div class="modal-body" id="likesModalBody<?= $post['id'] ?>">
+                                    <div class="text-center py-2 text-muted">Loading likes...</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                      <!---------------------------------------------- Modal ---------------------------------------------->
+                    <div class="modal fade" id="postview<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body d-flex p-0">
+
+                                    <div class="col-8">
+                                        <img src="assets/images/post/<?= $post['post_img'] ?>" class="w-100 rounded-start">
+                                    </div>
+
+
+
+                                    <div class="col-4 d-flex flex-column">
+                                        <div class="d-flex align-items-center p-2 border-bottom">
+
+                                            <div>
+                                                <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark">
+                                                    <img src="assets/images/profile/<?= $post['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
+                                                </a>
+                                            </div>
+                                            <div>&nbsp;&nbsp;&nbsp;</div>
+                                            <div class="d-flex flex-column justify-content-start align-items-center">
+                                                <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark">
+
+                                                    <h6 style="margin: 0px;"><?= $post['first_name'] . ' ' . $post['last_name'] ?></h6>
+                                                    <p style="margin:0px;" class="text-muted">@<?= $post['username'] ?></p>
+                                                </a>
+                                            </div>
+                                            </a>
+                                        </div>
+                                        <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height: 100px;">
+
+
+                                            <?php
+                                            $comments = getComments($post['id']);
+                                            if (!isset($comments) || !count($comments) > 0) {
+                                            ?>
+                                                <p class="p-3 nce">No Comments Found</p>
+
+                                                <?php
+                                            } else {
+
+
+                                                // Reorder comments: logged-in user on top
+                                                usort($comments, function ($a, $b) use ($user) {
+                                                    return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
+                                                });
+                                                foreach ($comments as $comment) {
+                                                    $cuser = getUser($comment['user_id']);
+                                                ?>
+
+                                                    <div class="d-flex align-items-center p-2">
+                                                        <div><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark"><img src="assets/images/profile/<?= $cuser['profile_pic'] ?>" alt="" height="40" class="rounded-circle border"></a>
+
+                                                        </div>
+                                                        <div>&nbsp;&nbsp;&nbsp;</div>
+                                                        <div class="d-flex flex-column justify-content-start align-items-start">
+
+                                                            <h6 style="margin: 0px;"><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark ">@<?= $cuser['username'] ?></a></h6>
+                                                            <p class="m-0  mx-1 text-muted"><?= $comment['comment'] ?></p>
+                                                        </div>
+                                                    </div>
+
+
+                                            <?php
+                                                }
+                                            }
+                                            ?>
+
+
+                                        </div>
+                                        <div class="input-group p-2 border-top">
+                                            <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
+                                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                                            <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
+                                                id="button-addon2">Post</button>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <?php
                     if (!empty($post['post_text'])) {
@@ -199,7 +296,7 @@ global $follow_suggestions;
                 </div>
                 <div class="modal-body">
                     <?php
-                 
+
                     if (isset($likes) && count($likes) > 0) {
                         // Reorder likes: logged-in user on top
                         usort($likes, function ($a, $b) use ($user) {

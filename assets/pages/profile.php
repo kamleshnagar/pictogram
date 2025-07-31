@@ -118,9 +118,9 @@ global $profile_post;
                                             <?php
                                             $comments = getComments($post['id']);
                                             if (!isset($comments) || !count($comments) > 0) {
-                                                ?> 
-                                                <p class="p-3">No Comments Found</p>
-                                                
+                                            ?>
+                                                <p class="p-3 nce">No Comments Found</p>
+
                                                 <?php
                                             } else {
 
@@ -131,7 +131,7 @@ global $profile_post;
                                                 });
                                                 foreach ($comments as $comment) {
                                                     $cuser = getUser($comment['user_id']);
-                                            ?>
+                                                ?>
 
                                                     <div class="d-flex align-items-center p-2">
                                                         <div><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark"><img src="assets/images/profile/<?= $cuser['profile_pic'] ?>" alt="" height="40" class="rounded-circle border"></a>

@@ -112,13 +112,31 @@ if (isset($_GET['addcomment'])) {
     $post_id = $_POST['post_id'];
     $comment = $_POST['comment'];
     if (addComment($post_id, $comment)) {
+        $cuser = getUser($_SESSION['userdata']['id']);
         $response['status'] = true;
+        $response['comment'] = '
+                                    <div class="d-flex align-items-center p-2">
+                                        <div>
+                                            <a href="?u=' . $cuser['username'] . '" class="text-decoration-none text-dark">
+                                                <img src="assets/images/profile/' . $cuser['profile_pic'] . '" alt="" height="40" class="rounded-circle border">
+                                            </a>
+                                        </div>
+                                        <div>&nbsp;&nbsp;&nbsp;</div>
+                                        <div class="d-flex flex-column justify-content-start align-items-start">
+                                            <h6 style="margin: 0px;">
+                                                <a href="?u=' . $cuser['username'] . '" class="text-decoration-none text-dark ">@' . $cuser['username'] . '</a>
+                                            </h6>
+                                            <p class="m-0 mx-1 text-muted">' . $comment. '</p>
+                                        </div>
+                                    </div>';
+
     } else {
         $response['status'] = false;
     }
     
     header('Content-Type: application/json');
     echo json_encode($response);
+    // echo json_encode($response['comment']);
     exit;
 }
 
