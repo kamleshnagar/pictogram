@@ -126,17 +126,16 @@ if (isset($_GET['addcomment'])) {
                                             <h6 style="margin: 0px;">
                                                 <a href="?u=' . $cuser['username'] . '" class="text-decoration-none text-dark ">@' . $cuser['username'] . '</a>
                                             </h6>
-                                            <p class="m-0 mx-1 text-muted">' . $comment. '</p>
+                                            <p class="m-0 mx-1 text-muted">' . $comment . '</p>
                                         </div>
                                     </div>';
-
+  
     } else {
         $response['status'] = false;
     }
-    
+
     header('Content-Type: application/json');
     echo json_encode($response);
-    // echo json_encode($response['comment']);
     exit;
 }
 

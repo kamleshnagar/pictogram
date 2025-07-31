@@ -27,7 +27,7 @@ global $follow_suggestions;
                 $comments = getComments($post['id']);
 
             ?>
-                <div class="card mt-4">
+                <div class="card mt-4 post-card">
                     <div class="card-title d-flex justify-content-between  align-items-center">
 
                         <div class="d-flex align-items-center p-2">
@@ -42,7 +42,7 @@ global $follow_suggestions;
                     <h4 style="font-size: x-larger" class="p-2 border-bottom">
                         <i class="bi <?= checkLikeStatus($post['id']) ? 'bi-heart-fill text-danger unlike_btn' : 'bi-heart like_btn' ?>" data-post-id="<?= $post['id'] ?>"></i>
 
-                        <i class="bi bi-chat-left" data-bs-toggle="modal"  data-bs-target="#postview<?= $post['id'] ?>"></i>
+                        <i class="bi bi-chat-left" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>"></i>
                     </h4>
                     <div>
                         <span
@@ -57,6 +57,7 @@ global $follow_suggestions;
                         <span
 
                             class="text-muted"
+                        
                             data-bs-toggle="modal"
                             data-post-id="<?= $post['id'] ?>"
                             data-bs-target="#postview<?= $post['id'] ?>">
@@ -82,7 +83,7 @@ global $follow_suggestions;
                         </div>
                     </div>
 
-                      <!---------------------------------------------- Modal ---------------------------------------------->
+                    <!---------------------------------------------- Modal ---------------------------------------------->
                     <div class="modal fade" id="postview<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl modal-dialog-centered">
                             <div class="modal-content">
@@ -156,7 +157,7 @@ global $follow_suggestions;
                                         <div class="input-group p-2 border-top">
                                             <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
                                                 aria-label="Recipient's username" aria-describedby="button-addon2">
-                                            <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
+                                            <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-page="wall" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
                                                 id="button-addon2">Post</button>
                                         </div>
                                     </div>
@@ -179,9 +180,9 @@ global $follow_suggestions;
                     <?php } ?>
 
                     <div class="input-group p-2 <?= !empty($posts['post_text']) ? 'border-top' : '' ?>">
-                        <input type="text" class="form-control rounded-0 border-0" placeholder="say something.."
+                        <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
                             aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-primary rounded-0 border-0" type="button"
+                        <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
                             id="button-addon2">Post</button>
                     </div>
 

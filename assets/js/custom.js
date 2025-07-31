@@ -231,22 +231,29 @@ $(document).on("click", ".add-comment", function (e) {
         return 0;
     }
     let post_id_v = $(this).data('postId');
+
     $(button).attr('disabled', true);
     $(button).siblings('.comment-input').attr('disabled', true);
     let cs = $(this).data('cs');
+    let page = $(this).data('page');
+
+
+
     $.ajax({
         url: 'assets/php/ajax.php?addcomment',
         method: 'POST',
         dataType: 'json',
         data: { post_id: post_id_v, comment: comment_v },
         success: function (response) {
-            console.log(response);
             if (response.status) {
                 $(button).attr('disabled', false);
                 $(button).siblings('.comment-input').attr('disabled', false);
                 $(button).siblings('.comment-input').val('');
                 $('#' + cs).append(response.comment);
                 $('.nce').hide();
+                if (page ='wall') {
+                    location.reload();
+                }
 
             } else {
                 $(button).attr('disabled', true);
