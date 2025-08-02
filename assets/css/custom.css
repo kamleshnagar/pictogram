@@ -12,3 +12,10 @@ align-items: center;
 
 
 }
+
+.unlike_btn,
+.like_btn,
+.comment-label,
+.like_count{
+    cursor: pointer;
+}

@@ -263,3 +263,12 @@ $(document).on("click", ".add-comment", function (e) {
         }
     })
 });
+
+
+// for notifications
+$(document).on("click", "#notification", function (e) {
+    e.preventDefault();
+    let button = this;
+
+
+});

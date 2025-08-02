@@ -10,7 +10,7 @@ if (isset($_GET['signup'])) {
     $response = validateSignupForm($_POST);
     if ($response['status']) {
         if (createUser($_POST)) {
-           
+
             header('location:../../?login&newuser');
             exit;
         } else {
@@ -190,3 +190,18 @@ if (isset($_GET['updateprofile'])) {
 //         header('location:../../?post_failed');
 //     }
 // }
+
+
+//block user
+
+if (isset($_GET['block'])) {
+    $profile_id = $_GET['block'];
+
+    $response = isBlock($profile_id);
+    if (!isblock($profile_id)) {
+        block($profile_id);
+        header('location:../../?blocked');
+    } else {
+        echo 'user blocked';
+    }
+}

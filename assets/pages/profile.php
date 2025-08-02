@@ -25,7 +25,7 @@ global $profile_post;
                                     data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i> </span>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item" href="#"><i class="bi bi-chat-fill"></i> Message</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-x-circle-fill"></i> Block</a></li>
+                                    <li><a class="dropdown-item" href="assets/php/actions.php?block=<?=$profile['id']?>"><i class="bi bi-x-circle-fill"></i> Block</a></li>
                                 </ul>
                             </div>
                         <?php
@@ -48,6 +48,7 @@ global $profile_post;
 
                     <?php
                     if ($profile['id'] !== $user['id']) {
+                        if(!isblock($profile['id'])){
                         if (checkFollowStatus($profile['id'])) {
                     ?>
                             <div class="d-flex">
@@ -61,6 +62,12 @@ global $profile_post;
                                 <button class="btn btn-sm btn-primary followbtn w-100 " data-user-id='<?= $profile['id'] ?>'>Follow</button>
                             </div>
                     <?php
+                        }}else{
+                            ?>
+                            <div>
+                                <h4>User blocked</h4>
+                            </div>
+                            <?php
                         }
                     }
                     ?>

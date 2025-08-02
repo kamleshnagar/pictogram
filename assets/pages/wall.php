@@ -39,12 +39,22 @@ global $follow_suggestions;
                         </div>
                     </div>
                     <img src="assets/images/post/<?= $post['post_img'] ?>" class="" alt="...">
-                    <h4 style="font-size: x-larger" class="p-2 border-bottom">
-                        <i class="bi <?= checkLikeStatus($post['id']) ? 'bi-heart-fill text-danger unlike_btn' : 'bi-heart like_btn' ?>" data-post-id="<?= $post['id'] ?>"></i>
+                    <div class="d-flex mt-3 gap-1 p-2 border-bottom w-100 ">
+                        <h4 style="font-size: x-larger">
+                            <i class="bi  <?= checkLikeStatus($post['id']) ? 'bi-heart-fill text-danger unlike_btn' : 'bi-heart like_btn' ?>" data-post-id="<?= $post['id'] ?>"></i>
 
-                        <i class="bi bi-chat-left" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>"></i>
-                    </h4>
-                    <div>
+                            <i class="bi  bi-chat-left" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>"></i>
+                        </h4>
+                        <span
+                            class="text-muted  fst-italic px-2 text-dark comment-label"
+                            data-bs-toggle="modal"
+                            data-post-id="<?= $post['id'] ?>"
+                            data-bs-target="#postview<?= $post['id'] ?>">
+                            <?= (count($comments) > 1) ? count($comments) . ' Comments' : count($comments) . ' Comment' ?>
+                        </span>
+                    </div>
+
+                    <div class="d-flex">
                         <span
 
                             class="text-muted px-2 like_count"
@@ -54,15 +64,8 @@ global $follow_suggestions;
                             data-bs-target="#likes<?= $post['id'] ?>">
                             <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
                         </span>
-                        <span
+                        <p class="text-muted  text-center fst-italic"> <i class="bi bi-dot"></i>Posted <?= timeAgo($post['created_at']) ?></p>
 
-                            class="text-muted"
-
-                            data-bs-toggle="modal"
-                            data-post-id="<?= $post['id'] ?>"
-                            data-bs-target="#postview<?= $post['id'] ?>">
-                            <?= (count($comments) > 1) ? count($comments) . ' Comments' : count($comments) . ' Comment' ?>
-                        </span>
                     </div>
                     <!-- Modal for like  -->
                     <div class="modal fade" id="likes<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,7 +86,7 @@ global $follow_suggestions;
                         </div>
                     </div>
 
-                    <!---------------------------------------------- Modal ---------------------------------------------->
+                    <!---------------------------------------------- Modal for postview ---------------------------------------------->
                     <div class="modal fade" id="postview<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-xl modal-dialog-centered">
                             <div class="modal-content">
@@ -96,22 +99,37 @@ global $follow_suggestions;
 
 
                                     <div class="col-4 d-flex flex-column">
-                                        <div class="d-flex align-items-center p-2 border-bottom">
+                                        <div class="d-flex align-items-center p-2 border-bottom justify-content-between">
+                                            <div class="d-flex align-items-center p-2 ">
 
-                                            <div>
-                                                <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark">
-                                                    <img src="assets/images/profile/<?= $post['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
+                                                <div>
+                                                    <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark">
+                                                        <img src="assets/images/profile/<?= $post['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
+                                                    </a>
+                                                </div>
+                                                <div>&nbsp;&nbsp;&nbsp;</div>
+                                                <div class="d-flex flex-column justify-content-start align-items-center">
+                                                    <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark">
+
+                                                        <h6 style="margin: 0px;"><?= $post['first_name'] . ' ' . $post['last_name'] ?></h6>
+                                                        <p style="margin:0px;" class="text-muted fst-italic">@<?= $post['username'] ?></p>
+                                                    </a>
+                                                </div>
                                                 </a>
                                             </div>
-                                            <div>&nbsp;&nbsp;&nbsp;</div>
-                                            <div class="d-flex flex-column justify-content-start align-items-center">
-                                                <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark">
+                                            <div class="d-flex flex-column text-end justify-content-center mt-3">
+                                                <span
 
-                                                    <h6 style="margin: 0px;"><?= $post['first_name'] . ' ' . $post['last_name'] ?></h6>
-                                                    <p style="margin:0px;" class="text-muted">@<?= $post['username'] ?></p>
-                                                </a>
+                                                    class="text-muted px-2 text-align-center like_count"
+                                                    id="likeCount_<?= $post['id'] ?>"
+                                                    data-bs-toggle="modal"
+                                                    data-post-id="<?= $post['id'] ?>"
+                                                    data-bs-target="#likes<?= $post['id'] ?>">
+                                                    <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
+                                                </span>
+
+                                                <p class="text-muted px-2 text-center fst-italic">Posted <?= timeAgo($post['created_at'])?></p>
                                             </div>
-                                            </a>
                                         </div>
                                         <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height: 100px;">
 
@@ -131,18 +149,24 @@ global $follow_suggestions;
                                                     return ($a['user_id'] == $user['id']) ? -1 : (($b['user_id'] == $user['id']) ? 1 : 0);
                                                 });
                                                 foreach ($comments as $comment) {
-                                                    $cuser = getUser($comment['user_id']);
+                                                    $cuser = getUser($comment['user_id']);;
+
+
                                                 ?>
 
-                                                    <div class="d-flex align-items-center p-2">
+                                                    <div class="d-flex align-items-center p-2 border-bottom">
                                                         <div><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark"><img src="assets/images/profile/<?= $cuser['profile_pic'] ?>" alt="" height="40" class="rounded-circle border"></a>
 
                                                         </div>
                                                         <div>&nbsp;&nbsp;&nbsp;</div>
-                                                        <div class="d-flex flex-column justify-content-start align-items-start">
+                                                        <div class="d-flex flex-column  align-items-start justify-content-center">
+                                                            <div class="d-flex  align-items-center ">
+                                                                <h6 style="margin: 0px;"><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark fst-italic ">@<?= $cuser['username'] ?></a></h6>
+                                                                <span class="text-muted m-0 px-2 text-end fst-italic">• <?= timeAgo($comment['created_at']) ?></span>
+                                                            </div>
+                                                            <p class="m-0  mx-1 text-muted text-dark"><?= $comment['comment'] ?></p>
 
-                                                            <h6 style="margin: 0px;"><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark ">@<?= $cuser['username'] ?></a></h6>
-                                                            <p class="m-0  mx-1 text-muted"><?= $comment['comment'] ?></p>
+
                                                         </div>
                                                     </div>
 
@@ -202,7 +226,7 @@ global $follow_suggestions;
                     <h6 style="margin: 0px;"><?= $user['first_name'] . ' ' . $user['last_name'] ?></h6>
                 </a>
                 <a href="?u=<?= $user['username'] ?>" class="text-decoration-none">
-                    <p style="margin:0px;" class="text-muted">@<?= $user['username'] ?></p>
+                    <p style="margin:0px;" class="text-muted fst-italic">@<?= $user['username'] ?></p>
                 </a>
             </div>
         </div>
@@ -224,7 +248,7 @@ global $follow_suggestions;
                                     <h6 style="margin: 0px;font-size: small;"><?= $suser['first_name'] . ' ' . $suser['last_name'] ?></h6>
                                 </a>
                                 <a href="?u=<?= $suser['username'] ?>" class="text-decoration-none">
-                                    <p style="margin:0px;font-size:small" class="text-muted">@<?= $suser['username'] ?></p>
+                                    <p style="margin:0px;font-size:small" class="text-muted fst-italic">@<?= $suser['username'] ?></p>
                                 </a>
                             </div>
                         </div>
@@ -318,7 +342,7 @@ global $follow_suggestions;
                                             <h6 style="margin: 0px;font-size: small;"><?= $liker['first_name'] . ' ' . $liker['last_name'] ?></h6>
                                         </a>
                                         <a href="?u=<?= $liker['username'] ?>" class="text-decoration-none">
-                                            <p style="margin:0px;font-size:small" class="text-muted">@<?= $liker['username'] ?></p>
+                                            <p style="margin:0px;font-size:small" class="text-muted fst-italic">@<?= $liker['username'] ?></p>
                                         </a>
                                     </div>
                                 </div>

@@ -553,7 +553,7 @@ function like($post_id)
     return mysqli_query($db, $query);
 }
 // creating comments
-function addComment($post_id,$comment)
+function addComment($post_id, $comment)
 {
     global $db;
     $comment = mysqli_real_escape_string($db, $comment);
@@ -577,17 +577,70 @@ function unlike($post_id)
 
 
 // function fr likescount
-function getLikes($post_id){
-global $db;
+function getLikes($post_id)
+{
+    global $db;
     $query = "SELECT * FROM likes WHERE post_id = $post_id;";
     $run = mysqli_query($db, $query);
-    return mysqli_fetch_all($run,true);
+    return mysqli_fetch_all($run, true);
 }
 
 // function for get comments of the post
-function getComments($post_id){
-global $db;
+function getComments($post_id)
+{
+    global $db;
     $query = "SELECT * FROM comments WHERE post_id = $post_id;";
     $run = mysqli_query($db, $query);
-    return mysqli_fetch_all($run,true);
+    return mysqli_fetch_all($run, true);
+}
+
+
+//function for calculate time
+function timeAgo($datetime)
+{
+    date_default_timezone_set('Asia/Kolkata');
+    $created = strtotime($datetime);
+    $now = time();
+    $diff = $now - $created;
+
+    if ($diff < 60) {
+        return $diff . ' sec ago';
+    } elseif ($diff < 3600) {
+        return floor($diff / 60) . ' min ago';
+    } elseif ($diff < 86400) {
+        $hours = floor($diff / 3600);
+        return $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago';
+    } elseif ($diff < 604800) { // less than 7 days
+        $days = floor($diff / 86400);
+        return $days . ' day' . ($days > 1 ? 's' : '') . ' ago';
+    } elseif ($diff < 2592000) { // less than 30 days (~4 weeks)
+        $weeks = floor($diff / 604800);
+        return $weeks . ' week' . ($weeks > 1 ? 's' : '') . ' ago';
+    } elseif ($diff < 31536000) { // less than 365 days
+        $months = floor($diff / 2592000);
+        return $months . ' month' . ($months > 1 ? 's' : '') . ' ago';
+    } else {
+        $years = floor($diff / 31536000);
+        return $years . ' year' . ($years > 1 ? 's' : '') . ' ago';
+    }
+}
+
+
+//function block user
+function block($profile_id)
+{
+    global $db;
+    $user_id = $_SESSION['userdata']['id'];
+    $query = "INSERT INTO `block` (`user_id`, `blocked_id`) VALUES ($user_id, $profile_id);";
+    return mysqli_query($db, $query);
+}
+
+//for checking blocked or not 
+function isBlock($profile_id)
+{
+    global $db;
+    $user_id = $_SESSION['userdata']['id'];
+    $query = "SELECT COUNT(*) as `row` FROM`block` WHERE user_id=$user_id AND blocked_id=$profile_id ;";
+    $result = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($result)['row'];
 }
