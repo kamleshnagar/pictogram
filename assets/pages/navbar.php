@@ -34,7 +34,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-dark" id="notification" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
+                    <a class="nav-link text-dark" id="notification" data-user-id="<?=$user['id']?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark" href="#"><i class="bi bi-chat-right-dots-fill"></i></a>

@@ -456,7 +456,7 @@ function filterFollowSuggestion()
     $list = getFollowSuggestions();
     $filter_list = array();
     foreach ($list as $user) {
-        if (!checkFollowStatus($user['id']) && count($filter_list) < 5) {
+        if (!checkFollowStatus($user['id']) && !isUserBlocked($user['id']) && count($filter_list) < 5) {
             $filter_list[] = $user;
         }
     }
@@ -474,7 +474,7 @@ function filterPost()
     }
     $filter_list = array();
     foreach ($list as $post) {
-        if (checkFollowStatus($post['user_id']) || $post['user_id'] == $_SESSION['userdata']['id']) {
+        if (checkFollowStatus($post['user_id'])  || $post['user_id'] == $_SESSION['userdata']['id']) {
             $filter_list[] = $post;
         }
     }
@@ -634,13 +634,35 @@ function block($profile_id)
     $query = "INSERT INTO `block` (`user_id`, `blocked_id`) VALUES ($user_id, $profile_id);";
     return mysqli_query($db, $query);
 }
+//function Unblock user
+function unblock($profile_id)
+{
+    global $db;
+    $user_id = $_SESSION['userdata']['id'];
+    $query = "DELETE FROM `block` WHERE blocked_id = $profile_id AND user_id= $user_id;";
+    return mysqli_query($db, $query);
+}
 
 //for checking blocked or not 
 function isBlock($profile_id)
 {
     global $db;
     $user_id = $_SESSION['userdata']['id'];
-    $query = "SELECT COUNT(*) as `row` FROM`block` WHERE user_id=$user_id AND blocked_id=$profile_id ;";
+    unfollowUser($user_id);
+    $query = "SELECT COUNT(*) as `row` FROM`block` WHERE user_id=$user_id AND blocked_id=$profile_id;";
     $result = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($result)['row'];
+}
+
+//for checking user blocked by profile or not 
+function isUserBlocked($profile_id)
+{
+    global $db;
+
+    $user_id = $_SESSION['userdata']['id'];
+    unfollowUser($user_id);
+    $query = "SELECT COUNT(*) as `row` FROM`block` WHERE user_id=$profile_id AND blocked_id=$user_id;";
+    $result = mysqli_query($db, $query);
+    
     return mysqli_fetch_assoc($result)['row'];
 }

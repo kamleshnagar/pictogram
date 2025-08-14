@@ -21,8 +21,8 @@ if (isset($_GET['follow'])) {
         exit;
     }
     if (followUser($user_id)) {
-
         $response['status'] = true;
+        
     } else {
         $response['status'] = false;
     }
@@ -202,3 +202,15 @@ if (isset($_GET['get_like_list'])) {
     exit();
 }
 ?>
+
+
+
+
+
+<?php
+//for getting notification
+
+if(isset($_GET['notification'])){
+    $response['status'] = true;
+   
+}

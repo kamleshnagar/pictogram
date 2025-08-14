@@ -64,3 +64,25 @@ $table_comments = "CREATE TABLE IF NOT EXISTS comments (
     PRIMARY KEY (id)
 );";
 mysqli_query($db, $table_comments);
+
+$table_block = "CREATE TABLE IF NOT EXISTS `block` (
+id INT(11) NOT NULL AUTO_INCREMENT,
+user_id INT(11) NOT NULL,
+blocked_id INT(11) NOT NULL,
+PRIMARY KEY (id)
+);";
+mysqli_query($db, $table_block);
+
+
+
+$notification_table = "CREATE TABLE IF NOT EXISTS`notification` (
+`id` INT NOT NULL AUTO_INCREMENT ,
+`user_id` INT NOT NULL ,
+`sub` VARCHAR(255) NOT NULL ,
+`disc` VARCHAR(255) NOT NULL ,
+`follower_id` INT NOT NULL ,
+`read_status` INT NOT NULL DEFAULT '0' ,
+`created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (`id`)
+);";
+mysqli_query($db, $notification_table);

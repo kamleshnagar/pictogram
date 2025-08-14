@@ -251,9 +251,9 @@ $(document).on("click", ".add-comment", function (e) {
                 $(button).siblings('.comment-input').val('');
                 $('#' + cs).append(response.comment);
                 $('.nce').hide();
-               if(page == 'wall'){
-                location.reload();
-               }              
+                if (page == 'wall') {
+                    location.reload();
+                }
 
             } else {
                 $(button).attr('disabled', true);
@@ -269,6 +269,22 @@ $(document).on("click", ".add-comment", function (e) {
 $(document).on("click", "#notification", function (e) {
     e.preventDefault();
     let button = this;
+    let user_id = $(button).data('user-id');
+    console.log(user_id);
+    $.ajax({
+        url: 'assets/php/ajax.php?notification',
+        method: 'POST',
+        dataType: 'json',
+        data: { user_id: user_id },
+        success: function (response) {
+            if (response.status) {
 
-
+            } else {
+                
+            }
+        }
+    })
 });
+
+
+

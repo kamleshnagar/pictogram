@@ -195,13 +195,30 @@ if (isset($_GET['updateprofile'])) {
 //block user
 
 if (isset($_GET['block'])) {
-    $profile_id = $_GET['block'];
 
+    $profile_username = $_GET['u'];
+    $profile_id = $_GET['block'];
     $response = isBlock($profile_id);
     if (!isblock($profile_id)) {
+        unfollowUser($profile_id);
         block($profile_id);
-        header('location:../../?blocked');
+        header('location:../../index.php?u=' . $profile_username . '&blocked');
     } else {
         echo 'user blocked';
+    }
+}
+
+
+//unblock user
+if (isset($_GET['unblock'])) {
+
+    $profile_id = $_GET['unblock'];
+    $profile_username = $_GET['u'];
+
+
+    $response = isBlock($profile_id);
+    if ($response) {
+        unblock($profile_id);
+        header('location:../../index.php?u=' . $profile_username . '&unblocked');
     }
 }
