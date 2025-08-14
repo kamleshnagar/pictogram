@@ -47,6 +47,7 @@ if (isset($_GET['like'])) {
 
     if (!checkLikeStatus($post_id)) {
         if (like($post_id)) {
+            // notify("like",$post_id);
             $response['status'] = true;
             $likes = getLikes($post_id);
             $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
@@ -63,6 +64,7 @@ if (isset($_GET['unlike'])) {
     if (checkLikeStatus($post_id)) {
 
         if (unlike($post_id)) {
+            
             $response['status'] = true;
             $likes = getLikes($post_id);
             $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
@@ -80,12 +82,18 @@ if (isset($_GET['addpost'])) {
     $response = validatePostForm($_FILES['post_img']);
 
     if ($response['status']) {
-        createPost($_POST, $_FILES['post_img']);
-        $response['msg'] = "Post has been uploaded successfully";
-        $response['status'] = true;
-        $response['redirect'] = '?new_post_added';
-        $response['field'] = 'post';
-        $_SESSION['success'] =  $response;
+        if (createPost($_POST, $_FILES['post_img'])) {
+            // notify("post");
+            $response['msg'] = "Post has been uploaded successfully";
+            $response['status'] = true;
+            $response['redirect'] = '?new_post_added';
+            $response['field'] = 'post';
+            $_SESSION['success'] =  $response;
+        } else {
+            $response['msg'] = "Create Post Failed";
+            $response['status'] = false;
+            $_SESSION['error'] = $response;
+        }
     } else {
         $response['msg'] = "Failed";
         $response['status'] = false;
@@ -182,11 +190,11 @@ if (isset($_GET['get_like_list'])) {
 
                     <?php if ($liker['id'] !== $user['id']) : ?>
                         <div class='d-flex align-items-center'>
-                            <?php if(isBlock($liker['id'])) : ?>
+                            <?php if (isBlock($liker['id'])) : ?>
                                 <button class="btn btn-sm btn-danger blocked" data-user-id="<?= $liker['id'] ?>" disabled>Blocked</button>
-                            <?php elseif(isUserBlocked($liker['id'])) : ?>
+                            <?php elseif (isUserBlocked($liker['id'])) : ?>
                                 <p class="text-muted" data-user-id="<?= $liker['id'] ?>"></p>
-                                
+
                             <?php elseif (checkFollowStatus($liker['id'])) : ?>
                                 <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $liker['id'] ?>">Unfollow</button>
                             <?php else : ?>

@@ -307,4 +307,3 @@ global $follow_suggestions;
 
     </div>
 </div>
-

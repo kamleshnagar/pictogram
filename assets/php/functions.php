@@ -663,6 +663,50 @@ function isUserBlocked($profile_id)
     unfollowUser($user_id);
     $query = "SELECT COUNT(*) as `row` FROM`block` WHERE user_id=$profile_id AND blocked_id=$user_id;";
     $result = mysqli_query($db, $query);
-    
+
     return mysqli_fetch_assoc($result)['row'];
 }
+
+// FOR GETTING LATEST POST
+function getLatestPost()
+{
+    global $db;
+
+    $query = "SELECT posts.id,posts.user_id,users.first_name,users.last_name,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id ORDER BY id DESC LIMIT 1;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($run);
+}
+
+// get postdata by post_id
+function getPostDataById($post_id)
+{
+    global $db;
+
+    $query = "SELECT* FROM posts WHERE post_id=$post_id";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($run);
+}
+
+
+// for notify actions
+// function notify($field,$data="")
+// {
+//     global $db;
+//     $follower_id = $_SESSION['userdata']['id'];
+    
+//     if ($field == "post") {
+//         $post = getLatestPost();
+//         $post_id = $post['id'];
+//         $user_id = $post['user_id'];
+//         $sql = "INSERT INTO `notification` (`post_id`, `user_id`, action)
+//             VALUES($post_id, $user_id, 0)";
+//         mysqli_query($db, $sql);
+//     } elseif ($field == "like") {
+       
+//         $sql = "INSERT INTO `notification` (`post_id`, `user_id`, follower_id, action)
+//             VALUES($data, $user_id, $follower_id, 1)";
+//         mysqli_query($db, $sql);
+//     }
+// }
+
+// notify("like");

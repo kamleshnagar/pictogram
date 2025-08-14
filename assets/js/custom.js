@@ -51,6 +51,7 @@ $(document).on("click", ".post-btn", function (e) {
         success: function (response) {
 
             if (response.status) {
+              
 
                 window.location.href = response.redirect;
 
