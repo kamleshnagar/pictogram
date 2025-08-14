@@ -311,7 +311,7 @@ global $follow_suggestions;
 <!-- modal for likes -->
 
 
-<div class="modal fade" id="likes<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="likes<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -349,11 +349,12 @@ global $follow_suggestions;
                                 </div>
                                 <?php
                                 if ($liker['id'] !== $user['id']) {
-                                    if (checkFollowStatus($liker['id'])) {
-                                ?>
+                                    ?><div>hello</div><?php
+                                    if (checkFollowStatus($liker['id'])) { ?>
                                         <div class='d-flex align-items-center '>
                                             <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $liker['id'] ?>">Unfollow</button>
                                         </div>
+
                                     <?php
                                     } else {
                                     ?>
@@ -376,4 +377,4 @@ global $follow_suggestions;
 
         </div>
     </div>
-</div>
+</div> -->

@@ -182,7 +182,12 @@ if (isset($_GET['get_like_list'])) {
 
                     <?php if ($liker['id'] !== $user['id']) : ?>
                         <div class='d-flex align-items-center'>
-                            <?php if (checkFollowStatus($liker['id'])) : ?>
+                            <?php if(isBlock($liker['id'])) : ?>
+                                <button class="btn btn-sm btn-danger blocked" data-user-id="<?= $liker['id'] ?>" disabled>Blocked</button>
+                            <?php elseif(isUserBlocked($liker['id'])) : ?>
+                                <p class="text-muted" data-user-id="<?= $liker['id'] ?>"></p>
+                                
+                            <?php elseif (checkFollowStatus($liker['id'])) : ?>
                                 <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $liker['id'] ?>">Unfollow</button>
                             <?php else : ?>
                                 <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $liker['id'] ?>">Follow</button>
