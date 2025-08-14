@@ -17,7 +17,7 @@
             <form class="d-flex flex-column">
                 <input class="form-control me-2" id="searchBox" type="search" placeholder="looking for someone.."
                     aria-label="Search" autocomplete="off">
-                   <div id="searchResults" class="list-group" style="width:300px;"></div>
+                   <div id="searchResults" class="searchResults list-group" style="width:220px;"></div>
                 </form>
 
         </div>

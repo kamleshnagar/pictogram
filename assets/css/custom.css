@@ -1,14 +1,14 @@
-body{
+body {
     background-color: #F5F9F9;
     /* background-size: cover; */
 }
 
-.login{
-    width:100vw;
+.login {
+    width: 100vw;
     height: 100vh;
-display: flex;
-justify-content: center;
-align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 
 }
@@ -16,6 +16,13 @@ align-items: center;
 .unlike_btn,
 .like_btn,
 .comment-label,
-.like_count{
+.like_count {
     cursor: pointer;
+}
+
+.searchResults {
+    position: absolute;
+    top: 50px;
+    z-index: 100;
+    background-color: white;
 }
