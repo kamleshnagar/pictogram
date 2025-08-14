@@ -22,7 +22,6 @@ if (isset($_GET['follow'])) {
     }
     if (followUser($user_id)) {
         $response['status'] = true;
-        
     } else {
         $response['status'] = false;
     }
@@ -129,7 +128,6 @@ if (isset($_GET['addcomment'])) {
                                             <p class="m-0 mx-1 text-muted">' . $comment . '</p>
                                         </div>
                                     </div>';
-  
     } else {
         $response['status'] = false;
     }
@@ -210,7 +208,50 @@ if (isset($_GET['get_like_list'])) {
 <?php
 //for getting notification
 
-if(isset($_GET['notification'])){
-    $response['status'] = true;
-   
+// if(isset($_GET['notification'])){
+//     $response['status'] = true;
+
+// }
+
+
+// for getting user serach box 
+
+if (isset($_POST['search'])) {
+    global $db;
+    $search = mysqli_real_escape_string($db, $_POST['search']);
+
+    $sql = "SELECT *
+            FROM users 
+            WHERE username LIKE '%$search%' 
+            OR CONCAT(first_name, ' ', last_name) LIKE '%$search%'
+            LIMIT 5";
+
+    $result = mysqli_query($db, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        while ($user = mysqli_fetch_assoc($result)) {
+            if ($user['id'] == $_SESSION['userdata']['id']) {
+                echo "<div class='list-group-item'>No results found</div>";
+            } else {
+                echo ' 
+            <div class="border rounded">
+                        <div class="d-flex align-items-center p-2">
+                            <div> <a href="?u=' . $user['username'] . '"><img src="assets/images/profile/' . $user['profile_pic'] . '" alt="" height="40" width="40" class="rounded-circle border">
+                            </div></a>
+                            <div>&nbsp;&nbsp;</div>
+                            <div class="d-flex flex-column justify-content-center">
+                                <a href="?u=' . $user['username'] . '" class="text-decoration-none text-dark">
+                                    <h6 style="margin: 0px;font-size: small;">' . $user['first_name'] . ' ' . $user['last_name'] . '</h6>
+                                </a>
+                                <a href="?u=' . $user['username'] . '" class="text-decoration-none">
+                                    <p style="margin:0px;font-size:small" class="text-muted fst-italic">@' . $user['username'] . '</p>
+                                </a>
+                            </div>
+                        </div>
+            </div>
+                        ';
+            }
+        }
+    } else {
+        echo "<div class='list-group-item'>No results found</div>";
+    }
 }

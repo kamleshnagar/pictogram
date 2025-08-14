@@ -128,7 +128,7 @@ global $follow_suggestions;
                                                     <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
                                                 </span>
 
-                                                <p class="text-muted px-2 text-center fst-italic">Posted <?= timeAgo($post['created_at'])?></p>
+                                                <p class="text-muted px-2 text-center fst-italic">Posted <?= timeAgo($post['created_at']) ?></p>
                                             </div>
                                         </div>
                                         <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height: 100px;">
@@ -235,34 +235,35 @@ global $follow_suggestions;
             <div class="shadow bg-white p-3 rounded">
                 <?php
                 foreach ($follow_suggestions as $suser) {
-
+                    if (!isBlock($suser['id'])) {
                 ?>
 
-                    <div class="d-flex justify-content-between shadow-sm p-2 mb-2 border rounded">
-                        <div class="d-flex align-items-center p-2">
-                            <div> <a href="?u=<?= $suser['username'] ?>"><img src="assets/images/profile/<?= $suser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
-                            </div></a>
-                            <div>&nbsp;&nbsp;</div>
-                            <div class="d-flex flex-column justify-content-center">
-                                <a href="?u=<?= $suser['username'] ?>" class="text-decoration-none text-dark">
-                                    <h6 style="margin: 0px;font-size: small;"><?= $suser['first_name'] . ' ' . $suser['last_name'] ?></h6>
-                                </a>
-                                <a href="?u=<?= $suser['username'] ?>" class="text-decoration-none">
-                                    <p style="margin:0px;font-size:small" class="text-muted fst-italic">@<?= $suser['username'] ?></p>
-                                </a>
+                        <div class="d-flex justify-content-between shadow-sm p-2 mb-2 border rounded">
+                            <div class="d-flex align-items-center p-2">
+                                <div> <a href="?u=<?= $suser['username'] ?>"><img src="assets/images/profile/<?= $suser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                                </div></a>
+                                <div>&nbsp;&nbsp;</div>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <a href="?u=<?= $suser['username'] ?>" class="text-decoration-none text-dark">
+                                        <h6 style="margin: 0px;font-size: small;"><?= $suser['first_name'] . ' ' . $suser['last_name'] ?></h6>
+                                    </a>
+                                    <a href="?u=<?= $suser['username'] ?>" class="text-decoration-none">
+                                        <p style="margin:0px;font-size:small" class="text-muted fst-italic">@<?= $suser['username'] ?></p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center ">
+                                <button class="btn btn-sm btn-primary followbtn" data-user-id='<?= $suser['id'] ?>'>Follow</button>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center ">
-                            <button class="btn btn-sm btn-primary followbtn" data-user-id='<?= $suser['id'] ?>'>Follow</button>
-                        </div>
-                    </div>
 
 
-                <?php
+                    <?php
+                    }
                 }
 
                 if (count($follow_suggestions) < 1) {
-                ?>
+                    ?>
                     <div class="text-center bg-white p-3 rounded">
                         <p class="text-muted">No Follow Suggestions</p>
                     </div>

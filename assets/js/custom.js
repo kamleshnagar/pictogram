@@ -287,4 +287,21 @@ $(document).on("click", "#notification", function (e) {
 });
 
 
+// for searching user 
+$("#searchBox").on("keyup", function(){
+      let user = $(this).val().trim();
+      console.log(user);
+       if(user.length > 0){
+            $.ajax({
+                url: "assets/php/ajax.php",
+                method: "POST",
+                data: {search: user},
+                success: function(data){
+                    $("#searchResults").html(data);
+                }
+            });
+        } else {
+            $("#searchResults").html("");
+        }
+})
 
