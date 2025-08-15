@@ -436,7 +436,8 @@ function createPost($text, $image)
     // sending post data to database
     $sql = "INSERT INTO posts (user_id, post_text, post_img)
             VALUES('$user_id','$post_text','$image_name')";
-    return mysqli_query($db, $sql);
+    $result = mysqli_query($db, $sql);
+    return $result;
 }
 
 
@@ -500,7 +501,9 @@ function followUser($user_id)
     global $db;
     $current_user =  $_SESSION['userdata']['id'];
     $query = "INSERT INTO follow_list (follower_id, user_id) VALUES ($current_user, $user_id);";
-    return mysqli_query($db, $query);
+    $result =  mysqli_query($db, $query);
+    notify("follow", $user_id);
+    return $result;
 }
 function unfollowUser($user_id)
 {
@@ -550,7 +553,8 @@ function like($post_id)
     global $db;
     $current_user =  $_SESSION['userdata']['id'];
     $query = "INSERT INTO `likes` (post_id, user_id) VALUES ($post_id,$current_user);";
-    return mysqli_query($db, $query);
+    $result = mysqli_query($db, $query);
+    return $result;
 }
 // creating comments
 function addComment($post_id, $comment)
@@ -559,7 +563,33 @@ function addComment($post_id, $comment)
     $comment = mysqli_real_escape_string($db, $comment);
     $current_user =  $_SESSION['userdata']['id'];
     $query = "INSERT INTO `comments` (post_id, user_id, comment) VALUES ($post_id,$current_user,'$comment');";
-    return mysqli_query($db, $query);
+    $result = mysqli_query($db, $query);
+    $comment_id  = findCommentId($post_id, $current_user, $comment);
+    notify("comment", $comment_id);
+    return $result;
+}
+
+//FOR FIND COMMENTS
+
+function findCommentId($post_id, $current_user, $comment)
+{
+    global $db;
+    $query = "SELECT `id` FROM`comments` WHERE post_id=$post_id AND user_id=$current_user AND comment='$comment' ORDER BY id DESC LIMIT 1 ;";
+    $result =  mysqli_query($db, $query);
+    if ($comment = mysqli_fetch_assoc($result)) {
+        return $comment['id'];
+    }
+    return NULL;
+}
+//FOR FIND COMMENT by id
+
+function findCommentById($comment_id)
+{
+    global $db;
+    $query = "SELECT * FROM`comments` WHERE id=$comment_id;";
+    $result =  mysqli_query($db, $query);
+    $comment = mysqli_fetch_assoc($result);
+    return $comment;
 }
 
 // unlike post
@@ -569,8 +599,9 @@ function unlike($post_id)
 
     $current_user =  $_SESSION['userdata']['id'];
     $query = "DELETE FROM likes WHERE user_id = $current_user AND post_id= $post_id;";
-
     $result = mysqli_query($db, $query);
+
+
 
     return $result;
 }
@@ -682,31 +713,45 @@ function getPostDataById($post_id)
 {
     global $db;
 
-    $query = "SELECT* FROM posts WHERE post_id=$post_id";
+    $query = "SELECT * FROM `posts` WHERE id=$post_id";
     $run = mysqli_query($db, $query);
     return mysqli_fetch_assoc($run);
 }
 
 
 // for notify actions
-// function notify($field,$data="")
-// {
-//     global $db;
-//     $follower_id = $_SESSION['userdata']['id'];
-    
-//     if ($field == "post") {
-//         $post = getLatestPost();
-//         $post_id = $post['id'];
-//         $user_id = $post['user_id'];
-//         $sql = "INSERT INTO `notification` (`post_id`, `user_id`, action)
-//             VALUES($post_id, $user_id, 0)";
-//         mysqli_query($db, $sql);
-//     } elseif ($field == "like") {
-       
-//         $sql = "INSERT INTO `notification` (`post_id`, `user_id`, follower_id, action)
-//             VALUES($data, $user_id, $follower_id, 1)";
-//         mysqli_query($db, $sql);
-//     }
-// }
+function notify($field, $data = "")
+{
+    global $db;
+    $follower_id = $_SESSION['userdata']['id'];
 
-// notify("like");
+    if ($field == "post") {
+        $post = getLatestPost();
+        $post_id = $post['id'];
+        $user_id = $post['user_id'];
+        $sql = "INSERT INTO `notification` (`post_id`,`user_id`, `follower_id`, action)
+                VALUES($post_id, $user_id, $follower_id, 0)";
+        mysqli_query($db, $sql);
+    } elseif ($field == "like") {
+        $post_data = getPostDataById($data);
+
+        $user_id = $post_data['user_id'];
+        $sql = "INSERT INTO `notification` (`post_id`, `user_id`, follower_id, action)
+                VALUES($data, $user_id, $follower_id, 1)";
+        mysqli_query($db, $sql);
+    } elseif ($field == "comment") {
+        $comment = findCommentById($data);
+        $post_id = $comment['post_id'];
+        $comment_id = $comment['id'];
+        $user_id = $comment['user_id'];
+        $sql = "INSERT INTO `notification` (`post_id`, `user_id`, follower_id,comment_id, action)
+                VALUES( $post_id , $user_id, $follower_id, $comment_id, 2)";
+        mysqli_query($db, $sql);
+    } elseif ($field == "follow") {
+        $sql = "INSERT INTO `notification` (`user_id`, follower_id, action)
+                VALUES($data, $follower_id, 3)";
+        mysqli_query($db, $sql);
+    }
+}
+
+// // for getting notifications

@@ -47,7 +47,7 @@ if (isset($_GET['like'])) {
 
     if (!checkLikeStatus($post_id)) {
         if (like($post_id)) {
-            // notify("like",$post_id);
+            notify("like",$post_id);
             $response['status'] = true;
             $likes = getLikes($post_id);
             $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
@@ -83,7 +83,7 @@ if (isset($_GET['addpost'])) {
 
     if ($response['status']) {
         if (createPost($_POST, $_FILES['post_img'])) {
-            // notify("post");
+            notify("post");
             $response['msg'] = "Post has been uploaded successfully";
             $response['status'] = true;
             $response['redirect'] = '?new_post_added';
