@@ -742,8 +742,10 @@ function notify($field, $data = "")
     } elseif ($field == "comment") {
         $comment = findCommentById($data);
         $post_id = $comment['post_id'];
+        $post_data = getPostDataById($post_id);
+        $user_id = $post_data['user_id'];
         $comment_id = $comment['id'];
-        $user_id = $comment['user_id'];
+
         $sql = "INSERT INTO `notification` (`post_id`, `user_id`, follower_id,comment_id, action)
                 VALUES( $post_id , $user_id, $follower_id, $comment_id, 2)";
         mysqli_query($db, $sql);
@@ -755,3 +757,9 @@ function notify($field, $data = "")
 }
 
 // // for getting notifications
+function getNotifiaction(){
+    global $db;
+    $sql = "SELECT * FROM `notification` ORDER BY id DESC; ";
+    $result =  mysqli_query($db,$sql);
+    return mysqli_fetch_all($result,true);
+}
