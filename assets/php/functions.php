@@ -768,25 +768,32 @@ function getNotifiaction()
 function filterNotifcation()
 {
     $notifications = getNotifiaction();
-   
+
     if ($notifications == null) {
         return [];
     }
     $filter_notifications = array();
     foreach ($notifications as $notification) {
-        // $follow_notify_id = getFollowNotifyId($notification['user_id'], $notification['follower_id']); 
-      
+        if ($notification['action'] == 3) {
+            $follow_notify_id = getFollowNotifyId($notification['user_id'], $notification['follower_id']);
+        }
         if ((checkFollowStatus($notification['user_id']) || $notification['user_id'] == $_SESSION['userdata']['id']) && $notification['follower_id'] != $_SESSION['userdata']['id']) {
-            
+
+        
+
+            if (isset($follow_notify_id) && $notification['action'] == 0 && $follow_notify_id >= $notification['id']) {
+                continue;
+            }
+
             $filter_notifications[] = $notification;
-        } 
+        }
     }
 
     return $filter_notifications;
 }
 
 
-function getFollowNotifyId($user_id,$follower_id)
+function getFollowNotifyId($user_id, $follower_id)
 {
     global $db;
     $sql = "SELECT `id` FROM `notification` WHERE `user_id`=$user_id AND `follower_id`=$follower_id AND `action`=3 ORDER BY id DESC LIMIT 1; ";

@@ -20,7 +20,7 @@
 
     ?>
           <div>
-            <p><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> added a new post</p>
+            <p><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> added a new post <?=$notification['post_id']?></p>
           </div>
         <?php
         } elseif (!empty($notification) && $notification['action'] == 1) {
