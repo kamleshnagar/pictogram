@@ -26,3 +26,25 @@ body {
     z-index: 100;
     background-color: white;
 }
+
+@keyframes flashHighlight {
+  from { background-color: rgb(84, 195, 232); }
+  to   { background-color: white; }
+}
+
+.flash-highlight {
+  animation: flashHighlight 10s ease forwards;
+}
+.count_n{
+    position: absolute;
+    top:7px;
+    left: 7px;
+    z-index: 1;
+    height: 12px;
+    width: 12px;
+    color: white;
+    font-size: 8px;
+}
+.notification{
+    cursor: pointer;
+}

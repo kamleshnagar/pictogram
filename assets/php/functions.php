@@ -810,3 +810,10 @@ function changeNotificationReadStatus($id){
     $sql = "UPDATE `notification` SET `read_status` = '1' WHERE `notification`.`id` = $id;";
     return mysqli_query($db, $sql);
 }
+//for getting notification by id
+function getNotifiactionById($id){
+     global $db;
+    $sql = "SELECT * FROM `notification` WHERE `id`=$id LIMIT 1; ";
+    $result =  mysqli_query($db, $sql);
+    return mysqli_fetch_assoc($result);
+}

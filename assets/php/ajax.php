@@ -267,11 +267,14 @@ if (isset($_POST['search'])) {
 // for read_status true notification
 if (isset($_GET['notification'])) {
     $n_id = $_POST['n_id'];
-    
+    $n = getNotifiactionById($n_id);
     if(isset($n_id) && changeNotificationReadStatus($n_id)){
         $response['status'] = true;
         $response['n_id'] = $n_id;
-        $response['msg'] = "Notification read Status changed successfully";
+        if($n['action'] == 3){
+            $user = getUser($n['follower_id']);
+            $response['redirect'] = '?u='.$user['username'];
+        }
     }else{
         $response['msg'] = "something went wrong";
     }

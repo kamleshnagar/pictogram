@@ -1,6 +1,19 @@
 <?php global $user; ?>
 <?php $name = $user['first_name'] . ' ' . $user['last_name']; ?>
-<?php $username = '@' . $user['username']; ?>
+<?php $username = '@' . $user['username'];?>
+<?php
+if (!empty($notifications = filterNotifcation())) {
+    $unread = array();
+
+    foreach ($notifications as $n) {
+        if ($n['read_status'] == 0) {
+            $unread[] = $n; 
+        }
+    }
+
+    $count_n = count($unread);
+}
+?>
 
 
 
@@ -17,8 +30,8 @@
             <form class="d-flex flex-column">
                 <input class="form-control me-2" id="searchBox" type="search" placeholder="looking for someone.."
                     aria-label="Search" autocomplete="off">
-                   <div id="searchResults" class="searchResults list-group" style="width:220px;"></div>
-                </form>
+                <div id="searchResults" class="searchResults list-group" style="width:220px;"></div>
+            </form>
 
         </div>
 
@@ -33,7 +46,10 @@
             </li>
 
             <li class="nav-item">
+                <div class="position-relative">
                 <a class="nav-link text-dark" id="notification" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
+                <div  class="<?=($count_n>0)?'':'d-none'?> rounded-circle bg-primary count_n text-center fw-bold"><p><?=($count_n>0)?$count_n:' '?></p></div>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" href="#"><i class="bi bi-chat-right-dots-fill"></i></a>

@@ -266,13 +266,30 @@ $(document).on("click", ".add-comment", function (e) {
 });
 
 
-// for notifications
+// for notifications like, post, comment
 $(document).on("click", ".notification", function (e) {
     e.preventDefault();
     let button = this;
+    if ($(button).data('c-id')) {
+        let c_id = $(button).data('c-id'),
+            modal = $($(button).data('bs-target')),
+            target = $('#comment_' + c_id);
+
+        console.log('comment id is ' + c_id);
+
+        // Wait for modal to finish showing
+        modal.one('shown.bs.modal', function () {
+            if (target.length) {
+                modal.find('.overflow-auto').animate({
+                    scrollTop: target.position().top - 50
+                }, 500);
+                target.addClass('flash-highlight');
+            }
+        });
+    }
+
     if ($(button).data('n-id')) {
         let n_id = $(button).data('n-id');
-
         $.ajax({
             url: 'assets/php/ajax.php?notification',
             method: 'POST',
@@ -281,12 +298,16 @@ $(document).on("click", ".notification", function (e) {
             success: function (response) {
                 if (response.status) {
                     $(button).find('.dot').addClass('d-none');
+                    $(button).addClass('bg-light');
+                    if (response.redirect) {
+                        window.location.href = response.redirect;
+                    }
                 } else {
                     console.log('something error');
                 }
             }
         })
-    }else{
+    } else {
         console.log('n_id not given');
     }
 });

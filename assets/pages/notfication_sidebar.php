@@ -6,8 +6,8 @@
 
 
 
-  <hr>
-  <div class="offcanvas-body w-100">
+  <hr class="m-0 p-0">
+  <div class="offcanvas-body p-0 ">
     <?php
     $notifications = filterNotifcation();
     if (count($notifications) > 0) {
@@ -19,26 +19,29 @@
         if (!empty($notification) && $notification['action'] == 0) {
 
     ?>
-          <div id="n_id_<?=$notification['id']?>" class="notification" <?=($notification['read_status'] == 0)?'data-n-id='.$notification['id']:''?>>
-            <div class="d-flex justify-content-between">
+          <div data-bs-toggle="modal" data-bs-target="#postview<?= $notification['post_id'] ?>" style="min-height:70px;" id="n_id_<?= $notification['id'] ?>" class="notification d-flex p-1 border-bottom <?= ($notification['read_status'] == 0 ? '' : 'bg-light') ?>" <?= ($notification['read_status'] == 0) ? 'data-n-id=' . $notification['id'] : '' ?>>
+            <?php if ($notification['read_status'] == 0) { ?>
+              <div class="d-flex">
+                <span class=" bg-primary  dot " style="height:100%; width:5px"> </span>
+              </div>
+            <?php } ?>
+            <div class="d-flex justify-content-between w-100 pe-3">
               <div class="d-flex pe-2">
-                <div> <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                <div class="d-flex align-items-center ms-2"> <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
                 </div></a>
                 <div>&nbsp;&nbsp;</div>
                 <div class="d-flex  justify-content-center align-items-center">
-                  <div class="d-flex gap-2 align-items-center">
+                  <div class="align-items-center">
                     <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
-                    <p class="m-0">(<?= $notification['id'] ?>) (<?= $notification['id'] ?>) added a new post</p>
+                    <p class="m-0">(<?= $notification['id'] ?>) added a new post</p>
                   </div>
+
                 </div>
               </div>
-              <?php if ($notification['read_status'] == 0) { ?>
-                <div class="d-flex align-items-center ">
-                  <span class="rounded-circle bg-primary dot" style="height:10px; width:10px"> </span>
-                </div>
-              <?php } ?>
+              <div class="d-flex gap-2 justify-content-end align-items-center ">
+                <div class="text-end text-muted my-1" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
+              </div>
             </div>
-            <div class="text-end text-muted" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
             <hr>
           </div>
 
@@ -48,80 +51,95 @@
         } elseif (!empty($notification) && $notification['action'] == 1) {
 
         ?>
-          <div id="n_id_<?=$notification['id']?>" class="notification" <?=($notification['read_status'] == 0)?'data-n-id='.$notification['id']:''?>>
-            <div class="d-flex justify-content-between">
+          <div data-bs-toggle="modal" data-bs-target="#postview<?= $notification['post_id'] ?>" style="min-height:70px;" id="n_id_<?= $notification['id'] ?>" class="notification d-flex p-1 border-bottom <?= ($notification['read_status'] == 0 ? '' : 'bg-light') ?>" <?= ($notification['read_status'] == 0) ? 'data-n-id=' . $notification['id'] : '' ?>>
+            <?php if ($notification['read_status'] == 0) { ?>
+              <div class="d-flex">
+                <span class=" bg-primary  dot " style="height:100%; width:5px"> </span>
+              </div>
+            <?php } ?>
+            <div class="d-flex justify-content-between w-100 pe-3">
               <div class="d-flex pe-2">
-                <div> <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                <div class="d-flex align-items-center ms-2"> <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
                 </div></a>
                 <div>&nbsp;&nbsp;</div>
                 <div class="d-flex  justify-content-center align-items-center">
-                  <div class="d-flex gap-2 align-items-center">
+                  <div class="align-items-center">
                     <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
                     <p class="m-0">(<?= $notification['id'] ?>) liked your post</p>
                   </div>
+
                 </div>
               </div>
-              <?php if ($notification['read_status'] == 0) { ?>
-                <div class="d-flex align-items-center ">
-                  <span class="rounded-circle bg-primary dot" style="height:10px; width:10px"> </span>
-                </div>
-              <?php } ?>
+              <div class="d-flex gap-2 justify-content-end align-items-center ">
+                <div class="text-end text-muted my-1" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
+              </div>
             </div>
-            <div class="text-end text-muted" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
             <hr>
           </div>
         <?php
         } elseif (!empty($notification) && $notification['action'] == 2) {
 
         ?>
-          <div id="n_id_<?=$notification['id']?>" class="notification" <?=($notification['read_status'] == 0)?'data-n-id='.$notification['id']:''?>>
-            <div class="d-flex justify-content-between">
+          <div href="#comment_<?= $notification['comment_id'] ?>" data-c-id="<?= $notification['comment_id'] ?>" data-bs-toggle="modal" data-bs-target="#postview<?= $notification['post_id'] ?>" style="min-height:70px;" id="n_id_<?= $notification['id'] ?>" class="notification d-flex p-1 border-bottom <?= ($notification['read_status'] == 0 ? '' : 'bg-light') ?>" <?= ($notification['read_status'] == 0) ? 'data-n-id=' . $notification['id'] : '' ?>>
+            <?php if ($notification['read_status'] == 0) { ?>
+              <div class="d-flex">
+                <span class=" bg-primary  dot " style="height:100%; width:5px"> </span>
+              </div>
+            <?php } ?>
+            <div class="d-flex justify-content-between w-100 pe-3">
               <div class="d-flex pe-2">
-                <div> <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                <div class="d-flex align-items-center ms-2"> <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
                 </div></a>
                 <div>&nbsp;&nbsp;</div>
                 <div class="d-flex  justify-content-center align-items-center">
-                  <div class="d-flex gap-2 align-items-center">
+                  <div class="align-items-center">
                     <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
-                    <p class="m-0"> (<?= $notification['id'] ?>) commented on your post</p>
+                    <p class="m-0">(<?= $notification['id'] ?>) commented on your post</p>
                   </div>
+
                 </div>
               </div>
-              <?php if ($notification['read_status'] == 0) { ?>
-                <div class="d-flex align-items-center ">
-                  <span class="rounded-circle bg-primary dot" style="height:10px; width:10px"> </span>
-                </div>
-              <?php } ?>
+              <div class="d-flex gap-2 justify-content-end align-items-center ">
+                <div class="text-end text-muted my-1" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
+              </div>
             </div>
-            <div class="text-end text-muted" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
             <hr>
           </div>
         <?php
         } elseif (!empty($notification) && $notification['action'] == 3) {
 
         ?>
-          <div id="n_id_<?=$notification['id']?>" class="notification" <?=($notification['read_status'] == 0)?'data-n-id='.$notification['id']:''?>>
-            <div class="d-flex justify-content-between">
-              <div class="d-flex pe-2">
-                <div> <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
-                </div></a>
-                <div>&nbsp;&nbsp;</div>
-                <div class="d-flex  justify-content-center align-items-center">
-                  <div class="d-flex gap-2 align-items-center">
-                    <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
-                    <p class="m-0">(<?= $notification['id'] ?>) started following you</p>
-                  </div>
+          <div>
 
-                </div>
-              </div>
+            <div style="min-height:70px;" id="n_id_<?= $notification['id'] ?>" class="notification d-flex p-1 border-bottom <?= ($notification['read_status'] == 0 ? '' : 'bg-light') ?>" data-user-id="<?=$notification['user_id']?>" data-n-id=" <?= $notification['id']?>">
+
               <?php if ($notification['read_status'] == 0) { ?>
-                <div class="d-flex align-items-center ">
-                  <span class="rounded-circle bg-primary dot"  style="height:10px; width:10px"> </span>
+                <div class="d-flex">
+                  <span class=" bg-primary  dot " style="height:100%; width:5px"> </span>
                 </div>
               <?php } ?>
+              <div class="d-flex justify-content-between w-100 pe-3">
+                <div class="d-flex pe-2">
+                  <div class="d-flex align-items-center ms-2">
+                    <a href="?u=<?= $nuser['username'] ?>"><img src="assets/images/profile/<?= $nuser['profile_pic'] ?>" alt="" height="40" width="40" class="rounded-circle border">
+                    </a>
+                  </div>
+                  <div>&nbsp;&nbsp;</div>
+                  <div class="d-flex  justify-content-center align-items-center">
+                    <div class="align-items-center">
+                      <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
+                      <p class="m-0">(<?= $notification['id'] ?>) started following you</p>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-end align-items-center ">
+                  <div class="text-end text-muted my-1" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
+                </div>
+              </div>
+              <hr>
             </div>
-            <div class="text-end text-muted" style="font-size: 15px;"><?= timeAgo($notification['created_at']) ?></div>
-            <hr>
+
           </div>
     <?php
         }
