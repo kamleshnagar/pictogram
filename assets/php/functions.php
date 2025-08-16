@@ -778,13 +778,9 @@ function filterNotifcation()
             $follow_notify_id = getFollowNotifyId($notification['user_id'], $notification['follower_id']);
         }
         if ((checkFollowStatus($notification['user_id']) || $notification['user_id'] == $_SESSION['userdata']['id']) && $notification['follower_id'] != $_SESSION['userdata']['id']) {
-
-        
-
             if (isset($follow_notify_id) && $notification['action'] == 0 && $follow_notify_id >= $notification['id']) {
                 continue;
             }
-
             $filter_notifications[] = $notification;
         }
     }
