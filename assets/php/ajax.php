@@ -47,7 +47,7 @@ if (isset($_GET['like'])) {
 
     if (!checkLikeStatus($post_id)) {
         if (like($post_id)) {
-            notify("like",$post_id);
+            notify("like", $post_id);
             $response['status'] = true;
             $likes = getLikes($post_id);
             $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
@@ -64,7 +64,7 @@ if (isset($_GET['unlike'])) {
     if (checkLikeStatus($post_id)) {
 
         if (unlike($post_id)) {
-            
+
             $response['status'] = true;
             $likes = getLikes($post_id);
             $response['like_count'] = (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like';
@@ -219,13 +219,6 @@ if (isset($_GET['get_like_list'])) {
 
 
 <?php
-//for getting notification
-
-// if(isset($_GET['notification'])){
-//     $response['status'] = true;
-
-// }
-
 
 // for getting user serach box 
 
@@ -267,4 +260,23 @@ if (isset($_POST['search'])) {
     } else {
         echo "<div class='list-group-item'>No results found</div>";
     }
+}
+
+
+
+// for read_status true notification
+if (isset($_GET['notification'])) {
+    $n_id = $_POST['n_id'];
+    
+    if(isset($n_id) && changeNotificationReadStatus($n_id)){
+        $response['status'] = true;
+        $response['n_id'] = $n_id;
+        $response['msg'] = "Notification read Status changed successfully";
+    }else{
+        $response['msg'] = "something went wrong";
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
 }

@@ -51,7 +51,7 @@ $(document).on("click", ".post-btn", function (e) {
         success: function (response) {
 
             if (response.status) {
-              
+
 
                 window.location.href = response.redirect;
 
@@ -267,42 +267,45 @@ $(document).on("click", ".add-comment", function (e) {
 
 
 // for notifications
-$(document).on("click", "#notification", function (e) {
+$(document).on("click", ".notification", function (e) {
     e.preventDefault();
     let button = this;
-    let user_id = $(button).data('user-id');
-    console.log(user_id);
-    $.ajax({
-        url: 'assets/php/ajax.php?notification',
-        method: 'POST',
-        dataType: 'json',
-        data: { user_id: user_id },
-        success: function (response) {
-            if (response.status) {
+    if ($(button).data('n-id')) {
+        let n_id = $(button).data('n-id');
 
-            } else {
-                
+        $.ajax({
+            url: 'assets/php/ajax.php?notification',
+            method: 'POST',
+            dataType: 'json',
+            data: { n_id: n_id },
+            success: function (response) {
+                if (response.status) {
+                    $(button).find('.dot').addClass('d-none');
+                } else {
+                    console.log('something error');
+                }
             }
-        }
-    })
+        })
+    }else{
+        console.log('n_id not given');
+    }
 });
 
-
 // for searching user 
-$("#searchBox").on("keyup", function(){
-      let user = $(this).val().trim();
-      console.log(user);
-       if(user.length > 0){
-            $.ajax({
-                url: "assets/php/ajax.php",
-                method: "POST",
-                data: {search: user},
-                success: function(data){
-                    $("#searchResults").html(data);
-                }
-            });
-        } else {
-            $("#searchResults").html("");
-        }
+$("#searchBox").on("keyup", function () {
+    let user = $(this).val().trim();
+    console.log(user);
+    if (user.length > 0) {
+        $.ajax({
+            url: "assets/php/ajax.php",
+            method: "POST",
+            data: { search: user },
+            success: function (data) {
+                $("#searchResults").html(data);
+            }
+        });
+    } else {
+        $("#searchResults").html("");
+    }
 })
 
