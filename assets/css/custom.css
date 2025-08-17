@@ -37,13 +37,13 @@ body {
 }
 .count_n{
     position: absolute;
-    top:7px;
-    left: 7px;
+    top:4px;
+    left: 4px;
     z-index: 1;
-    height: 12px;
-    width: 12px;
+    height: 15px;
+    width: 15px;
     color: white;
-    font-size: 8px;
+    font-size: 10px;
 }
 .notification{
     cursor: pointer;

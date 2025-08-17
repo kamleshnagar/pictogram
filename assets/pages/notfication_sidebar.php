@@ -33,7 +33,7 @@
                 <div class="d-flex  justify-content-center align-items-center">
                   <div class="align-items-center">
                     <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
-                    <p class="m-0">(<?= $notification['id'] ?>) added a new post</p>
+                    <p class="m-0">Added a new post</p>
                   </div>
 
                 </div>
@@ -65,7 +65,7 @@
                 <div class="d-flex  justify-content-center align-items-center">
                   <div class="align-items-center">
                     <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
-                    <p class="m-0">(<?= $notification['id'] ?>) liked your post</p>
+                    <p class="m-0">Liked your post</p>
                   </div>
 
                 </div>
@@ -94,7 +94,7 @@
                 <div class="d-flex  justify-content-center align-items-center">
                   <div class="align-items-center">
                     <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
-                    <p class="m-0">(<?= $notification['id'] ?>) commented on your post</p>
+                    <p class="m-0">Commented on your post</p>
                   </div>
 
                 </div>
@@ -128,7 +128,7 @@
                   <div class="d-flex  justify-content-center align-items-center">
                     <div class="align-items-center">
                       <h6 class="m-0"><?= $nuser['first_name'] . ' ' . $nuser['last_name'] ?> </h6>
-                      <p class="m-0">(<?= $notification['id'] ?>) started following you</p>
+                      <p class="m-0">Started following you</p>
                     </div>
 
                   </div>
