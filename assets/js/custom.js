@@ -175,25 +175,6 @@ function unlike() {
     })
 };
 
-// for refreshing like count
-// setInterval(function () {
-//     $('.like_count').each(function () {
-//         let postId = $(this).data('postId');
-//         $.ajax({
-//             url: 'assets/php/ajax.php?get_like_count',
-//             method: 'POST',
-//             dataType: 'json',
-//             data: { post_id: postId },
-//             success: function (response) {
-//                 if (response.status) {
-//                     $('#likeCount_' + postId).text(response.like_count);
-//                 }
-//             }
-//         });
-//     });
-// }, 1000); // every 1 seconds
-
-
 
 // //Refresghing likes in modal
 $(document).on('click', '.like_count', function () {
@@ -280,12 +261,14 @@ $(document).on("click", ".notification", function (e) {
         // Wait for modal to finish showing
         modal.one('shown.bs.modal', function () {
             if (target.length) {
-                modal.find('.overflow-auto').animate({
+                modal.find('.flash-highlight').removeClass('flash-highlight');
+                modal.find('#comment_' + c_id).animate({
                     scrollTop: target.position().top - 50
                 }, 500);
                 target.addClass('flash-highlight');
             }
         });
+
     }
 
     if ($(button).data('n-id')) {
@@ -310,6 +293,7 @@ $(document).on("click", ".notification", function (e) {
     } else {
         console.log('n_id not given');
     }
+    target.Class('flash-highlight');
 });
 
 // for searching user 

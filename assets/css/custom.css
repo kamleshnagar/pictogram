@@ -28,7 +28,7 @@ body {
 }
 
 @keyframes flashHighlight {
-  from { background-color: rgb(84, 195, 232); }
+  from { background-color: rgb(153, 214, 255); }
   to   { background-color: white; }
 }
 
