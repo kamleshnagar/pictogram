@@ -113,6 +113,9 @@ foreach ($posts as $post) {
                                 aria-label="Recipient's username" aria-describedby="button-addon2">
                             <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
                                 id="button-addon2">Post</button>
+                            <h4 style="font-size: x-larger; height:100%;" class="d-flex justify-content-center align-items-center pt-2">
+                                <i class="bi   <?= checkLikeStatus($post['id']) ? 'bi-heart-fill text-danger unlike_btn' : 'bi-heart like_btn' ?>" data-post-id="<?= $post['id'] ?>"></i>
+                            </h4>
                         </div>
                     </div>
 
