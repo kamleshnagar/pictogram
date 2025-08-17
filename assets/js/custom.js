@@ -246,6 +246,25 @@ $(document).on("click", ".add-comment", function (e) {
     })
 });
 
+// for notifications modal body
+$(document).on("click", "#notifications", function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: 'assets/php/ajax.php?getNotifications',
+        method: 'GET', // GET is fine here
+        dataType: 'json',
+        success: function (response) {
+            if (response.notifications) {
+                $('#notifications_box').html(response.notifications);
+            } else {
+                $('#notifications_box').html('<p class="text-muted">No notifications</p>');
+            }
+        },
+        error: function () {
+            $('#notifications_box').html('<p class="text-danger">Error loading notifications</p>');
+        }
+    });
+});
 
 // for notifications like, post, comment
 $(document).on("click", ".notification", function (e) {
@@ -262,7 +281,7 @@ $(document).on("click", ".notification", function (e) {
         modal.one('shown.bs.modal', function () {
             if (target.length) {
                 modal.find('.flash-highlight').removeClass('flash-highlight');
-                modal.find('#comment_' + c_id).animate({
+                modal.find('.overflow-auto').animate({
                     scrollTop: target.position().top - 50
                 }, 500);
                 target.addClass('flash-highlight');

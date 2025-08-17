@@ -268,18 +268,85 @@ if (isset($_POST['search'])) {
 if (isset($_GET['notification'])) {
     $n_id = $_POST['n_id'];
     $n = getNotifiactionById($n_id);
-    if(isset($n_id) && changeNotificationReadStatus($n_id)){
+    if (isset($n_id) && changeNotificationReadStatus($n_id)) {
         $response['status'] = true;
         $response['n_id'] = $n_id;
-        if($n['action'] == 3){
+        if ($n['action'] == 3) {
             $user = getUser($n['follower_id']);
-            $response['redirect'] = '?u='.$user['username'];
+            $response['redirect'] = '?u=' . $user['username'];
         }
-    }else{
+    } else {
         $response['msg'] = "something went wrong";
     }
 
     header('Content-Type: application/json');
     echo json_encode($response);
+    exit;
+}
+// for get notifications
+if (isset($_GET['getNotifications'])) {
+    $notifications = filterNotifcation();
+    $html = '';
+
+    // action → message mapping
+    $messages = [
+        0 => 'Added a new post',
+        1 => 'Liked your post',
+        2 => 'Commented on your post',
+        3 => 'Started following you'
+    ];
+
+    if ($notifications && count($notifications) > 0) {
+        foreach ($notifications as $n) {
+            if (empty($n)) continue;
+
+            $u = getUser($n['follower_id']);
+            $readClass = ($n['read_status'] == 0 ? '' : 'bg-light');
+            $dot = ($n['read_status'] == 0)
+                ? '<div class="d-flex"><span class="bg-primary dot" style="height:100%;width:5px"></span></div>'
+                : '';
+            $msg = $messages[$n['action']] ?? 'Notification';
+
+            // optional attributes
+            $extra = '';
+            if ($n['action'] == 2) { // comment
+                $extra = ' href="#comment_'.$n['comment_id'].'" data-c-id="'.$n['comment_id'].'"';
+            } elseif ($n['action'] == 3) { // follow
+                $extra = ' data-user-id="'.$n['user_id'].'"';
+            }
+
+            $target = in_array($n['action'], [0,1,2]) ? 'data-bs-toggle="modal" data-bs-target="#postview'.$n['post_id'].'"' : '';
+
+            $html .= '
+            <div '.$target.$extra.'
+                style="min-height:70px;"
+                id="n_id_'.$n['id'].'"
+                class="notification d-flex p-1 border-bottom '.$readClass.'"
+                '.($n['read_status'] == 0 ? 'data-n-id="'.$n['id'].'"' : '').'>
+                '.$dot.'
+                <div class="d-flex justify-content-between w-100 pe-3">
+                    <div class="d-flex pe-2">
+                        <div class="d-flex align-items-center ms-2">
+                            <a href="?u='.$u['username'].'">
+                                <img src="assets/images/profile/'.$u['profile_pic'].'" height="40" width="40" class="rounded-circle border">
+                            </a>
+                        </div>
+                        <div class="ms-2 d-flex align-items-center">
+                            <div>
+                                <h6 class="m-0">'.$u['first_name'].' '.$u['last_name'].'</h6>
+                                <p class="m-0"><span class="text-muted">'.$u['username'].'</span> '.$msg.'</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end text-muted my-1" style="font-size:15px;">'.timeAgo($n['created_at']).'</div>
+                </div>
+                <hr>
+            </div>';
+        }
+    } else {
+        $html = '<p class="text-muted text-italic">No notifications</p>';
+    }
+
+    echo json_encode(['notifications' => $html]);
     exit;
 }

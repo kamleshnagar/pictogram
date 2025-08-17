@@ -75,14 +75,16 @@ mysqli_query($db, $table_block);
 
 
 
-$notification_table = "CREATE TABLE IF NOT EXISTS`notification` (
-`id` INT NOT NULL AUTO_INCREMENT ,
-`user_id` INT NOT NULL ,
-`sub` VARCHAR(255) NOT NULL ,
-`disc` VARCHAR(255) NOT NULL ,
-`follower_id` INT NOT NULL ,
-`read_status` INT NOT NULL DEFAULT '0' ,
-`created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-PRIMARY KEY (`id`)
-);";
+$notification_table = "CREATE TABLE IF NOT EXISTS `notification` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `post_id` INT(11) DEFAULT NULL,
+  `user_id` INT(11) DEFAULT NULL,
+  `follower_id` INT(11) DEFAULT NULL,
+  `comment_id` INT(11) DEFAULT NULL,
+  `action` INT(11) DEFAULT NULL,
+  `read_status` INT(11) NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+";
 mysqli_query($db, $notification_table);

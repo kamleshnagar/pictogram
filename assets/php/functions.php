@@ -722,6 +722,7 @@ function getPostDataById($post_id)
 // for notify actions
 function notify($field, $data = "")
 {
+   
     global $db;
     $follower_id = $_SESSION['userdata']['id'];
 
@@ -734,8 +735,14 @@ function notify($field, $data = "")
         mysqli_query($db, $sql);
     } elseif ($field == "like") {
         $post_data = getPostDataById($data);
-
         $user_id = $post_data['user_id'];
+        $duplicates = isDuplicateNotification($field, $data);
+        if (!empty($duplicates) && isset($duplicates)) {
+            foreach ($duplicates as $dn) {
+                $id = $dn['id'];
+                deletDuplicateNotification($id);
+            }
+        }
         $sql = "INSERT INTO `notification` (`post_id`, `user_id`, follower_id, action)
                 VALUES($data, $user_id, $follower_id, 1)";
         mysqli_query($db, $sql);
@@ -750,11 +757,53 @@ function notify($field, $data = "")
                 VALUES( $post_id , $user_id, $follower_id, $comment_id, 2)";
         mysqli_query($db, $sql);
     } elseif ($field == "follow") {
+
+        $duplicates = isDuplicateNotification($field, $data);
+        if (!empty($duplicates) && isset($duplicates)) {
+            foreach ($duplicates as $dn) {
+                $id = $dn['id'];
+                
+                deletDuplicateNotification($id);
+            }
+        }
+
         $sql = "INSERT INTO `notification` (`user_id`, follower_id, action)
                 VALUES($data, $follower_id, 3)";
         mysqli_query($db, $sql);
     }
 }
+//delet old notification
+function deletDuplicateNotification($id)
+{
+    global $db;
+    
+        $sql = "DELETE FROM `notification` WHERE `notification`.`id` = $id;";
+        return mysqli_query($db, $sql);
+}
+
+// check old notification
+function isDuplicateNotification($field, $id)
+{
+    global $db;
+    $follower_id = $_SESSION['userdata']['id'];
+
+    if ($field == "like") {
+        $post_data = getPostDataById($id);
+        $user_id = $post_data['user_id'];
+
+        $sql = "SELECT id FROM `notification` WHERE post_id='$id' AND user_id='$user_id' AND follower_id='$follower_id' AND action=1 ;";
+        $run = mysqli_query($db, $sql);
+        $result = mysqli_fetch_all($run, true);
+    }
+    if ($field == "follow") {
+        $sql = "SELECT * FROM `notification` WHERE  user_id='$id' AND follower_id='$follower_id' AND action=3 ;";
+        $run = mysqli_query($db, $sql);
+        $result = mysqli_fetch_all($run, true);
+    }
+
+    return $result;
+}
+
 
 // // for getting notifications
 function getNotifiaction()
@@ -805,14 +854,16 @@ function getFollowNotifyId($user_id, $follower_id)
 
 
 //for change read status of notification
-function changeNotificationReadStatus($id){
+function changeNotificationReadStatus($id)
+{
     global $db;
     $sql = "UPDATE `notification` SET `read_status` = '1' WHERE `notification`.`id` = $id;";
     return mysqli_query($db, $sql);
 }
 //for getting notification by id
-function getNotifiactionById($id){
-     global $db;
+function getNotifiactionById($id)
+{
+    global $db;
     $sql = "SELECT * FROM `notification` WHERE `id`=$id LIMIT 1; ";
     $result =  mysqli_query($db, $sql);
     return mysqli_fetch_assoc($result);
