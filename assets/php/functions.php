@@ -831,7 +831,7 @@ function isDuplicateNotification($field, $id)
 function getNotifiaction()
 {
     global $db;
-    $sql = "SELECT * FROM `notification` ORDER BY id DESC; ";
+    $sql = "SELECT `notification`.*, posts.post_img FROM `notification` JOIN posts ON `notification`.post_id=posts.id ORDER BY id DESC; ";
     $result =  mysqli_query($db, $sql);
     return mysqli_fetch_all($result, true);
 }
