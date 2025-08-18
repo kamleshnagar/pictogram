@@ -349,7 +349,7 @@ if (isset($_GET['getNotifications'])) {
                                     </div>
                             </div>
                             <div class="d-flex flex-column  col-4  ">
-                                                ' . (isset($img) ? $img : '') . '
+                                                ' . ((isset($img) && $n['action'] != 3) ? $img : '') . '
                                                 <div class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($n['created_at']) . '</div>
                             </div>
 

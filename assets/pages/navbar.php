@@ -25,7 +25,7 @@
             <li class="nav-item">
                 <div class="position-relative">
                     <a class="nav-link text-dark" id="notifications" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
-                    <div id="notifCount" class="rounded-circle bg-primary count_n text-center fw-bold d-none">
+                    <div id="notifCount" class="rounded-circle bg-primary count_n text-center fw-bold <?= (!empty($unread))?'' : 'd-none' ?>">
                         <p id="notifNum"><?= (!empty($unread))?count($unread) : '' ?></p>
                     </div>
 

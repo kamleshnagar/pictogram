@@ -251,6 +251,7 @@ $(document).on("click", ".add-comment", function (e) {
 // for notifications modal body
 $(document).on("click", "#notifications", function (e) {
     e.preventDefault();
+    console.log("notification clicked")
     $("#footer_content").load(
         "assets/pages/footer.php #footer_content>*",
     );
