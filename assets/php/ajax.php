@@ -283,9 +283,13 @@ if (isset($_GET['notification'])) {
     echo json_encode($response);
     exit;
 }
+
 // for get notifications
 if (isset($_GET['getNotifications'])) {
     $notifications = filterNotifcation();
+    $user = getUser($_SESSION['userdata']['id']);
+    $posts =  filterPost();
+    $follow_suggestions = filterFollowSuggestion();
     $html = '';
 
     // action → message mapping
@@ -299,8 +303,9 @@ if (isset($_GET['getNotifications'])) {
     if ($notifications && count($notifications) > 0) {
         foreach ($notifications as $n) {
             if (empty($n)) continue;
-
+            $n['post_img'] = getPostById($n['post_id'])['post_img'];
             $u = getUser($n['follower_id']);
+          
             $readClass = ($n['read_status'] == 0 ? '' : 'bg-light');
             $dot = ($n['read_status'] == 0)
                 ? '<div class="d-flex"><span class="bg-primary dot" style="height:100%;width:5px"></span></div>'
@@ -310,36 +315,41 @@ if (isset($_GET['getNotifications'])) {
             // optional attributes
             $extra = '';
             if ($n['action'] == 2) { // comment
-                $extra = ' href="#comment_'.$n['comment_id'].'" data-c-id="'.$n['comment_id'].'"';
+                $extra = ' href="#comment_' . $n['comment_id'] . '" data-c-id="' . $n['comment_id'] . '"';
             } elseif ($n['action'] == 3) { // follow
-                $extra = ' data-user-id="'.$n['user_id'].'"';
+                $extra = ' data-user-id="' . $n['user_id'] . '"';
             }
 
-            $target = in_array($n['action'], [0,1,2]) ? 'data-bs-toggle="modal" data-bs-target="#postview'.$n['post_id'].'"' : '';
+            $target = in_array($n['action'], [0, 1, 2]) ? 'data-bs-toggle="modal" data-bs-target="#postview' . $n['post_id'] . '"' : '';
 
             $html .= '
-            <div '.$target.$extra.'
+            <div ' . $target . $extra . '
                 style="min-height:70px;"
-                id="n_id_'.$n['id'].'"
-                class="notification d-flex p-1 border-bottom '.$readClass.'"
-                '.($n['read_status'] == 0 ? 'data-n-id="'.$n['id'].'"' : '').'>
-                '.$dot.'
-                <div class="d-flex justify-content-between w-100 pe-3">
-                    <div class="d-flex pe-2">
-                        <div class="d-flex align-items-center ms-2">
-                            <a href="?u='.$u['username'].'">
-                                <img src="assets/images/profile/'.$u['profile_pic'].'" height="40" width="40" class="rounded-circle border">
-                            </a>
-                        </div>
-                        <div class="ms-2 d-flex align-items-center">
-                            <div>
-                                <h6 class="m-0">'.$u['first_name'].' '.$u['last_name'].'</h6>
-                                <p class="m-0"><span class="text-muted">'.$u['username'].'</span> '.$msg.'</p>
+                id="n_id_' . $n['id'] . '"
+                class="notification d-flex p-1 border-bottom ' . $readClass . '"
+                ' . ($n['read_status'] == 0 ? 'data-n-id="' . $n['id'] . '"' : '') . '>
+                ' . $dot . '
+                    <div class="d-flex flex-column w-100 pe-3">
+                         <div class="d-flex justify-content-between w-100 pe-3">
+                            <div class="d-flex pe-2">
+                                    <div class="d-flex align-items-center ms-2">
+                                        <a href="?u=' . $u['username'] . '">
+                                            <img src="assets/images/profile/' . $u['profile_pic'] . '" height="40" width="40" class="rounded-circle border">
+                                        </a>
+                                    </div>
+                                    <div class="ms-2 d-flex align-items-center">
+                                        <div>
+                                            <h6 class="m-0">' . $u['first_name'] . ' ' . $u['last_name'] . '</h6>
+                                            <p class="m-0"><span class="text-muted">' . $u['username'] . '</span> ' . $msg . '</p>
+                                        </div>
+                                        <img src="assets/images/post/'.$n['post_img'].'" height="40" width="40" class="rounded border position-relative  m-2" style="left:60px">
+                                    </div>
+                                     
                             </div>
                         </div>
+                        <div class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($n['created_at']) . '</div>
                     </div>
-                    <div class="text-end text-muted my-1" style="font-size:15px;">'.timeAgo($n['created_at']).'</div>
-                </div>
+
                 <hr>
             </div>';
         }
@@ -348,5 +358,24 @@ if (isset($_GET['getNotifications'])) {
     }
 
     echo json_encode(['notifications' => $html]);
+    exit;
+}
+
+
+
+if (isset($_GET['getNotifCount'])) {
+    $notifications = filterNotifcation();
+
+    $unread = [];
+
+    if (!empty($notifications)) {
+        foreach ($notifications as $n) {
+            if ($n['read_status'] == 0) {
+                $unread[] = $n;
+            }
+        }
+    }
+
+    echo count($unread);
     exit;
 }

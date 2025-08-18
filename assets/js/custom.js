@@ -138,6 +138,7 @@ function like() {
                 $(button).attr('disabled', false);
                 $(button).attr('class', 'bi bi-heart-fill text-danger unlike_btn');
                 $('#likeCount_' + post_id_v).html(response.like_count);
+                $('#modalLikeCount_' + post_id_v).html(response.like_count);
                 // location.reload();
 
             } else {
@@ -166,6 +167,7 @@ function unlike() {
                 $(button).attr('disabled:', false);
                 $(button).attr('class', 'bi bi-heart like_btn');
                 $('#likeCount_' + post_id_v).html(response.like_count);
+                $('#modalLikeCount_' + post_id_v).html(response.like_count);
                 // location.reload();
             } else {
                 $(button).attr('disabled', false);
@@ -249,6 +251,9 @@ $(document).on("click", ".add-comment", function (e) {
 // for notifications modal body
 $(document).on("click", "#notifications", function (e) {
     e.preventDefault();
+    $("#footer_content").load(
+        "assets/pages/footer.php #footer_content>*",
+    );
     $.ajax({
         url: 'assets/php/ajax.php?getNotifications',
         method: 'GET', // GET is fine here
@@ -267,8 +272,11 @@ $(document).on("click", "#notifications", function (e) {
 });
 
 // for notifications like, post, comment
+
 $(document).on("click", ".notification", function (e) {
     e.preventDefault();
+
+
     let button = this;
     if ($(button).data('c-id')) {
         let c_id = $(button).data('c-id'),
@@ -312,7 +320,6 @@ $(document).on("click", ".notification", function (e) {
     } else {
         console.log('n_id not given');
     }
-    target.Class('flash-highlight');
 });
 
 // for searching user 
@@ -333,3 +340,30 @@ $("#searchBox").on("keyup", function () {
     }
 })
 
+// for notification count
+function fetchNotifCount() {
+    fetch("assets/php/ajax.php?getNotifCount")
+        .then(res => res.text())
+        .then(count => {
+            count = parseInt(count) || 0;
+            let badge = document.getElementById("notifCount");
+            let num = document.getElementById("notifNum");
+
+            if (count > 0) {
+                badge.classList.remove("d-none");
+                num.textContent = count;
+
+            } else {
+                badge.classList.add("d-none");
+                num.textContent = "";
+            }
+        })
+        .catch(err => console.error("Notification fetch error:", err));
+}
+
+
+setInterval(fetchNotifCount, 2000);
+
+function updateFooter() {
+
+}

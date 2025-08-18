@@ -4,8 +4,6 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
-
-
   <hr class="m-0 p-0">
   <div class="offcanvas-body p-0 " id="notifications_box">
     

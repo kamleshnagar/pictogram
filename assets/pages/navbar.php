@@ -1,23 +1,6 @@
 <?php global $user; ?>
 <?php $name = $user['first_name'] . ' ' . $user['last_name']; ?>
-<?php $username = '@' . $user['username'];?>
-<?php
-if (!empty($notifications = filterNotifcation())) {
-    $unread = array();
-
-    foreach ($notifications as $n) {
-        if ($n['read_status'] == 0) {
-            $unread[] = $n; 
-        }
-    }
-
-    $count_n = count($unread);
-}
-?>
-
-
-
-
+<?php $username = '@' . $user['username']; ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border">
     <div class="container col-9 d-flex justify-content-between">
@@ -40,9 +23,11 @@ if (!empty($notifications = filterNotifcation())) {
             </li>
             <li class="nav-item">
                 <div class="position-relative">
-                <a class="nav-link text-dark" id="notifications" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
-                <div  class="<?=($count_n>0)?'':'d-none'?> rounded-circle bg-primary count_n text-center fw-bold"><p><?=($count_n>0)?$count_n:' '?></p></div>
-                </div>
+                    <a class="nav-link text-dark" id="notifications" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
+                    <div id="notifCount" class="rounded-circle bg-primary count_n text-center fw-bold d-none">
+                        <p id="notifNum"></p>
+                    </div>
+
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" href="#"><i class="bi bi-chat-right-dots-fill"></i></a>

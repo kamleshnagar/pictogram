@@ -154,6 +154,14 @@ function getPost()
     $run = mysqli_query($db, $query);
     return mysqli_fetch_all($run, true);
 }
+//get post by id
+function getPostById($id)
+{
+    global $db;
+    $query = "SELECT * FROM posts WHERE id = $id ORDER BY id DESC;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($run);
+}
 
 // getting Posts by user_id
 function getPostByUserId($id)
@@ -722,7 +730,7 @@ function getPostDataById($post_id)
 // for notify actions
 function notify($field, $data = "")
 {
-   
+
     global $db;
     $follower_id = $_SESSION['userdata']['id'];
 
@@ -762,7 +770,7 @@ function notify($field, $data = "")
         if (!empty($duplicates) && isset($duplicates)) {
             foreach ($duplicates as $dn) {
                 $id = $dn['id'];
-                
+
                 deletDuplicateNotification($id);
             }
         }
@@ -776,9 +784,9 @@ function notify($field, $data = "")
 function deletDuplicateNotification($id)
 {
     global $db;
-    
-        $sql = "DELETE FROM `notification` WHERE `notification`.`id` = $id;";
-        return mysqli_query($db, $sql);
+
+    $sql = "DELETE FROM `notification` WHERE `notification`.`id` = $id;";
+    return mysqli_query($db, $sql);
 }
 
 // check old notification
