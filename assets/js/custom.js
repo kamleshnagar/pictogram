@@ -248,29 +248,6 @@ $(document).on("click", ".add-comment", function (e) {
     })
 });
 
-// for notifications modal body
-$(document).on("click", "#notifications", function (e) {
-    e.preventDefault();
-    console.log("notification clicked")
-    $("#footer_content").load(
-        "assets/pages/footer.php #footer_content>*",
-    );
-    $.ajax({
-        url: 'assets/php/ajax.php?getNotifications',
-        method: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            if (response.notifications) {
-                $('#notifications_box').html(response.notifications);
-            } else {
-                $('#notifications_box').html('<p class="text-muted">No notifications</p>');
-            }
-        },
-        error: function () {
-            $('#notifications_box').html('<p class="text-danger">Error loading notifications</p>');
-        }
-    });
-});
 
 // for notifications like, post, comment
 
@@ -343,6 +320,7 @@ $("#searchBox").on("keyup", function () {
 
 // for notification count
 function fetchNotifCount() {
+
     fetch("assets/php/ajax.php?getNotifCount")
         .then(res => res.text())
         .then(count => {
@@ -353,6 +331,7 @@ function fetchNotifCount() {
             if (count > 0) {
                 badge.classList.remove("d-none");
                 num.textContent = count;
+                unread = count;
 
             } else {
                 badge.classList.add("d-none");
@@ -362,9 +341,41 @@ function fetchNotifCount() {
         .catch(err => console.error("Notification fetch error:", err));
 }
 
+// for notifications modal body
+function fetchNotifications() {
+    $.ajax({
+        url: 'assets/php/ajax.php?getNotifications',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            if (response.notifications) {
+                $('#notifications_box').html(response.notifications);
+            } else {
+                $('#notifications_box').html('<p class="text-muted">No notifications</p>');
+            }
+        },
+        error: function () {
+            $('#notifications_box').html('<p class="text-danger">Error loading notifications</p>');
+        }
+    });
+}
+
 
 setInterval(fetchNotifCount, 2000);
 
-function updateFooter() {
 
+//observer for notifNum text changes
+function observeNotifNum() {
+    let notifNumEl = document.getElementById("notifNum");
+
+    if (notifNumEl) {
+        const observer = new MutationObserver(() => {
+            console.log("notifNum changed:", notifNumEl.textContent);
+            $("#footer_content").load("assets/pages/footer.php #footer_content>*");
+            fetchNotifications();
+        });
+
+        observer.observe(notifNumEl, { childList: true, characterData: true, subtree: true });
+    }
 }
+observeNotifNum();
