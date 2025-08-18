@@ -303,9 +303,12 @@ if (isset($_GET['getNotifications'])) {
     if ($notifications && count($notifications) > 0) {
         foreach ($notifications as $n) {
             if (empty($n)) continue;
-            $n['post_img'] = getPostById($n['post_id'])['post_img'];
+            if (isset($n['post_id'])) {
+                $n['post_img'] = getPostById($n['post_id'])['post_img'];
+                $post_img = $n['post_img'];
+                $img = '<img src="assets/images/post/' . $post_img . '" height="40" width="40" class="align-self-end rounded border m-2">';
+            }
             $u = getUser($n['follower_id']);
-
             $readClass = ($n['read_status'] == 0 ? '' : 'bg-light');
             $dot = ($n['read_status'] == 0)
                 ? '<div class="d-flex"><span class="bg-primary dot" style="height:100%;width:5px"></span></div>'
@@ -329,8 +332,8 @@ if (isset($_GET['getNotifications'])) {
                 class="notification d-flex p-1 border-bottom ' . $readClass . '"
                 ' . ($n['read_status'] == 0 ? 'data-n-id="' . $n['id'] . '"' : '') . '>
                 ' . $dot . '
-                    <div class="d-flex flex-column w-100 pe-2">
-                        <div class="d-flex pe-2 justify-content-between align-items-center w-100">
+                    <div class="d-flex flex-column w-100 ">
+                        <div class="d-flex  justify-content-between align-items-center w-100">
                             <div class="d-flex col-8">
                                 
                                     <a href="?u=' . $u['username'] . '">
@@ -345,10 +348,10 @@ if (isset($_GET['getNotifications'])) {
 
                                     </div>
                             </div>
-                                    <div class="d-flex flex-column px-2 col-4 ">
-                                                        <img src="assets/images/post/' . $n['post_img'] . '" height="40" width="40" class=" align-self-end rounded border m-2" ">
-                                                        <div class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($n['created_at']) . '</div>
-                                    </div>
+                            <div class="d-flex flex-column  col-4  ">
+                                                ' . (isset($img) ? $img : '') . '
+                                                <div class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($n['created_at']) . '</div>
+                            </div>
 
                            
                         </div>
@@ -359,7 +362,7 @@ if (isset($_GET['getNotifications'])) {
             </div>';
         }
     } else {
-        $html = '<p class="text-muted text-italic">No notifications</p>';
+        $html = '<p class="m-3 text-muted text-italic">No notifications</p>';
     }
 
     echo json_encode(['notifications' => $html]);

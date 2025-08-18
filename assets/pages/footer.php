@@ -5,9 +5,14 @@ global $profile_post;
 
 require_once __DIR__ . "/../php/functions.php";
 $user = getUser($_SESSION['userdata']['id']);
-$posts =  filterPost();
-$follow_suggestions = filterFollowSuggestion(); ?>
+if(isset($_GET['u'])){
+$posts = $profile_post + filterPost();
+}else{
+    $posts = filterPost();
+}
+$follow_suggestions = filterFollowSuggestion();
 
+?>
 
 <div id="footer_content">
     <?php

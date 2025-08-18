@@ -3,7 +3,6 @@ global $profile;
 global $user;
 global $profile_post;
 
-//  pr($profile['following']);
 
 ?>
 <div class="container col-9 rounded-0 d-flex flex-column justify-content-center align-items-center">

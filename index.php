@@ -42,6 +42,7 @@ if (isset($_SESSION['AUTH']) && $user['ac_status'] == 0 && !$pagecount) {
     $profile_post = getPostByUserId($profile['id']);
     $profile['followers'] = getFollowers($profile['id']);
     $profile['following'] = getFollowing($profile['id']);
+  
 
 
 
@@ -90,14 +91,12 @@ if (isset($_SESSION['code'])) {
 } elseif (isset($_SESSION['forget_code'])) {
     pr($_SESSION['forget_code']);
 } else {
-    pr('No code found');
+   
 }
 
 unset($_SESSION['error']);
 unset($_SESSION['success']);
 unset($_SESSION['formdata']);
-$n['post_id'] =47;
- $n['post_img'] = getPostById($n['post_id'])['post_img'];
- echo $n['post_img'];
+
 
 showPage("footer");

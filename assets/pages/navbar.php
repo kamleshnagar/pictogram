@@ -1,6 +1,7 @@
 <?php global $user; ?>
 <?php $name = $user['first_name'] . ' ' . $user['last_name']; ?>
-<?php $username = '@' . $user['username']; ?>
+<?php $username = '@' . $user['username'];
+?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border">
     <div class="container col-9 d-flex justify-content-between">
@@ -25,7 +26,7 @@
                 <div class="position-relative">
                     <a class="nav-link text-dark" id="notifications" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
                     <div id="notifCount" class="rounded-circle bg-primary count_n text-center fw-bold d-none">
-                        <p id="notifNum"></p>
+                        <p id="notifNum"><?= (!empty($unread))?count($unread) : '' ?></p>
                     </div>
 
             </li>

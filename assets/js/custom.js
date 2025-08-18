@@ -256,7 +256,7 @@ $(document).on("click", "#notifications", function (e) {
     );
     $.ajax({
         url: 'assets/php/ajax.php?getNotifications',
-        method: 'GET', // GET is fine here
+        method: 'GET',
         dataType: 'json',
         success: function (response) {
             if (response.notifications) {

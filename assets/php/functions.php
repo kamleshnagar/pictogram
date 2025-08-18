@@ -168,7 +168,7 @@ function getPostByUserId($id)
 {
     global $db;
 
-    $query = "SELECT * FROM posts WHERE user_id = $id ORDER BY id DESC;";
+    $query = "SELECT  posts.*,users.first_name,users.last_name,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id WHERE user_id = $id ORDER BY id DESC;";
     $run = mysqli_query($db, $query);
     return mysqli_fetch_all($run, true);
 }
@@ -525,6 +525,18 @@ function unfollowUser($user_id)
     return $result;
 }
 
+function removeFromfollowList($user_id)
+{
+    global $db;
+
+    $current_user =  $_SESSION['userdata']['id'];
+    $query = "DELETE FROM follow_list WHERE (follower_id = $current_user AND user_id= $user_id) OR (follower_id = $user_id AND user_id= $current_user);";
+
+    $result = mysqli_query($db, $query);
+
+    return $result;
+}
+
 
 // for counting the followers
 function getFollowers($user_id)
@@ -670,9 +682,11 @@ function block($profile_id)
 {
     global $db;
     $user_id = $_SESSION['userdata']['id'];
+    removeFromfollowList($profile_id);
     $query = "INSERT INTO `block` (`user_id`, `blocked_id`) VALUES ($user_id, $profile_id);";
     return mysqli_query($db, $query);
 }
+
 //function Unblock user
 function unblock($profile_id)
 {
@@ -687,7 +701,7 @@ function isBlock($profile_id)
 {
     global $db;
     $user_id = $_SESSION['userdata']['id'];
-    unfollowUser($user_id);
+
     $query = "SELECT COUNT(*) as `row` FROM`block` WHERE user_id=$user_id AND blocked_id=$profile_id;";
     $result = mysqli_query($db, $query);
     return mysqli_fetch_assoc($result)['row'];
@@ -699,7 +713,7 @@ function isUserBlocked($profile_id)
     global $db;
 
     $user_id = $_SESSION['userdata']['id'];
-    unfollowUser($user_id);
+    // unfollowUser($profile_id);
     $query = "SELECT COUNT(*) as `row` FROM`block` WHERE user_id=$profile_id AND blocked_id=$user_id;";
     $result = mysqli_query($db, $query);
 
@@ -842,6 +856,7 @@ function filterNotifcation()
             ($notification['follower_id'] == $user_id) ||
             (isset($follow_notify_id) && $notification['action'] == 0 && $follow_notify_id >= $notification['id']) ||
             ($notification['user_id'] != $user_id && $notification['action'] != 0)
+            || (isblock($notification['follower_id']) || isUserBlocked($notification['follower_id']))
         ) continue;
 
         $filter_notifications[] = $notification;
