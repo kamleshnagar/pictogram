@@ -831,7 +831,7 @@ function isDuplicateNotification($field, $id)
 function getNotifiaction()
 {
     global $db;
-    $sql = "SELECT * FROM `notification` ORDER BY id DESC; ";
+    $sql = "SELECT notification.* FROM `notification` ORDER BY id DESC; ";
     $result =  mysqli_query($db, $sql);
     return mysqli_fetch_all($result, true);
 }
@@ -840,7 +840,6 @@ function filterNotifcation()
 {
     $user_id = $_SESSION['userdata']['id'];
     $notifications = getNotifiaction();
-
     if ($notifications == null) {
         return [];
     }
@@ -852,13 +851,13 @@ function filterNotifcation()
         }
 
         if (
-            (!checkFollowStatus($notification['user_id']) && $notification['user_id'] != $user_id) ||
-            ($notification['follower_id'] == $user_id) ||
-            (isset($follow_notify_id) && $notification['action'] == 0 && $follow_notify_id >= $notification['id']) ||
-            ($notification['user_id'] != $user_id && $notification['action'] != 0) ||
-            (isblock($notification['follower_id']) || isUserBlocked($notification['follower_id']))
+            (!checkFollowStatus($notification['user_id']) && $notification['user_id'] != $user_id) 
+            || ($notification['follower_id'] == $user_id) 
+            || (isset($follow_notify_id) && $notification['action'] == 0 && $follow_notify_id >= $notification['id']) 
+            || ($notification['user_id'] != $user_id && $notification['action'] != 0) 
+            || (isblock($notification['follower_id']) || isUserBlocked($notification['follower_id']))
         ) continue;
-
+        
         $filter_notifications[] = $notification;
     }
 

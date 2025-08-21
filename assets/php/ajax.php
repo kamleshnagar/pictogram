@@ -291,7 +291,7 @@ if (isset($_GET['getNotifications'])) {
     $posts =  filterPost();
     $follow_suggestions = filterFollowSuggestion();
     $html = '';
-    
+
     // action → message mapping
     $messages = [
         0 => 'Added a new post',
@@ -299,7 +299,7 @@ if (isset($_GET['getNotifications'])) {
         2 => 'Commented on your post',
         3 => 'Started following you'
     ];
-    
+
     if ($notifications && count($notifications) > 0) {
         foreach ($notifications as $n) {
             if (empty($n)) continue;
@@ -364,8 +364,7 @@ if (isset($_GET['getNotifications'])) {
     } else {
         $html = '<p class="m-3 text-muted text-italic">No notifications</p>';
     }
-
-    // echo (['notifications' => $html]);
+    header('Content-Type: application/json');
     echo json_encode(['notifications' => $html]);
     exit;
 }

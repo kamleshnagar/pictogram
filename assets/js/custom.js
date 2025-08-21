@@ -343,26 +343,30 @@ function fetchNotifCount() {
 
 // for notifications modal body
 function fetchNotifications() {
+
     $.ajax({
         url: 'assets/php/ajax.php?getNotifications',
         method: 'GET',
         dataType: 'json',
         success: function (response) {
+            console.log("response");
             if (response.notifications) {
                 $('#notifications_box').html(response.notifications);
             } else {
                 $('#notifications_box').html('<p class="text-muted">No notifications</p>');
             }
         },
-        error: function () {
+        error: function (xhr, status, err) {
             $('#notifications_box').html('<p class="text-danger">Error loading notifications</p>');
+            console.error("AJAX error:", status, err);
+            console.error("Response text:", xhr.responseText);
         }
+
     });
 }
 
 
-setInterval(fetchNotifCount, 2000);
-
+setInterval(fetchNotifCount, 2500);
 
 //observer for notifNum text changes
 function observeNotifNum() {
@@ -379,3 +383,8 @@ function observeNotifNum() {
     }
 }
 observeNotifNum();
+
+$(document).on("click", "#notifications", function (e) {
+    e.preventDefault();
+    fetchNotifications();
+})

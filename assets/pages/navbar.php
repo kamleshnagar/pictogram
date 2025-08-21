@@ -24,14 +24,26 @@
             </li>
             <li class="nav-item">
                 <div class="position-relative">
-                    <a class="nav-link text-dark" id="notifications" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="notification_sidebar"><i class="bi bi-bell-fill"></i></a>
-                    <div id="notifCount" class="rounded-circle bg-primary count_n text-center fw-bold <?= (!empty($unread))?'' : 'd-none' ?>">
-                        <p id="notifNum"><?= (!empty($unread))?count($unread) : '' ?></p>
+                    <a class="nav-link text-dark" id="notifications" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#notification_sidebar" role="button" aria-controls="sidebar"><i class="bi bi-bell-fill"></i></a>
+                    <?php
+                    $notifications = filterNotifcation();
+                    $unread = [];
+                    if (!empty($notifications)) {
+                        foreach ($notifications as $n) {
+                            if ($n['read_status'] == 0) {
+                                $unread[] = $n;
+                            }
+                        }
+                    }
+
+                    ?>
+                    <div id="notifCount" class="rounded-circle bg-primary count_n text-center fw-bold <?= (!empty($unread)) ? '' : 'd-none' ?>">
+                        <p id="notifNum"><?= (!empty($unread)) ? count($unread) : '' ?></p>
                     </div>
 
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i class="bi bi-chat-right-dots-fill"></i></a>
+                <a class="nav-link text-dark" id="messages" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#messages_sidebar" role="button" aria-controls="sidebar"><i class="bi bi-chat-right-dots-fill"></i></a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -52,4 +64,4 @@
     </div>
 </nav>
 
-<?php include('assets/pages/notfication_sidebar.php'); ?>
+<?php include('assets/pages/sidebar.php'); ?>
