@@ -8,7 +8,7 @@ global $profile_post;
 <div class="container col-9 rounded-0 d-flex flex-column justify-content-center align-items-center">
     <div class="col-12 rounded p-4 mt-4 d-flex gap-5 align-items-center">
         <div class="col-4 d-flex justify-content-end align-items-start"><img src="assets/images/profile/<?= $profile['profile_pic'] ?>"
-                class="img-thumbnail rounded-circle my-3" style="height:170px;width:170px;" alt="...">
+                class="img-thumbnail rounded-circle my-3 img-fluide" style="height:170px;width:170px;" alt="...">
         </div>
         <div class="col-4 justify-content-center">
             <div class="d-flex flex-column justify-content-center align-items-start">

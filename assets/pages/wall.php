@@ -31,7 +31,7 @@ global $follow_suggestions;
                     <div class="card-title d-flex justify-content-between  align-items-center">
 
                         <div class="d-flex align-items-center p-2">
-                            <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark"> <img src="assets/images/profile/<?= $post['profile_pic'] ?>" alt="" height="30" class="rounded-circle border "><span class="px-2"><?= $post['first_name'] . ' ' . $post['last_name'] ?>
+                            <a href="?u=<?= $post['username'] ?>" class="text-decoration-none text-dark"> <img src="assets/images/profile/<?= $post['profile_pic'] ?>" alt="" height="30" width="30" class="rounded-circle border "><span class="px-2"><?= $post['first_name'] . ' ' . $post['last_name'] ?>
                                 </span>
                         </div></a>
                         <div class="p-2">
@@ -112,7 +112,7 @@ global $follow_suggestions;
     </div>
     <div class="col-4 px-3">
         <div class="d-flex align-items-center p-2 shodow bg-white  rounded border my-4 p-3">
-            <div><a href="?u=<?= $user['username'] ?>"><img src="assets/images/profile/<?= $user['profile_pic'] ?>" alt="" height="60" class="rounded-circle border"></a>
+            <div><a href="?u=<?= $user['username'] ?>"><img src="assets/images/profile/<?= $user['profile_pic'] ?>" alt="" height="60" width="60" class="rounded-circle border "></a>
             </div>
             <div>&nbsp;&nbsp;&nbsp;</div>
             <div class="d-flex flex-column justify-content-center">

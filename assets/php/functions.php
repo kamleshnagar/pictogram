@@ -483,7 +483,7 @@ function filterPost()
     }
     $filter_list = array();
     foreach ($list as $post) {
-        if (checkFollowStatus($post['user_id'])  || $post['user_id'] == $_SESSION['userdata']['id']) {
+        if ((checkFollowStatus($post['user_id'] )) || $post['user_id'] == $_SESSION['userdata']['id'] || (isset($_GET['u']) && $post['user_id']== $_SESSION['userdata']['id'])) {
             $filter_list[] = $post;
         }
     }

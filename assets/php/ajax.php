@@ -303,7 +303,7 @@ if (isset($_GET['getNotifications'])) {
     if ($notifications && count($notifications) > 0) {
         foreach ($notifications as $n) {
             if (empty($n)) continue;
-            if (isset($n['post_id'])) {
+            if ($n['post_id']) {
                 $n['post_img'] = getPostById($n['post_id'])['post_img'];
                 $post_img = $n['post_img'];
                 $img = '<img src="assets/images/post/' . $post_img . '" height="40" width="40" class="align-self-end rounded border m-2">';
@@ -330,7 +330,7 @@ if (isset($_GET['getNotifications'])) {
                 style="min-height:70px;"
                 id="n_id_' . $n['id'] . '"
                 class="notification d-flex p-1 border-bottom ' . $readClass . '"
-                ' . ($n['read_status'] == 0 ? 'data-n-id="' . $n['id'] . '"' : '') . '>
+                data-n-id="' . $n['id'] .'">
                 ' . $dot . '
                     <div class="d-flex flex-column w-100 ">
                         <div class="d-flex  justify-content-between align-items-center w-100">
@@ -364,6 +364,8 @@ if (isset($_GET['getNotifications'])) {
     } else {
         $html = '<p class="m-3 text-muted text-italic">No notifications</p>';
     }
+
+    // echo $html;
     header('Content-Type: application/json');
     echo json_encode(['notifications' => $html]);
     exit;
