@@ -40,7 +40,6 @@ $(document).on("click", ".post-btn", function (e) {
     if (postImg) {
         formData.append('post_img', postImg);
     }
-    console.log(formData);
     $.ajax({
         url: 'assets/php/ajax.php?addpost',
         type: 'POST',
@@ -111,7 +110,6 @@ function unfollow() {
                 $(button).text("Follow");
                 $(button).attr('disabled:', false);
                 $(button).removeClass('unfollowbtn btn-danger').addClass('followbtn btn-primary');
-                console.log(response);
             } else {
                 $(button).attr('disabled:', false);
                 alert('Something went wrong, please try again later.');
@@ -133,7 +131,6 @@ function like() {
         dataType: 'json',
         data: { post_id: post_id_v },
         success: function (response) {
-            console.log(response);
             if (response.status) {
                 $(button).attr('disabled', false);
                 $(button).attr('class', 'bi bi-heart-fill text-danger unlike_btn');
@@ -303,7 +300,6 @@ $(document).on("click", ".notification", function (e) {
 // for searching user 
 $("#searchBox").on("keyup", function () {
     let user = $(this).val().trim();
-    console.log(user);
     if (user.length > 0) {
         $.ajax({
             url: "assets/php/ajax.php",
@@ -349,7 +345,7 @@ function fetchNotifications() {
         method: 'GET',
         dataType: 'json',
         success: function (response) {
-            console.log("response");
+            console.log("fetching notifications");
             if (response.notifications) {
                 $('#notifications_box').html(response.notifications);
             } else {
@@ -365,16 +361,13 @@ function fetchNotifications() {
     });
 }
 
-
-setInterval(fetchNotifCount, 2500);
-
 //observer for notifNum text changes
 function observeNotifNum() {
     let notifNumEl = document.getElementById("notifNum");
 
     if (notifNumEl) {
         const observer = new MutationObserver(() => {
-            console.log("notifNum changed:", notifNumEl.textContent);
+            console.log("notifNum changed");
             $("#footer_content").load("assets/pages/footer.php #footer_content>*");
             fetchNotifications();
         });
@@ -388,3 +381,29 @@ $(document).on("click", "#notifications", function (e) {
     e.preventDefault();
     fetchNotifications();
 })
+$(document).on("click", "#messages", function (e) {
+    e.preventDefault();
+    syncmsg();
+})
+
+
+function syncmsg() {
+    $.ajax({
+        url: 'assets/php/ajax.php?getChatList',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            console.log(response);
+            if (response.chatlist) {
+                $('#chat_box').html(response.chatlist);
+            } else {
+                $('#chat_box').html('<p class="text-muted">No notifications</p>');
+            }
+        },
+    })
+}
+
+setInterval(() => {
+  fetchNotifCount();
+  syncmsg();
+}, 2500);

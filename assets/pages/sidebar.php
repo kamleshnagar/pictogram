@@ -6,7 +6,7 @@
 
   <hr class="m-0 p-0">
   <div class="offcanvas-body p-0 " id="notifications_box">
-    
+
 
   </div>
 </div>
@@ -18,10 +18,13 @@
     <h5 class="offcanvas-title" id="messages_sidebarLabel">Messages</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-
   <hr class="m-0 p-0">
   <div class="offcanvas-body p-0 " id="chat_box">
-    
 
+
+
+
+  
+    
   </div>
 </div>

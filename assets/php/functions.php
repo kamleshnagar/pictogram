@@ -890,3 +890,44 @@ function getNotifiactionById($id)
     $result =  mysqli_query($db, $sql);
     return mysqli_fetch_assoc($result);
 }
+
+
+// function for getting ids of chat users
+function getActiveChatUserIds()
+{
+    global $db;
+    $current_user_id = $_SESSION['userdata']['id'];
+    $query = "SELECT from_user_id, to_user_id FROM `messages` WHERE from_user_id = $current_user_id || to_user_id = $current_user_id ORDER BY id DESC;";
+    $run = mysqli_query($db, $query);
+    $data =  mysqli_fetch_all($run, true);
+    $ids = array();
+    foreach ($data as $ch){
+        if ($ch['from_user_id'] != $current_user_id && !in_array($ch['from_user_id'],$ids)){
+            $ids[] = $ch['from_user_id'];
+        }
+        if ($ch['to_user_id'] != $current_user_id && !in_array($ch['to_user_id'],$ids)){
+            $ids[] = $ch['to_user_id'];
+        }
+    }
+    return $ids;
+
+}
+
+// function for getting messages
+function getMessages($user_id){
+    global $db;
+    $current_user_id = $_SESSION['userdata']['id'];
+    $query = "SELECT * FROM `messages` WHERE (from_user_id = $current_user_id AND to_user_id = $user_id) || (from_user_id = $user_id AND to_user_id = $current_user_id) ORDER BY id DESC;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run, true);
+}
+
+function getAllMessages(){
+    $active_chat_ids = getActiveChatUserIds();
+    $conversation = array();
+    foreach($active_chat_ids as $index => $id){
+        $conversation[$index]['user_id'] = $id;
+        $conversation[$index]['messages'] = getMessages($id);
+    }
+    return $conversation;
+}

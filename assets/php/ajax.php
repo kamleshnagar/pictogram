@@ -330,7 +330,7 @@ if (isset($_GET['getNotifications'])) {
                 style="min-height:70px;"
                 id="n_id_' . $n['id'] . '"
                 class="notification d-flex p-1 border-bottom ' . $readClass . '"
-                data-n-id="' . $n['id'] .'">
+                data-n-id="' . $n['id'] . '">
                 ' . $dot . '
                     <div class="d-flex flex-column w-100 ">
                         <div class="d-flex  justify-content-between align-items-center w-100">
@@ -350,8 +350,8 @@ if (isset($_GET['getNotifications'])) {
                             </div>
                             <div class="d-flex flex-column  col-4  ">
                                                 ' . ((isset($img) && $n['action'] != 3) ? $img : '') . '
-                                                <div class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($n['created_at']) . '</div>
-                            </div>
+                                                <time class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($n['created_at']) . '</div>
+                            </time>
 
                            
                         </div>
@@ -387,5 +387,43 @@ if (isset($_GET['getNotifCount'])) {
     }
 
     echo count($unread);
+    exit;
+}
+
+
+if (isset($_GET['getChatList'])) {
+    $chats = getAllMessages();
+    $chatlist = '';
+    foreach ($chats as $chat) {
+        $ch_user =  getUser($chat['user_id']);
+        $last_msg = $chat['messages'][0];
+        $chatlist .=
+           '<div style="height:70px; " class="d-flex p-1  border-bottom ' . ($last_msg['read_status'] == 0 ? '' : 'bg-light') . '">
+                <div class="d-flex w-100 ">
+                    <span class="bg-primary dot display-inline-block ' . ($last_msg['read_status'] == 0 ? '' : 'd-none') . '" style="height:100%;width:5px"></span>
+                    <div class="d-flex  my-2 w-100">
+                        <div class="d-flex  justify-content-between align-items-start overflow-hidden w-100">
+                            <div class="d-flex col-8">
+                                <a href="" class="' . ($last_msg['read_status'] == 0 ? 'ms-2' : 'ms-3') . '">
+                                    <img src="assets/images/profile/' . $ch_user['profile_pic'] . '" height="40" width="40" class="rounded-circle border">
+                                </a>
+                                <div class="ms-2 d-flex align-items-center justify-content-between">
+                                    <div>
+                                    <h6 class="m-0 fw-bold">' . $ch_user['first_name'] . ' ' . $ch_user['last_name'] . '</h6>
+                                    <span class="text-muted " style="font-size: 15px; ">' . $last_msg['msg'] . ' </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column  col-4  ">
+                                <time class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($last_msg['created_at']) . '</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>  
+            </div>';
+    }
+    $json['chatlist'] = $chatlist;
+    echo json_encode($json);
     exit;
 }
