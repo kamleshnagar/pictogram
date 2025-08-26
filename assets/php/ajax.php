@@ -391,14 +391,15 @@ if (isset($_GET['getNotifCount'])) {
 }
 
 
-if (isset($_GET['getChatList'])) {
+if (isset($_GET['getMessages'])) {
     $chats = getAllMessages();
+
     $chatlist = '';
     foreach ($chats as $chat) {
         $ch_user =  getUser($chat['user_id']);
         $last_msg = $chat['messages'][0];
         $chatlist .=
-           '<div style="height:70px; " class="d-flex p-1  border-bottom ' . ($last_msg['read_status'] == 0 ? '' : 'bg-light') . '">
+            '<div style="height:70px; " class="chatlist_item d-flex p-1  border-bottom ' . ($last_msg['read_status'] == 0 ? '' : 'bg-light') . '" data-bs-toggle="modal" data-bs-target="#chatbox" onclick = "popchat('. $chat['user_id'] .')">
                 <div class="d-flex w-100 ">
                     <span class="bg-primary dot display-inline-block ' . ($last_msg['read_status'] == 0 ? '' : 'd-none') . '" style="height:100%;width:5px"></span>
                     <div class="d-flex  my-2 w-100">
@@ -409,7 +410,7 @@ if (isset($_GET['getChatList'])) {
                                 </a>
                                 <div class="ms-2 d-flex align-items-center justify-content-between">
                                     <div>
-                                    <h6 class="m-0 fw-bold">' . $ch_user['first_name'] . ' ' . $ch_user['last_name'] . '</h6>
+                                    <h6 class="m-0 fw-bold">' . $chat['user_id'] . ' ' . $ch_user['first_name'] . ' ' . $ch_user['last_name'] . '</h6>
                                     <span class="text-muted " style="font-size: 15px; ">' . $last_msg['msg'] . ' </span>
                                     </div>
                                 </div>
@@ -424,6 +425,31 @@ if (isset($_GET['getChatList'])) {
             </div>';
     }
     $json['chatlist'] = $chatlist;
+    // for getting chat messages
+    if (isset($_POST['chatter_id']) && $_POST['chatter_id'] != 0) {
+        $messages = getMessages($_POST['chatter_id']);
+        $messages = array_reverse($messages);
+        $ch_user =  getUser($_POST['chatter_id']);
+        $chat_box = '';
+        foreach ($messages as $msg) {
+            if($msg['from_user_id'] == $_SESSION['userdata']['id']){
+                $extra_class = 'bg-light align-self-end  text-dark';
+                $time_class = 'text-muted';
+            }else{
+                $extra_class = 'bg-primary align-self-start text-light';
+                $time_class = 'text-light';
+            }
+            $chat_box .= '
+                        <div style="max-width:350px;" class=" '. $extra_class .' border my-1 p-2 pb-0 rounded">
+                            <p class="m-0 p-0">'.$msg['msg'].'</p>
+                            <p style="font-size: 10px;" class=" '.$time_class.' mt-1 mb-0 p-0  text-end">'.formatDateTime($msg['created_at']).'</p>
+                        </div>
+            ';
+        }
+        $json['chat']['msgs'] = $chat_box;
+        $json['chat']['userdata'] = $ch_user;
+    }else{
+        $json['chat'] = '<p class="text-muted m-3">lodding...</p>';
+    }
     echo json_encode($json);
-    exit;
 }

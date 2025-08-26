@@ -48,3 +48,7 @@ body {
 .notification{
     cursor: pointer;
 }
+
+.time{
+    font-size: 12px;
+}

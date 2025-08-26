@@ -381,29 +381,54 @@ $(document).on("click", "#notifications", function (e) {
     e.preventDefault();
     fetchNotifications();
 })
+
+
 $(document).on("click", "#messages", function (e) {
     e.preventDefault();
     syncmsg();
 })
 
 
+
+
+let chatting_user_id = 0;
+
+function popchat(user_id) {
+    $('#chatter_username').text('@loading');
+    $('#chatter_name').text('loading...');
+    $('#chatter_pic').attr('src', 'assets/images/profile/default_profile.jpg');
+    chatting_user_id = user_id;
+    console.log('chatting with user id: ' + chatting_user_id);
+    syncmsg();
+
+};
+
 function syncmsg() {
+
     $.ajax({
-        url: 'assets/php/ajax.php?getChatList',
-        method: 'GET',
+        url: 'assets/php/ajax.php?getMessages',
+        method: 'POST',
         dataType: 'json',
+        data: { chatter_id: chatting_user_id },
         success: function (response) {
-            console.log(response);
             if (response.chatlist) {
-                $('#chat_box').html(response.chatlist);
+                $('#chatlist').html(response.chatlist);
+                $('#chat_box').html(response.chat.msgs);
+
             } else {
-                $('#chat_box').html('<p class="text-muted">No notifications</p>');
+                $('#chatlist').html('<p class="text-muted">No Messages</p>');
+            }
+            if (response.chat.userdata) {
+                $('#chatter_username').text('@' + response.chat.userdata.username);
+                $('#chatter_name').text(response.chat.userdata.first_name + ' ' + response.chat.userdata.last_name);
+                $('#chatter_pic').attr('src', 'assets/images/profile/' + response.chat.userdata.profile_pic);
             }
         },
     })
+
 }
 
 setInterval(() => {
-  fetchNotifCount();
-  syncmsg();
+    fetchNotifCount();
+    syncmsg();
 }, 2500);

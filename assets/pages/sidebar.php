@@ -6,8 +6,7 @@
 
   <hr class="m-0 p-0">
   <div class="offcanvas-body p-0 " id="notifications_box">
-
-
+<!-- //modal body here ajax-->
   </div>
 </div>
 
@@ -19,12 +18,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <hr class="m-0 p-0">
-  <div class="offcanvas-body p-0 " id="chat_box">
-
-
-
-
-  
-    
+  <div class="offcanvas-body p-0 " id="chatlist">
+<!-- //modal body here by ajax -->
   </div>
 </div>

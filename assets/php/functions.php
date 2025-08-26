@@ -21,7 +21,13 @@ function pr(...$dataList)
     }
 }
 
-
+// funcation for date and time format
+function formatDateTime($datetime)
+{
+    if (empty($datetime)) return '';
+    $dt = new DateTime($datetime);
+    return $dt->format("h:i A, d-m-Y"); // 02:02 PM, 26-08-2025
+}
 // function to show pages
 
 function showPage($page, $data = "")
@@ -483,7 +489,7 @@ function filterPost()
     }
     $filter_list = array();
     foreach ($list as $post) {
-        if ((checkFollowStatus($post['user_id'] )) || $post['user_id'] == $_SESSION['userdata']['id'] || (isset($_GET['u']) && $post['user_id']== $_SESSION['userdata']['id'])) {
+        if ((checkFollowStatus($post['user_id'])) || $post['user_id'] == $_SESSION['userdata']['id'] || (isset($_GET['u']) && $post['user_id'] == $_SESSION['userdata']['id'])) {
             $filter_list[] = $post;
         }
     }
@@ -664,18 +670,11 @@ function timeAgo($datetime)
     } elseif ($diff < 604800) { // less than 7 days
         $days = floor($diff / 86400);
         return $days . ' day' . ($days > 1 ? 's' : '') . ' ago';
-    } elseif ($diff < 2592000) { // less than 30 days (~4 weeks)
-        $weeks = floor($diff / 604800);
-        return $weeks . ' week' . ($weeks > 1 ? 's' : '') . ' ago';
-    } elseif ($diff < 31536000) { // less than 365 days
-        $months = floor($diff / 2592000);
-        return $months . ' month' . ($months > 1 ? 's' : '') . ' ago';
     } else {
-        $years = floor($diff / 31536000);
-        return $years . ' year' . ($years > 1 ? 's' : '') . ' ago';
+        // ✅ If more than 7 days, show full date & time
+        return date("h:i A, d-m-Y", $created);
     }
 }
-
 
 //function block user
 function block($profile_id)
@@ -851,13 +850,13 @@ function filterNotifcation()
         }
 
         if (
-            (!checkFollowStatus($notification['user_id']) && $notification['user_id'] != $user_id) 
-            || ($notification['follower_id'] == $user_id) 
-            || (isset($follow_notify_id) && $notification['action'] == 0 && $follow_notify_id >= $notification['id']) 
-            || ($notification['user_id'] != $user_id && $notification['action'] != 0) 
+            (!checkFollowStatus($notification['user_id']) && $notification['user_id'] != $user_id)
+            || ($notification['follower_id'] == $user_id)
+            || (isset($follow_notify_id) && $notification['action'] == 0 && $follow_notify_id >= $notification['id'])
+            || ($notification['user_id'] != $user_id && $notification['action'] != 0)
             || (isblock($notification['follower_id']) || isUserBlocked($notification['follower_id']))
         ) continue;
-        
+
         $filter_notifications[] = $notification;
     }
 
@@ -901,20 +900,20 @@ function getActiveChatUserIds()
     $run = mysqli_query($db, $query);
     $data =  mysqli_fetch_all($run, true);
     $ids = array();
-    foreach ($data as $ch){
-        if ($ch['from_user_id'] != $current_user_id && !in_array($ch['from_user_id'],$ids)){
+    foreach ($data as $ch) {
+        if ($ch['from_user_id'] != $current_user_id && !in_array($ch['from_user_id'], $ids)) {
             $ids[] = $ch['from_user_id'];
         }
-        if ($ch['to_user_id'] != $current_user_id && !in_array($ch['to_user_id'],$ids)){
+        if ($ch['to_user_id'] != $current_user_id && !in_array($ch['to_user_id'], $ids)) {
             $ids[] = $ch['to_user_id'];
         }
     }
     return $ids;
-
 }
 
 // function for getting messages
-function getMessages($user_id){
+function getMessages($user_id)
+{
     global $db;
     $current_user_id = $_SESSION['userdata']['id'];
     $query = "SELECT * FROM `messages` WHERE (from_user_id = $current_user_id AND to_user_id = $user_id) || (from_user_id = $user_id AND to_user_id = $current_user_id) ORDER BY id DESC;";
@@ -922,10 +921,11 @@ function getMessages($user_id){
     return mysqli_fetch_all($run, true);
 }
 
-function getAllMessages(){
+function getAllMessages()
+{
     $active_chat_ids = getActiveChatUserIds();
     $conversation = array();
-    foreach($active_chat_ids as $index => $id){
+    foreach ($active_chat_ids as $index => $id) {
         $conversation[$index]['user_id'] = $id;
         $conversation[$index]['messages'] = getMessages($id);
     }

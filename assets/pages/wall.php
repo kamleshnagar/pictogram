@@ -54,7 +54,7 @@ global $follow_suggestions;
                         </span>
                     </div>
 
-                    <div class="d-flex">
+                    <div class="d-flex ">
                         <span
 
                             class="text-muted px-2 like_count"
@@ -64,7 +64,7 @@ global $follow_suggestions;
                             data-bs-target="#likes<?= $post['id'] ?>">
                             <?= (count($likes) > 1) ? count($likes) . ' likes' : count($likes) . ' like' ?>
                         </span>
-                        <p class="text-muted  text-center fst-italic"> <i class="bi bi-dot"></i>Posted <?= timeAgo($post['created_at']) ?></p>
+                        <p class="text-muted time pt-1  text-center fst-italic"> <i class="bi bi-dot"></i>Posted <?= timeAgo($post['created_at']) ?></p>
 
                     </div>
                     <!-- Modal for like  -->
