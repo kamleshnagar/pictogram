@@ -8,6 +8,8 @@ const DB_PASS = "";
 const DB_NAME = "pictogram";
 
 $db = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME) or die("Can't Connect to Data Base!");
+mysqli_query($db, "CREATE DATABASE IF NOT EXISTS " . DB_NAME . " CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;");
+mysqli_select_db($db, DB_NAME);
 
 $table_posts = "CREATE TABLE IF NOT EXISTS posts (
     id INT(11) NOT NULL AUTO_INCREMENT,
@@ -38,13 +40,13 @@ mysqli_query($db, $table_users);
 
 
 
-$table_follower_list = "CREATE TABLE IF NOT EXISTS follow_list
+$table_follow_list = "CREATE TABLE IF NOT EXISTS follow_list
 (`id` INT NOT NULL AUTO_INCREMENT ,
  `follower_id` INT NOT NULL , 
  `user_id` INT NOT NULL , 
  PRIMARY KEY (`id`)
  );";
-mysqli_query($db, $table_follower_list);
+mysqli_query($db, $table_follow_list);
 
 
 $table_likes = "CREATE TABLE IF NOT EXISTS likes (
@@ -88,3 +90,15 @@ $notification_table = "CREATE TABLE IF NOT EXISTS `notification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ";
 mysqli_query($db, $notification_table);
+
+$messages_table = "CREATE TABLE IF NOT EXISTS `messages` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `from_user_id` INT(11) NOT NULL,
+  `to_user_id` INT(11) NOT NULL,
+  `msg` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `read_status` INT(11) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+
+mysqli_query($db, $messages_table);
