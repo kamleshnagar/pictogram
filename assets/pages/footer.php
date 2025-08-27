@@ -102,7 +102,7 @@ if (isset($_SESSION['AUTH']) && $_SESSION['userdata']['ac_status'] == 1) {
                                                 <div class="d-flex flex-column  align-items-start justify-content-center">
                                                     <div class="d-flex  align-items-center ">
                                                         <h6 style="margin: 0px;"><a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark fst-italic ">@<?= $cuser['username'] ?></a></h6>
-                                                        <p  class="text-muted time m-0 px-2 text-end fst-italic">• <?= timeAgo($comment['created_at']) ?></p>
+                                                        <p class="text-muted time m-0 px-2 text-end fst-italic">• <?= timeAgo($comment['created_at']) ?></p>
                                                     </div>
                                                     <p class="m-0  mx-1 text-muted text-dark"><?= $comment['comment'] ?></p>
 
@@ -181,33 +181,46 @@ if (isset($_SESSION['AUTH']) && $_SESSION['userdata']['ac_status'] == 1) {
                 <div class="modal-header">
                     <div class="modal-title w-100 d-flex align-items-center">
 
-                        <a href="?u=' . $u['username'] . '">
+                        <a id="linkusername" href="?u=" class="d-flex align-items-center text-decoration-none text-dark">
                             <img id="chatter_pic" src="" height="40" width="40" class="rounded-circle border">
-                        </a>
 
-                        <div class="ms-2 d-flex align-items-center justify-content-between">
-                            <div>
-                                <h5 id="chatter_name" class="m-0">loding...</h5>
-                                <p id="chatter_username" class="m-0 p-0 text-muted">loding...</p>
+
+                            <div class="ms-2 d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h5 id="chatter_name" class="m-0"></h5>
+                                    <p id="chatter_username" class="m-0 p-0 text-muted"></p>
+                                </div>
+
                             </div>
-
-                        </div>
+                        </a>
 
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="d-flex flex-column my-2" id="chat_box">
-                        loding...
+
                     </div>
                     <hr class="m-0 p-0">
                     <div class="pb-2 px-2">
-                        <form action="">
+                        <?php
+
+                        ?>
+                        <form id=msginputform action="">
                             <div class="input-group mt-2">
-                                <input type="text" class="form-control rounded-0 border-0" placeholder="Type a message" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-primary rounded-0 border-0" type="button" id="button-addon2">Send</button>
+                                <input type="text" class="form-control rounded-0 border-0" placeholder="Type a message" id="msginput" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-primary rounded-0 border-0" type="button" id="sendmsg" data-user-id="0">Send</button>
                             </div>
                         </form>
+                        <?php
+
+                        ?>
+                        <div class="alert alert-warning mt-2 " id="blockederror" role="alert">
+                            You are not allowed to send message to this user.
+                        </div>
+                        <?php
+
+                        ?>
                     </div>
                 </div>
             </div>

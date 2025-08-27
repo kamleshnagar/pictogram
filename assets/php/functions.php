@@ -931,3 +931,29 @@ function getAllMessages()
     }
     return $conversation;
 }
+
+
+function sendMessage($user_id, $msg)
+{
+    global $db;
+    $from_user_id = $_SESSION['userdata']['id'];
+    $msg = mysqli_real_escape_string($db, $msg);
+    $query = "INSERT INTO `messages` (from_user_id, to_user_id, msg) VALUES ($from_user_id, $user_id, '$msg');";
+    updateMsgReadStatus($user_id);
+    return mysqli_query($db, $query);
+}
+
+function newMsgNot (){
+    global $db;
+    $current_user_id = $_SESSION['userdata']['id'];
+    $query = "SELECT count(*) as `row` FROM `messages` WHERE to_user_id = $current_user_id AND read_status=0;";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($run)['row'];
+}
+
+function updateMsgReadStatus($user_id){
+    global $db;
+    $current_user_id = $_SESSION['userdata']['id'];
+    $query = "UPDATE `messages` SET `read_status` = '1' WHERE from_user_id = $user_id AND to_user_id = $current_user_id;";
+    return mysqli_query($db, $query);
+}

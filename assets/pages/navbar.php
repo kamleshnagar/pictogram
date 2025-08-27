@@ -39,11 +39,18 @@
                     ?>
                     <div id="notifCount" class="rounded-circle bg-primary count_n text-center fw-bold <?= (!empty($unread)) ? '' : 'd-none' ?>">
                         <p id="notifNum"><?= (!empty($unread)) ? count($unread) : '' ?></p>
+
                     </div>
+                </div>
 
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" id="messages" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#messages_sidebar" role="button" aria-controls="sidebar"><i class="bi bi-chat-right-dots-fill"></i></a>
+                <div class="position-relative">
+                    <a class="nav-link text-dark" id="messages" data-user-id="<?= $user['id'] ?>" data-bs-toggle="offcanvas" href="#messages_sidebar" role="button" aria-controls="sidebar"><i class="bi bi-chat-right-dots-fill"></i></a>
+                    <div id="msgCount" class="rounded-circle bg-primary count_n text-center fw-bold <?= (newMsgNot()) ? '' : 'd-none' ?>">
+                        <p id="msgNum"><?= newMsgNot() ?></p>
+                    </div>
+                </div>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

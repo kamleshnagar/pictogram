@@ -391,17 +391,63 @@ $(document).on("click", "#messages", function (e) {
 
 
 
-let chatting_user_id = 0;
 
+let chatting_user_id = 0;
 function popchat(user_id) {
+
     $('#chatter_username').text('@loading');
     $('#chatter_name').text('loading...');
     $('#chatter_pic').attr('src', 'assets/images/profile/default_profile.jpg');
+    $('#linkusername').attr('href', '');
     chatting_user_id = user_id;
-    console.log('chatting with user id: ' + chatting_user_id);
+    $('#sendmsg').attr('data-user-id', user_id);
+    updateMsgReadStatus(user_id);
     syncmsg();
 
 };
+
+function updateMsgReadStatus(user_id) {
+    $.ajax({
+        url: 'assets/php/ajax.php?markAsRead',
+        method: 'POST',
+        dataType: 'json',
+        data: { chatter_id: user_id },
+        success: function (response) {
+            if (response.status) {
+                if ($('.msgdot').classList.contains('d-none')
+                    && $('.msgdot').classList.contains('bg-light')) {
+                    return;
+                }
+                $('.msgdot').addClass('d-none');
+                $(button).addClass('bg-light');
+            }
+        }
+    })
+}
+
+$('#sendmsg').click(function () {
+    let user_id = chatting_user_id;
+    console.log('user id is ' + user_id);
+    let msg = $('#msginput').val().trim();
+    if ((msg == '') || !(msg)) return;
+    $('#sendmsg').attr('disabled', true);
+    $('#msginput').attr('disabled', true);
+
+    $.ajax({
+        url: 'assets/php/ajax.php?sendMessage',
+        method: 'POST',
+        dataType: 'json',
+        data: { user_id: user_id, msg: msg },
+        success: function (response) {
+            if (response.status) {
+                $('#sendmsg').attr('disabled', false);
+                $('#msginput').attr('disabled', false);
+                $('#msginput').val('');
+                syncmsg();
+            }
+        }
+    })
+})
 
 function syncmsg() {
 
@@ -413,7 +459,20 @@ function syncmsg() {
         success: function (response) {
             if (response.chatlist) {
                 $('#chatlist').html(response.chatlist);
+                if (response.newmsgcount > 0) {
+                    $('#msgCount').removeClass('d-none');
+                    $('#msgNum').text(response.newmsgcount);
+
+                } else {
+                    $('#msgCount').addClass('d-none');
+                    $('#msgNum').text('');
+                }
+
+                if (chatting_user_id != 0) {
+                    $('#chat_box').html(response.chat.msgs);
+                }
                 $('#chat_box').html(response.chat.msgs);
+
 
             } else {
                 $('#chatlist').html('<p class="text-muted">No Messages</p>');
@@ -422,7 +481,16 @@ function syncmsg() {
                 $('#chatter_username').text('@' + response.chat.userdata.username);
                 $('#chatter_name').text(response.chat.userdata.first_name + ' ' + response.chat.userdata.last_name);
                 $('#chatter_pic').attr('src', 'assets/images/profile/' + response.chat.userdata.profile_pic);
+                $('#linkusername').attr('href', '?u=' + response.chat.userdata.username);
             }
+            if (response.bs) {
+                $('#msginputform').hide();
+                $('#blockederror').show();
+            } else {
+                $('#msginputform').show();
+                $('#blockederror').hide();
+            }
+
         },
     })
 

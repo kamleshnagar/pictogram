@@ -23,7 +23,11 @@ global $profile_post;
                                 <span class="" style="font-size:xx-large" type="button" id="dropdownMenuButton1"
                                     data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i> </span>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-chat-fill"></i> Message</a></li>
+
+                                   
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#chatbox" onclick="popchat(<?= $profile['id'] ?>)"><i class="bi bi-chat-fill"></i> Message</a></li>
+
+                                   
                                     <li> <a class="dropdown-item"
                                             href="<?= isBlock($profile['id'])
                                                         ? 'assets/php/actions.php?u=' . $profile['username'] . '&unblock=' . $profile['id']
@@ -145,7 +149,7 @@ global $profile_post;
                 <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z"></path>
                 <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z"></path>
             </svg>
-            <h4 class="text-center">Unblock <span class="text-danger ">@<?=$profile['username']?></span> to see the posts.</h4>
+            <h4 class="text-center">Unblock <span class="text-danger ">@<?= $profile['username'] ?></span> to see the posts.</h4>
         </div>
     <?php
     }
@@ -303,4 +307,3 @@ global $profile_post;
         </div>
     </div>
 </div>
-

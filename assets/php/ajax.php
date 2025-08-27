@@ -397,11 +397,21 @@ if (isset($_GET['getMessages'])) {
     $chatlist = '';
     foreach ($chats as $chat) {
         $ch_user =  getUser($chat['user_id']);
+        if (isblock($ch_user['id']) || isUserBlocked($ch_user['id'])) {
+            $json['bs'] = true;
+        } else {
+            $json['bs'] = false;
+        }
         $last_msg = $chat['messages'][0];
+        $seen = false;
+        if (($last_msg['from_user_id'] == $_SESSION['userdata']['id']) || $last_msg['read_status'] == 1) {
+            $seen = true;
+        }
+
         $chatlist .=
-            '<div style="height:70px; " class="chatlist_item d-flex p-1  border-bottom ' . ($last_msg['read_status'] == 0 ? '' : 'bg-light') . '" data-bs-toggle="modal" data-bs-target="#chatbox" onclick = "popchat('. $chat['user_id'] .')">
+            '<div style="height:70px; " class="chatlist_item d-flex p-1  border-bottom ' . ($seen ? 'bg-light' : '') . '" data-bs-toggle="modal" data-bs-target="#chatbox" onclick = "popchat(' . $chat['user_id'] . ')">
                 <div class="d-flex w-100 ">
-                    <span class="bg-primary dot display-inline-block ' . ($last_msg['read_status'] == 0 ? '' : 'd-none') . '" style="height:100%;width:5px"></span>
+                    <span class="bg-primary msgdot display-inline-block ' . ($seen ? 'd-none' : '') . '" style="height:100%;width:5px"></span>
                     <div class="d-flex  my-2 w-100">
                         <div class="d-flex  justify-content-between align-items-start overflow-hidden w-100">
                             <div class="d-flex col-8">
@@ -410,13 +420,13 @@ if (isset($_GET['getMessages'])) {
                                 </a>
                                 <div class="ms-2 d-flex align-items-center justify-content-between">
                                     <div>
-                                    <h6 class="m-0 fw-bold">' . $chat['user_id'] . ' ' . $ch_user['first_name'] . ' ' . $ch_user['last_name'] . '</h6>
-                                    <span class="text-muted " style="font-size: 15px; ">' . $last_msg['msg'] . ' </span>
+                                        <h6 class="m-0 fw-bold">' . $ch_user['first_name'] . ' ' . $ch_user['last_name'] . '</h6>
+                                        <span class="text-muted " style="font-size: 15px; ">' . $last_msg['msg'] . ' </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex flex-column  col-4  ">
-                                <time class=" text-end text-muted my-1" style="font-size:15px;">' . timeAgo($last_msg['created_at']) . '</time>
+                                <time class=" text-end text-muted mt-4 mb-0" style="font-size:12px;">' . formatDateTime($last_msg['created_at']) . '</time>
                             </div>
                         </div>
                     </div>
@@ -432,24 +442,45 @@ if (isset($_GET['getMessages'])) {
         $ch_user =  getUser($_POST['chatter_id']);
         $chat_box = '';
         foreach ($messages as $msg) {
-            if($msg['from_user_id'] == $_SESSION['userdata']['id']){
+            if ($msg['from_user_id'] == $_SESSION['userdata']['id']) {
                 $extra_class = 'bg-light align-self-end  text-dark';
                 $time_class = 'text-muted';
-            }else{
+            } else {
                 $extra_class = 'bg-primary align-self-start text-light';
                 $time_class = 'text-light';
             }
             $chat_box .= '
-                        <div style="max-width:350px;" class=" '. $extra_class .' border my-1 p-2 pb-0 rounded">
-                            <p class="m-0 p-0">'.$msg['msg'].'</p>
-                            <p style="font-size: 10px;" class=" '.$time_class.' mt-1 mb-0 p-0  text-end">'.formatDateTime($msg['created_at']).'</p>
+                        <div style="max-width:350px;" class=" ' . $extra_class . ' border my-1 p-2 pb-0 rounded">
+                            <p class="m-0 p-0">' . $msg['msg'] . '</p>
+                            <p style="font-size: 10px;" class=" ' . $time_class . ' mt-1 mb-0 p-0  text-end">' . formatDateTime($msg['created_at']) . '</p>
                         </div>
             ';
         }
         $json['chat']['msgs'] = $chat_box;
         $json['chat']['userdata'] = $ch_user;
-    }else{
+    } else {
         $json['chat'] = '<p class="text-muted m-3">lodding...</p>';
     }
+    $json['newmsgcount'] = newMsgNot();
     echo json_encode($json);
+}
+
+
+if (isset($_GET['sendMessage'])) {
+    if (sendMessage($_POST['user_id'], $_POST['msg'])) {
+        $response['status'] = true;
+    } else {
+        $response['status'] = false;
+    }
+    echo json_encode($response);
+}
+
+
+if (isset($_GET['markAsRead'])) {
+    if (updateMsgReadStatus($_POST['chatter_id'])) {
+        $response['status'] = true;
+    } else {
+        $response['status'] = false;
+    }
+    echo json_encode($response);
 }
