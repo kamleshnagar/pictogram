@@ -1,26 +1,20 @@
 <?php
+
+require_once __DIR__ . "/../php/functions.php";
 if (isset($_SESSION['AUTH']) && $_SESSION['userdata']['ac_status'] == 1) {
-
+global $profile_post;
 ?>
-
-    <?php
-    global $profile_post;
-    ?>
-    <?php
-
-    require_once __DIR__ . "/../php/functions.php";
-    $user = getUser($_SESSION['userdata']['id']);
-    if (isset($_GET['u'])) {
-        $posts = $profile_post + filterPost();
-    } else {
-        $posts = filterPost();
-    }
-    $follow_suggestions = filterFollowSuggestion();
-
-    ?>
-
     <div id="footer_content">
+
         <?php
+
+        $user = getUser($_SESSION['userdata']['id']);
+        if (isset($_GET['u'])) {
+            $posts = $profile_post + filterPost();
+        } else {
+            $posts = filterPost();
+        }
+        $follow_suggestions = filterFollowSuggestion();
         foreach ($posts as $post) {
             $likes = getLikes($post['id']);
             $comments = getComments($post['id']);
@@ -176,7 +170,7 @@ if (isset($_SESSION['AUTH']) && $_SESSION['userdata']['ac_status'] == 1) {
 
     <!-- // modal for conversation -->
     <div class="modal fade" id="chatbox" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div id="chatbox_scroll" class="modal-dialog modal-dialog-centered modal-dialog-scrollable  ">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title w-100 d-flex align-items-center">
@@ -197,8 +191,8 @@ if (isset($_SESSION['AUTH']) && $_SESSION['userdata']['ac_status'] == 1) {
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="d-flex flex-column my-2" id="chat_box">
+                <div class="modal-body" style="height:600px;">
+                    <div class="d-flex flex-column my-2 " id="chat_box">
 
                     </div>
                     <hr class="m-0 p-0">
@@ -206,10 +200,10 @@ if (isset($_SESSION['AUTH']) && $_SESSION['userdata']['ac_status'] == 1) {
                         <?php
 
                         ?>
-                        <form id=msginputform action="">
+                        <form id=msginputform>
                             <div class="input-group mt-2">
                                 <input type="text" class="form-control rounded-0 border-0" placeholder="Type a message" id="msginput" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-primary rounded-0 border-0" type="button" id="sendmsg" data-user-id="0">Send</button>
+                                <button class="btn btn-outline-primary rounded-0 border-0" type="submit" id="sendmsg" data-user-id="0">Send</button>
                             </div>
                         </form>
                         <?php
