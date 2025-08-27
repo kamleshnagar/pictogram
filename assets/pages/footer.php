@@ -2,7 +2,7 @@
 
 require_once __DIR__ . "/../php/functions.php";
 if (isset($_SESSION['AUTH']) && $_SESSION['userdata']['ac_status'] == 1) {
-global $profile_post;
+    global $profile_post;
 ?>
     <div id="footer_content">
 
@@ -191,30 +191,21 @@ global $profile_post;
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" style="height:600px;">
+                <div class="modal-body" style="height:500px;">
                     <div class="d-flex flex-column my-2 " id="chat_box">
 
                     </div>
-                    <hr class="m-0 p-0">
-                    <div class="pb-2 px-2">
-                        <?php
-
-                        ?>
-                        <form id=msginputform>
-                            <div class="input-group mt-2">
-                                <input type="text" class="form-control rounded-0 border-0" placeholder="Type a message" id="msginput" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-primary rounded-0 border-0" type="submit" id="sendmsg" data-user-id="0">Send</button>
-                            </div>
-                        </form>
-                        <?php
-
-                        ?>
-                        <div class="alert alert-warning mt-2 " id="blockederror" role="alert">
-                            You are not allowed to send message to this user.
+                </div>
+                <hr class="m-0 p-0">
+                <div class="pb-2 px-2">
+                    <form id=msginputform>
+                        <div class="input-group mt-2">
+                            <input type="text" class="form-control rounded-0 border-0" placeholder="Type a message" id="msginput" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-primary rounded-0 border-0" type="submit" id="sendmsg" data-user-id="0">Send</button>
                         </div>
-                        <?php
-
-                        ?>
+                    </form>
+                    <div class="alert alert-danger mt-2 text-center " id="blockederror" role="alert">
+                        You are not allowed to send message to this user.
                     </div>
                 </div>
             </div>
